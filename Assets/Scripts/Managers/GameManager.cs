@@ -4,6 +4,12 @@ using System.Collections.Generic;
 
 public class GameManager : Singleton<GameManager>
 {
+
+	#region Prefabs
+	public GameObject playerPrefab;
+	#endregion
+	public float modifiedTimeScale = 1;
+
 	public Player[] players;
 
 	public enum GamePhase { Intro, Tutorial, EndTutorial, MainPlay, BeginAccuse, Accusation, EndGame };
@@ -20,17 +26,38 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
-    void Awake() {
+    void Awake() 
+	{
+		LookupPrefabs();
+
+		int playerCount = 1;
+		if (PlayerPrefs.HasKey("PlayerCount"))
+		{
+			playerCount = PlayerPrefs.GetInt("PlayerCount");
+		}
+
+		for (int i = 0; i < playerCount; i++)
+		{
+			AddPlayer(i);
+		}
+
         players = GameObject.FindObjectsOfType<Player>();
     }
 
-	void Start()
+	private void LookupPrefabs()
 	{
+		playerPrefab = Resources.Load<GameObject>("Player Prefab");
 	}
 
-	public void AddPlayer()
+	public void AddPlayer(int newID)
 	{
+		//Create the Player Object.
+		GameObject playerGO = GameObject.Instantiate<GameObject>(playerPrefab);
+		Player newPlayer = playerGO.GetComponent<Player>();
+		//newPlayer.transform.position = GetRandomSpawnPosition();
 
+		newPlayer.playerID = newID;
+		playerGO.name = "Player " + newID;
 	}
 
 	void Update()
@@ -55,6 +82,14 @@ public class GameManager : Singleton<GameManager>
 	public void ProcessNPCRelocation()
 	{
 		
+	}
+
+	public void OnDestroy()
+	{
+		if (PlayerPrefs.HasKey("PlayerCount"))
+		{
+			PlayerPrefs.DeleteKey("PlayerCount");
+		}
 	}
 
 	public void DoNothing()

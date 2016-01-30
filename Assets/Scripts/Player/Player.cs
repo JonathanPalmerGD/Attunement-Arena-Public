@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
 	public Vector3 targetScanDir = Vector3.zero;
 	public Vector3 hitscanContact = Vector3.zero;
 
+	public CameraController cameraController;
 	public Camera myCamera;
 
 	private float health;
@@ -58,6 +59,15 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
+		if (cameraController == null)
+		{
+			cameraController = GetComponent<CameraController>();
+			cameraController.PositionCamera((byte)playerID);
+		}
+		if (myCamera == null)
+		{
+			myCamera = GetComponent<Camera>();
+		}
 		abilities = new List<Ability>();
 		abilityBindings = new Dictionary<string, Ability>();
 
@@ -73,9 +83,11 @@ public class Player : MonoBehaviour
 	{
 		GetInput();
 
+		hitscanTarget = TargetScan();
+
 		for (int i = 0; i < abilities.Count; i++)
 		{
-			
+			abilities[i].UpdateAbility(GameManager.Instance.modifiedTimeScale * Time.deltaTime);
 		}
 	}
 
