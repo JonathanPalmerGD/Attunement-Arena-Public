@@ -82,6 +82,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 
         private Rigidbody mRigidBody;
+		private Vector3 accRBForces;
         private CapsuleCollider mCapsule;
         private float mYRotation;
         private Vector3 mGroundContactNormal;
@@ -140,6 +141,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
         }
 
+		void ApplyExternalForce(Vector3 force)
+		{
+			accRBForces += force;
+		}
 
         private void FixedUpdate()
         {
@@ -188,6 +193,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 }
             }
             mJump = false;
+
+			if(accRBForces.sqrMagnitude > 0.1f)
+			{
+				mRigidBody.AddForce(accRBForces, ForceMode.Impulse);
+				accRBForces = Vector3.zero;
+			}
         }
 
 
