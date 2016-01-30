@@ -148,56 +148,56 @@ public class UIManager : Singleton<UIManager>
 				// );
 
 		#region UI Buttons
-		inventoryButton.onClick.AddListener(() =>
-		{
-			ToggleInventory();
-		}
-			 );
+		//inventoryButton.onClick.AddListener(() =>
+		//{
+		//	ToggleInventory();
+		//}
+		//	 );
 
-		journalButton.onClick.AddListener(() =>
-		{
-			ToggleJournal();
-		}
-			 );
+		//journalButton.onClick.AddListener(() =>
+		//{
+		//	ToggleJournal();
+		//}
+		//	 );
 
 		
-		networkButton.onClick.AddListener(() =>
-		{
-			ToggleNetworkMenu();
-		}
-			 );
+		//networkButton.onClick.AddListener(() =>
+		//{
+		//	ToggleNetworkMenu();
+		//}
+		//	 );
 
-		helpButton.onClick.AddListener(() =>
-		{
-			ToggleHelp();
-		}
-			 );
+		//helpButton.onClick.AddListener(() =>
+		//{
+		//	ToggleHelp();
+		//}
+		//	 );
 
-		chatButton.onClick.AddListener(() =>
-		{
-			ToggleChat();
-		}
-			 );
+		//chatButton.onClick.AddListener(() =>
+		//{
+		//	ToggleChat();
+		//}
+		//	 );
 		#endregion
 
 		#region Close Buttons
-		helpCloseButton.onClick.AddListener(() =>
-		{
-			CloseHelp();
-		}
-			 );
+		//helpCloseButton.onClick.AddListener(() =>
+		//{
+		//	CloseHelp();
+		//}
+		//	 );
 
-		inventoryCloseButton.onClick.AddListener(() =>
-		{
-			ToggleInventory();
-		}
-			 );
+		//inventoryCloseButton.onClick.AddListener(() =>
+		//{
+		//	ToggleInventory();
+		//}
+		//	 );
 
-		journalCloseButton.onClick.AddListener(() =>
-		{
-			ToggleJournal();
-		}
-			 );
+		//journalCloseButton.onClick.AddListener(() =>
+		//{
+		//	ToggleJournal();
+		//}
+		//	 );
 		#endregion
 	}
 
@@ -287,10 +287,10 @@ public class UIManager : Singleton<UIManager>
 
 
 			#region Chat Control
-			if (Input.GetKeyDown(KeyCode.Tab) && uiButtonState == MenuState.Open)
-			{
-				ToggleChat();
-			}
+			//if (Input.GetKeyDown(KeyCode.Tab) && uiButtonState == MenuState.Open)
+			//{
+			//	ToggleChat();
+			//}
 			#endregion
 		}
 		#endregion
@@ -300,96 +300,97 @@ public class UIManager : Singleton<UIManager>
 	#region Player Button UI
 	public bool AllowHotkeys()
 	{
-		bool uiButtonsOpen = uiButtonState == MenuState.Open;
-		return uiButtonsOpen && !chatBox.activeSelf;
+		return true;
+		//bool uiButtonsOpen = uiButtonState == MenuState.Open;
+		//return uiButtonsOpen && !chatBox.activeSelf;
 	}
 	public void HideUIButtons()
 	{
-		if (uiButtonState == MenuState.Open)
-		{
-			uiButtonState = MenuState.Closed;
-		}
+		//if (uiButtonState == MenuState.Open)
+		//{
+		//	uiButtonState = MenuState.Closed;
+		//}
 	}
 	public void ShowUIButtons()
 	{
-		if (uiButtonState == MenuState.Closed)
-		{
-			uiButtonState = MenuState.Open;
-		}
+		//if (uiButtonState == MenuState.Closed)
+		//{
+		//	uiButtonState = MenuState.Open;
+		//}
 	}
 	#endregion
 
 	#region Menu Management
 	public void UpdateSubMenuDisplay()
 	{
-		if (uiButtonState == MenuState.Open)
-		{
-			playerButtons.SetActive(true);
-		}
-		else if (uiButtonState == MenuState.Closed)
-		{
-			playerButtons.SetActive(false);
-		}
-		else
-		{
-			//this.OutputInfo("Error Menu State for Player Buttons State", ObjectExtensions.OutputType.Error);
-		}
+		//if (uiButtonState == MenuState.Open)
+		//{
+		//	playerButtons.SetActive(true);
+		//}
+		//else if (uiButtonState == MenuState.Closed)
+		//{
+		//	playerButtons.SetActive(false);
+		//}
+		//else
+		//{
+		//	//this.OutputInfo("Error Menu State for Player Buttons State", ObjectExtensions.OutputType.Error);
+		//}
 
 
-		if (journalState == MenuState.Suppressed)
-		{
-			CloseJournal();
-		}
-		else if (journalState == MenuState.Open)
-		{
-			OpenJournal();
-		}
-		else if (journalState == MenuState.Closed)
-		{
-			CloseJournal();
-		}
-		else
-		{
-			//this.OutputInfo("Error Menu State for Journal State", ObjectExtensions.OutputType.Error);
-		}
+		//if (journalState == MenuState.Suppressed)
+		//{
+		//	CloseJournal();
+		//}
+		//else if (journalState == MenuState.Open)
+		//{
+		//	OpenJournal();
+		//}
+		//else if (journalState == MenuState.Closed)
+		//{
+		//	CloseJournal();
+		//}
+		//else
+		//{
+		//	//this.OutputInfo("Error Menu State for Journal State", ObjectExtensions.OutputType.Error);
+		//}
 
-		if (inventoryState == MenuState.Suppressed)
-		{
-			CloseInventory();
-		}
-		else if (inventoryState == MenuState.Open)
-		{
-			OpenInventory();
-		}
-		else if (inventoryState == MenuState.Closed)
-		{
-			CloseInventory();
-		}
-		else
-		{
-			//this.OutputInfo("Error Menu State for Journal State", ObjectExtensions.OutputType.Error);
-		}
+		//if (inventoryState == MenuState.Suppressed)
+		//{
+		//	CloseInventory();
+		//}
+		//else if (inventoryState == MenuState.Open)
+		//{
+		//	OpenInventory();
+		//}
+		//else if (inventoryState == MenuState.Closed)
+		//{
+		//	CloseInventory();
+		//}
+		//else
+		//{
+		//	//this.OutputInfo("Error Menu State for Journal State", ObjectExtensions.OutputType.Error);
+		//}
 	}
 
 	#region Close Menus
 	public void CloseInventory()
 	{
-		inventoryState = MenuState.Closed;
-		inventory.SetActive(false);
+		//inventoryState = MenuState.Closed;
+		//inventory.SetActive(false);
 	}
 	public void CloseJournal()
 	{
-		journalState = MenuState.Closed;
-		journal.SetActive(false);
+		//journalState = MenuState.Closed;
+		//journal.SetActive(false);
 	}
 	public void CloseChat()
 	{
-		chatBox.SetActive(false);
+		//chatBox.SetActive(false);
 	}
 	public void CloseHelp()
 	{
-		helpState = MenuState.Closed; 
-		helpBox.SetActive(false);
+		//helpState = MenuState.Closed; 
+		//helpBox.SetActive(false);
 	}
 	public void EndInspect()
 	{
@@ -415,28 +416,28 @@ public class UIManager : Singleton<UIManager>
 	#region Opening Menus
 	public void OpenInventory()
 	{
-		inventory.SetActive(true);
+		//inventory.SetActive(true);
 	}
 	public void OpenJournal()
 	{
-		journal.SetActive(true);
+		//journal.SetActive(true);
 	}
 	public void OpenChat()
 	{
-		chatBox.SetActive(true);
+		//chatBox.SetActive(true);
 	}
 	public void OpenHelp()
 	{
-		helpState = MenuState.Open;
-		helpBox.SetActive(true);
+		//helpState = MenuState.Open;
+		//helpBox.SetActive(true);
 	}
 	private bool OpenInspection()
 	{
 		//if (inspection.Initialized)
 		//{
 
-		allowInventoryControl = false;
-		allowJournalControl = false;
+		//allowInventoryControl = false;
+		//allowJournalControl = false;
 
 		return true;
 		//}
@@ -451,37 +452,37 @@ public class UIManager : Singleton<UIManager>
 	#region Toggling Menus
 	public void ToggleInventory()
 	{
-		if (allowInventoryControl)
-		{
-			if (UIManager.Instance.inventory.activeSelf)
-			{
-				inventoryState = MenuState.Closed;
-				//UIManager.Instance.inventory.SetActive(false);
-			}
-			else
-			{
-				CloseHelp();
-				inventoryState = MenuState.Open;
-				//UIManager.Instance.inventory.SetActive(true);
-			}
-		}
+		//if (allowInventoryControl)
+		//{
+		//	if (UIManager.Instance.inventory.activeSelf)
+		//	{
+		//		inventoryState = MenuState.Closed;
+		//		//UIManager.Instance.inventory.SetActive(false);
+		//	}
+		//	else
+		//	{
+		//		CloseHelp();
+		//		inventoryState = MenuState.Open;
+		//		//UIManager.Instance.inventory.SetActive(true);
+		//	}
+		//}
 	}
 	public void ToggleJournal()
 	{
-		if (allowJournalControl)
-		{
-			if (journal.activeSelf)
-			{
-				journalState = MenuState.Closed;
-				//journal.SetActive(false);
-			}
-			else
-			{
-				CloseHelp();
-				journalState = MenuState.Open;
-				//journal.SetActive(true);
-			}
-		}
+		//if (allowJournalControl)
+		//{
+		//	if (journal.activeSelf)
+		//	{
+		//		journalState = MenuState.Closed;
+		//		//journal.SetActive(false);
+		//	}
+		//	else
+		//	{
+		//		CloseHelp();
+		//		journalState = MenuState.Open;
+		//		//journal.SetActive(true);
+		//	}
+		//}
 	}
 	public void ToggleNetworkMenu()
 	{
@@ -489,36 +490,36 @@ public class UIManager : Singleton<UIManager>
 	}
 	public void ToggleHelp()
 	{
-		if (helpBox.activeSelf)
-		{
-			CloseHelp();
-		}
-		else
-		{
-			OpenHelp();
-			CloseJournal();
-			CloseInventory();
-			CloseChat();
-		}
+		//if (helpBox.activeSelf)
+		//{
+		//	CloseHelp();
+		//}
+		//else
+		//{
+		//	OpenHelp();
+		//	CloseJournal();
+		//	CloseInventory();
+		//	CloseChat();
+		//}
 	}
 	public void ToggleChat()
 	{
-		if (chatBox.activeSelf)
-		{
-			chatBox.SetActive(false);
-			//PlayerController.getNetworkPlayer().CanMove = true;
-			//TODO: Kush setup toast notifications for chat
-			//PlayerController.getNetworkPlayer().isChatOn = false;
-		}
-		else
-		{
-			chatBox.SetActive(true);
-			CloseHelp();
-			GameCanvas.Instance.LookupComponent<InputField>("Chat Input Field").Select();
-			//PlayerController.getNetworkPlayer().CanMove = false;
-			//TODO: Kush setup toast notifications for chat
-			//PlayerController.getNetworkPlayer().isChatOn = true;
-		}
+		//if (chatBox.activeSelf)
+		//{
+		//	chatBox.SetActive(false);
+		//	//PlayerController.getNetworkPlayer().CanMove = true;
+		//	//TODO: Kush setup toast notifications for chat
+		//	//PlayerController.getNetworkPlayer().isChatOn = false;
+		//}
+		//else
+		//{
+		//	chatBox.SetActive(true);
+		//	CloseHelp();
+		//	GameCanvas.Instance.LookupComponent<InputField>("Chat Input Field").Select();
+		//	//PlayerController.getNetworkPlayer().CanMove = false;
+		//	//TODO: Kush setup toast notifications for chat
+		//	//PlayerController.getNetworkPlayer().isChatOn = true;
+		//}
 	}
 	#endregion
 
