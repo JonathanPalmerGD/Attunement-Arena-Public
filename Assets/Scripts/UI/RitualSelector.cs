@@ -20,6 +20,9 @@ public class RitualSelector : MonoBehaviour
 	public string ToggleButton = "Jump";
 	public string DoneButton = "Start";
 
+	public Coroutine PnPCR;
+	public Text TooManyText;
+
 	void Start()
 	{
 		contentRect = GetComponent<ScrollRect>().content;
@@ -44,9 +47,49 @@ public class RitualSelector : MonoBehaviour
 		if (GetSelect())
 		{
 			RitualElement re = contentRect.GetChild(CurrRitual).GetComponent<RitualElement>();
-			re.Selected = !re.Selected;
-			SelectedRituals ^= re.connectedRitual;
+			if (SelectedRitualCount < 3 || re.Selected)
+			{
+				re.Selected = !re.Selected;
+				SelectedRituals ^= re.connectedRitual;
+
+				if (re.Selected) SelectedRitualCount++; else SelectedRitualCount--;
+
+				// User has not done a dumb and picked more than three Rituals
+				// Clear error away
+				if (PnPCR != null) StopCoroutine(PnPCR);
+				Color c = TooManyText.color;
+				c.a = 0f;
+				TooManyText.color = c;
+			}
+			else
+			{
+				if (PnPCR != null) StopCoroutine(PnPCR);
+				PnPCR = StartCoroutine(PopAndFade(TooManyText));
+			}
 		}
+	}
+
+	public IEnumerator PopAndFade(Text element)
+	{
+		float totalTime = 0f;
+		Color c = element.color; // Get color reference
+		c.a = 1f;
+		element.color = c; // Max alpha color
+		while(totalTime < 2f) // Keep for two seconds
+		{
+			totalTime += Time.deltaTime;
+			yield return null;
+		}
+		totalTime = 0f; // Reset timer
+		while(totalTime < 2f) // Fade over two seconds
+		{
+			totalTime += Time.deltaTime;
+			c.a = 1f - (totalTime / 2f); // Alpha should fade from full to zero over two seconds
+			element.color = c; // Set new alpha
+			yield return null;
+		}
+		c.a = 0f;
+		element.color = c;
 	}
 
 	public bool GetLeft()
