@@ -21,7 +21,7 @@ public class GameManager : Singleton<GameManager>
 	}
 
     void Awake() {
-        players = GameObject.FindObjecstOfType<Player>();
+        players = GameObject.FindObjectsOfType<Player>();
     }
 
 	void Start()
