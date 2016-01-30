@@ -5,7 +5,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class Player : MonoBehaviour
 {
-	public int playerID;
+	public int playerID = 0;
 
 	public RigidbodyFirstPersonController controller;
 	//public List<Ability> rituals;
@@ -54,6 +54,8 @@ public class Player : MonoBehaviour
 	{
 		abilities = new List<Ability>();
 		abilityBindings = new Dictionary<string, Ability>();
+
+		controller = GetComponent<RigidbodyFirstPersonController>();
 	}
 
 	public void UseAbility()

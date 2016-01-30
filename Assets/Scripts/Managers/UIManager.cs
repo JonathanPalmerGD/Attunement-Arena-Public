@@ -85,24 +85,12 @@ public class UIManager : Singleton<UIManager>
 
 	void Start()
 	{
+		//For each player
 
+		//Create a Player UI
 
-
-		//if (inspection.gameObject.activeSelf)
-		//{
-		//	inspection.Init();
-		//	EndInspect();
-		//}
-
-		//sockDrawer = GameCanvas.Instance.LookupGameObject("Sock Drawer");
-		//transitionImage = GameCanvas.Instance.LookupComponent<Image>("Transition");
-
-		//playerButtons = GameCanvas.Instance.LookupGameObject("Player Buttons");
-		//chatBox = GameCanvas.Instance.LookupGameObject("Chat");		
-		//helpBox = GameCanvas.Instance.LookupGameObject("Help Screen");
-
-		//helpCloseButton = GameCanvas.Instance.LookupComponent<Button>("Help Close Button");
-
+		PlayerAbilityDisplay = new PopulateContainer[1];
+		PlayerAbilityDisplay[0] = GameCanvas.Instance.LookupComponent<PopulateContainer>("P1 Ability Parent");
 
 		//LoseState = GameCanvas.Instance.LookupComponent<CanvasGroup>("Lose State");
 		//WinState = GameCanvas.Instance.LookupComponent<CanvasGroup>("Win State");
@@ -110,25 +98,6 @@ public class UIManager : Singleton<UIManager>
 		//WinState.alpha = 0;
 
 		//InitButtonListeners();
-
-		//Close any left open UI stuff.
-		//inventoryState = MenuState.Closed;
-		//journalState = MenuState.Closed;
-		//sockState = MenuState.Closed;
-		//interactState = MenuState.Closed;
-		//uiButtonState = MenuState.Open;
-		//helpState = MenuState.Open;
-		
-		//CloseSocks();
-		//CloseInteract();
-
-#if UNITY_EDITOR
-		//CloseHelp();
-#endif
-		//CloseInventory();
-		//CloseJournal();
-
-
 	}
 
 	private void InitButtonListeners()
