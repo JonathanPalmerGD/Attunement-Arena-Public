@@ -81,7 +81,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 	public AdvancedSettings advancedSettings = new AdvancedSettings();
 
 
-	private Rigidbody mRigidBody;
+	public Rigidbody mRigidBody;
 	private Vector3 accRBForces;
 	private CapsuleCollider mCapsule;
 	private float mYRotation;
@@ -136,14 +136,15 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 		RotateView();
 
-		if (Input.GetButtonDown(Owner.PlayerInput + "Jump") && !mJump)
-		{
-			mJump = true;
-		}
+		//if (Input.GetButtonDown(Owner.PlayerInput + "Jump") && !mJump)
+		//{
+		//	mJump = true;
+		//}
 	}
 
 	void ApplyExternalForce(Vector3 force)
 	{
+		Debug.Log("Hit\n");
 		accRBForces += force;
 	}
 

@@ -17,8 +17,11 @@ public class Ability : ScriptableObject
 		get { return false; }
 	}
 	public int Charges = 0;
+	public int MaxCharges = 0;
+	private int cost = 0;
 	public virtual int Cost
 	{
+		set { cost = value; }
 		get { return 0; }
 	}
 	public virtual float GeneralDamage
@@ -59,7 +62,18 @@ public class Ability : ScriptableObject
 		}
 		else
 		{
-			CurrentCooldown = 0;
+			if (UseCharges)
+			{
+				if (Charges < MaxCharges)
+				{
+					Charges++;
+				}
+				CurrentCooldown = MaxCooldown;
+			}
+			else
+			{
+				CurrentCooldown = 0;
+			}
 		}
 	}
 
@@ -93,12 +107,14 @@ public class Ability : ScriptableObject
 			return true;
 		}
 
+		//Debug.Log("Failed to be able to use the ability\n" + canPayCost + " " + chargeValid + " " + onCooldown + "\n" + OutputInfo());
 		return false;
 	}
 
 	//Returns false if unsuccessful
-	public bool ActivateAbilityOverhead(bool validateActivation = true)
+	public bool ActivateAbilityOverhead(Vector3 inputVector = default(Vector3), bool validateActivation = true)
 	{
+		//Debug.Log(OutputInfo());
 		if (validateActivation)
 		{
 			if (!CanUseAbility())
@@ -115,18 +131,34 @@ public class Ability : ScriptableObject
 		{
 			Charges--;
 		}
-
+	
 		//Pay the cost
 		Owner.Mana -= Cost;
 
 		//Activate the Effect
-		ExecuteAbility();
+		ExecuteAbility(inputVector);
 
 		return true;
 	}
 
-	public virtual void ExecuteAbility()
+	public virtual void ExecuteAbility(Vector3 inputVector = default(Vector3))
 	{
 		return;
+	}
+
+	public virtual string OutputInfo()
+	{
+		string output = "[Ability]: " + this.GetType() + "\n";
+		output += "Owner: " + Owner.name + "\n";
+		output += "keyBinding: " + keyBinding + "\n";
+		output += "Charges: " + Charges + "\n";
+		output += "MaxCharges: " + MaxCharges + "\n";
+		output += "Cost: " + Cost + "\n";
+		output += "GeneralDamage: " + GeneralDamage + "\n";
+		output += "SpecialDamage: " + SpecialDamage + "\n";
+		output += "CurrentCooldown: " + MaxCooldown + "\n";
+		output += "UseCharges: " + UseCharges + "\n";
+
+		return output;
 	}
 }

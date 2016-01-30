@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
+	public bool initialized;
+
 	public int playerID = 0;
 	public enum PlayerControls { Mouse, GamePad}
 	public PlayerControls ControlType = PlayerControls.GamePad;
@@ -25,6 +27,7 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	#region Object References
 	public RigidbodyFirstPersonController controller;
 	//public List<Ability> rituals;
 
@@ -32,11 +35,12 @@ public class Player : MonoBehaviour
 	public Vector3 targetScanDir = Vector3.zero;
 	public Vector3 hitscanContact = Vector3.zero;
 
+	public PlayerSpawn mySpawn;
 	public CameraController cameraController;
 	public Camera myCamera;
+	#endregion
 
-	public bool initialized;
-
+	#region Properties
 	public bool Grounded
 	{
 		get { return controller.Grounded; }
@@ -66,32 +70,24 @@ public class Player : MonoBehaviour
 			mana = value;
 		}
 	}
+	#endregion
 
+	#region Ability List and Dict
 	public List<Ability> abilities;
 	public Dictionary<string, Ability> abilityBindings;
+	#endregion
 
-	public Ability AddAbility(string abilityName, string keyBinding, string displayKeyBinding)
-	{
-		Init();
-		Ability newAbility = ScriptableObject.CreateInstance(abilityName) as Ability;
-
-		newAbility.Init(this, keyBinding, displayKeyBinding);
-
-		abilities.Add(newAbility);
-		abilityBindings.Add(keyBinding, newAbility);
-
-		return newAbility;
-	}
-
+	#region Start, Init and AddAbility
 	void Start()
 	{
 		Init();
 	}
 
-	void Init()
+	public void Init()
 	{
 		if (!initialized)
 		{
+			Mana = 100;
 			if (myCamera == null)
 			{
 				myCamera = GetComponent<Camera>();
@@ -120,6 +116,24 @@ public class Player : MonoBehaviour
 			}
 		}
 	}
+
+	public Ability CreateAbility(string abilityName, string keyBinding, string displayKeyBinding)
+	{
+		Ability newAbility = ScriptableObject.CreateInstance(abilityName) as Ability;
+
+		newAbility.Init(this, keyBinding, displayKeyBinding);
+
+		abilities.Add(newAbility);
+		abilityBindings.Add(keyBinding, newAbility);
+
+		return newAbility;
+	}
+
+	public void AddAbilityBinding(Ability newAbil, string keyBinding)
+	{
+		abilityBindings.Add(keyBinding, newAbil);
+	}
+	#endregion
 
 	public void UseAbility()
 	{
@@ -205,8 +219,29 @@ public class Player : MonoBehaviour
 
 	public void GetInput()
 	{
+		#region Jumping
+		if (Input.GetButtonDown(PlayerInput + "Jump"))
+		{
+			//Debug.Log("Hit\n" + abilityBindings.ContainsKey(PlayerInput + "Jump"));
+			if (abilityBindings.ContainsKey(PlayerInput + "Jump"))
+			{
+				//Debug.Log("Hit\n");
+				abilityBindings[PlayerInput + "Jump"].ActivateAbilityOverhead(Vector3.down);
+			}
+		}
+
+		if (Input.GetButtonDown(PlayerInput + "Primary"))
+		{
+			if (abilityBindings.ContainsKey(PlayerInput + "Primary"))
+			{
+				abilityBindings[PlayerInput + "Primary"].ActivateAbilityOverhead(targetScanDir);
+			}
+		}
+		#endregion
+
+		#region Cursor Unlocking
 #if UNITY_EDITOR
-		if(Input.GetKeyDown(KeyCode.Escape))
+		if (Input.GetKeyDown(KeyCode.Escape))
 		{
 			if (Cursor.lockState == CursorLockMode.Locked)
 			{
@@ -220,5 +255,6 @@ public class Player : MonoBehaviour
 			}
 		}
 #endif
+		#endregion
 	}
 }

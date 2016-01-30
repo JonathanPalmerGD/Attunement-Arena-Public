@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -14,6 +15,8 @@ public class GameManager : Singleton<GameManager>
 		get { return players.Length; }
 	}
 	public Player[] players;
+
+	public List<PlayerSpawn> SpawnPoints;
 
 	public enum GamePhase { Intro, Tutorial, EndTutorial, MainPlay, BeginAccuse, Accusation, EndGame };
 	public GamePhase currentPhase = GamePhase.Intro;
@@ -33,7 +36,11 @@ public class GameManager : Singleton<GameManager>
 	{
 		LookupPrefabs();
 
-		int playerCount = 1;
+		SpawnPoints = new List<PlayerSpawn>();
+
+		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
+
+		int playerCount = 2;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
@@ -50,7 +57,14 @@ public class GameManager : Singleton<GameManager>
 
 		for (int i = 0; i < playerCount; i++)
 		{
-			//players[i].playerID = i;
+			if (SpawnPoints.Count > 0)
+			{
+				PlayerSpawn spawn = SpawnPoints[Random.Range(0, SpawnPoints.Count)];
+				players[i].mySpawn = spawn;
+				SpawnPoints.Remove(spawn);
+			}
+
+			players[i].transform.position = players[i].mySpawn.transform.position;
 
 #if UNITY_EDITOR
 			if (players[i].playerID == playerCount - 1)
@@ -81,7 +95,19 @@ public class GameManager : Singleton<GameManager>
 	{
 		for (int i = 0; i < NumPlayers; i++)
 		{
-			players[i].AddAbility("Gust", "Player " + i + " Q", "Q");
+			players[i].Init();
+			Gust newGust = (Gust)players[i].CreateAbility("Gust", players[i].PlayerInput + "Primary", "A");
+			players[i].AddAbilityBinding(newGust, players[i].PlayerInput + "Jump");
+
+			//RITUAL:
+				//If the player doesn't have Gust
+					//Give them Gust
+				//Modify Gust
+
+			//Gust newGust = (Gust)players[i].AddAbility("Gust", players[i].PlayerInput + "Jump", "Jump");
+			newGust.MaxCharges = 5;
+			newGust.Charges = 5;
+
 		}
 	}
 

@@ -207,11 +207,11 @@ MonoBehaviour:
   Owner: {fileID: 0}
   cam: {fileID: 2060296}
   movementSettings:
-    ForwardSpeed: 8
-    BackwardSpeed: 4
-    StrafeSpeed: 4
-    RunMultiplier: 2
-    RunKey: 304
+    ForwardSpeed: 16
+    BackwardSpeed: 16
+    StrafeSpeed: 16
+    RunMultiplier: 1
+    RunKey: 0
     JumpForce: 50
     SlopeCurveModifier:
       serializedVersion: 2
@@ -235,18 +235,18 @@ MonoBehaviour:
       m_PostInfinity: 2
     CurrentTargetSpeed: 8
   mouseLook:
-    XSensitivity: 2
-    YSensitivity: 2
+    XSensitivity: 4
+    YSensitivity: 4
     clampVerticalRotation: 1
-    MinimumX: -60
+    MinimumX: -45
     MaximumX: 90
-    smooth: 1
-    smoothTime: 18
+    smooth: 0
+    smoothTime: 1000
     controller: {fileID: 0}
   advancedSettings:
     groundCheckDistance: .100000001
     stickToGroundHelperDistance: .600000024
-    slowDownRate: 20
+    slowDownRate: 1000
     airControl: 1
 --- !u!114 &11444262
 MonoBehaviour:
@@ -317,6 +317,7 @@ MonoBehaviour:
   hitscanTarget: {fileID: 0}
   targetScanDir: {x: 0, y: 0, z: 0}
   hitscanContact: {x: 0, y: 0, z: 0}
+  mySpawn: {fileID: 0}
   cameraController: {fileID: 11402282}
   myCamera: {fileID: 2060296}
   initialized: 0
@@ -376,7 +377,47 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: mouseLook.MinimumX
-      value: -60
+      value: -45
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: mouseLook.smoothTime
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: mouseLook.smooth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: movementSettings.RunMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: movementSettings.RunKey
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: movementSettings.StrafeSpeed
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: movementSettings.BackwardSpeed
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: advancedSettings.slowDownRate
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: movementSettings.ForwardSpeed
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: mouseLook.XSensitivity
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: mouseLook.YSensitivity
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

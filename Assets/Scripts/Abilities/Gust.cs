@@ -7,16 +7,7 @@ public class Gust : Ability
     {
         get
         {
-            return false;
-        }
-    }
-
-
-    public override int Cost
-    {
-        get
-        {
-            return 5;
+            return true;
         }
     }
 
@@ -27,34 +18,29 @@ public class Gust : Ability
             return 2f;
         }
 	}
-	public float RecoilForce
+	public float RecoilForce = 100;
+	public float Force = 5;
+	public float Range = 10;
+	public float MaxAngle = 15;
+
+	public override void UpdateAbility(float deltaTime)
 	{
-		get { return 5f; }
+		if (Owner.controller.Grounded)
+		{
+			//Debug.Log("Updating Gust - Grounded\n" + deltaTime);
+			base.UpdateAbility(deltaTime);
+		}
+		else
+		{
+			//Debug.Log("Not Updating Gust - Not Grounded\n" + deltaTime);
+		}
 	}
 
-	public float Force
-    {
-        get { return 5f; }
-    }
+	public override void ExecuteAbility(Vector3 inputVector = default(Vector3))
+	{
+		var castDir = inputVector.normalized;
 
-    public float Range
-    {
-        get { return 10f; }
-    }
-
-    public float MaxAngle
-    {
-        get { return 15f; }
-    }
-
-    public override void ExecuteAbility()
-    {
-        ExecuteAbility(false);
-    }
-
-    public void ExecuteAbility(bool downwards)
-    {
-        var castDir = downwards ? (new Vector3(0f, 1, 0f)) : Owner.targetScanDir.normalized;
+		Debug.DrawLine(Owner.transform.position, Owner.transform.position + castDir * Range, Color.green, 5.0f);
 
         foreach (Player p in GameManager.Instance.players)
         {
@@ -72,9 +58,13 @@ public class Gust : Ability
             // If the other player is not in the cone of influence, ignore
             if (Vector3.Angle(castDir, tetherVector) > MaxAngle) continue;
 
+			Debug.DrawLine(Owner.transform.position, Owner.transform.position + tetherVector, Color.red, 5.0f);
+
             p.SendMessage("ApplyExternalForce", castDir * Force);
         }
 
-        Owner.SendMessage("ApplyExternalForce", castDir * RecoilForce * -1f);
+		Vector3 oldVel = Owner.controller.mRigidBody.velocity;
+		Owner.controller.mRigidBody.velocity = new Vector3(oldVel.x, 0, oldVel.z);
+        Owner.SendMessage("ApplyExternalForce", castDir * RecoilForce * -1);
     }
 }
