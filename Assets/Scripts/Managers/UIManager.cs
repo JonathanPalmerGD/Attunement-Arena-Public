@@ -111,6 +111,12 @@ public class UIManager : Singleton<UIManager>
 				PlayerAbilityDisplay[i] = GameCanvas.Instance.LookupComponent<PopulateContainer>("P" + i + " Ability Parent");
 			}
 
+			for (int i = 0; i < GameManager.Instance.NumPlayers; i++)
+			{
+				GameManager.Instance.players[i].damageIndicator = GameCanvas.Instance.LookupComponent<Image>("P" + i + " Damage Indicator");
+				GameManager.Instance.players[i].damageIndicator.gameObject.SetActive(false);
+			}
+
 			GameManager.Instance.AddPlayerAbilities();
 
 			initialized = true;
@@ -166,7 +172,6 @@ public class UIManager : Singleton<UIManager>
 		UIGameObject.transform.SetParent(inGameUI.transform);
 		playerUIParents[id] = UIGameObject.GetComponent<RectTransform>();
 		playerUIParents[id].localScale = Vector3.one;
-
 
 		//EXTREMELY IMPORTANT: We use .Name, which is a special thing of UIComponents.
 		playerUIParents[newPlayer.playerID].GetComponent<UIComponent>().Name = "Player UI";

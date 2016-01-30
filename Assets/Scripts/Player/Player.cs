@@ -201,6 +201,7 @@ public class Player : MonoBehaviour
 
 		if (damaged)
 		{
+			StartCoroutine("DamageFlash");
 			//Coroutine to flash the damage screen
 		}
 
@@ -216,6 +217,14 @@ public class Player : MonoBehaviour
 	{
 		if (amount < 0)
 		{
+			if (!damaged)
+			{
+				damageFlashTimer = .75f;
+			}
+			else
+			{
+				damageFlashTimer += .25f;
+			}
 			damaged = true;
 		}
 		if (Health + amount >= MaxHealth)
@@ -424,15 +433,26 @@ public class Player : MonoBehaviour
 
 	public Image damageIndicator;
 
-	public IEnumerator DamageFlash(float fadeDur)
+	float damageFlashTimer;
+	public IEnumerator DamageFlash()
 	{
-		damageIndicator.enabled = true;
-		for (float i = 0.2f; i < 0; i -= .01f)
+		damageIndicator.gameObject.SetActive(true);
+		Color col = damageIndicator.color; // Get color reference
+		col.a = 1f;
+		damageIndicator.color = col; // Max alpha color
+
+		while (damageFlashTimer > 0)
 		{
-			//damageIndicator.color = new Color(damageIndicator.color.r, damageIndicator.color.g, damageIndicator.color.b, 
-			///yield return new WaitForSeconds(.01f);
+			damageFlashTimer = Mathf.Clamp(damageFlashTimer, 0, 1.25f);
+
+			damageFlashTimer -= Time.deltaTime;
+			col.a = .30f * (damageFlashTimer / 0.75f); // Alpha should fade from full to zero over two seconds
+			damageIndicator.color = col; // Set new alpha
+			yield return null;
 		}
-		float alpha = .2f;
-		yield return new WaitForSeconds(1);
+		damaged = false;
+		col.a = 0f;
+		damageIndicator.color = col;
+		damageIndicator.gameObject.SetActive(false);
 	}
 }
