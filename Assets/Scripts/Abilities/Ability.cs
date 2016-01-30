@@ -47,6 +47,11 @@ public class Ability : ScriptableObject
 		}
 	}
 
+	public virtual void UpdateAbility(float deltaTime)
+	{
+
+	}
+
 	public bool CanUseAbility()
 	{
 		//If our owner can pay the cost
