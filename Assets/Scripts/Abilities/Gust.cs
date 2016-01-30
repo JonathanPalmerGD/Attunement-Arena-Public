@@ -18,7 +18,7 @@ public class Gust : Ability
 			return 2f;
 		}
 	}
-	public float RecoilForce = 100;
+	public float RecoilForce = 140;
 	public float Force = 5;
 	public float Range = 10;
 	public float MaxAngle = 15;
@@ -68,11 +68,21 @@ public class Gust : Ability
 			Owner.controller.Jumping = true;
 		}
 
-		if (Vector3.Angle(castDir, Vector3.down) < 15 || !Owner.Grounded)
+		Vector3 oldVel = Owner.controller.mRigidBody.velocity;
+
+		if (Vector3.Angle(castDir, Vector3.down) < 15)
 		{
-			Vector3 oldVel = Owner.controller.mRigidBody.velocity;
 			Owner.controller.mRigidBody.velocity = new Vector3(oldVel.x, 0, oldVel.z);
 			Owner.SendMessage("ApplyExternalForce", castDir * RecoilForce * -1);
 		}
+		else
+		{
+			if (!Owner.Grounded)
+			{
+				Owner.controller.mRigidBody.velocity = new Vector3(0, 0, 0);
+				Owner.SendMessage("ApplyExternalForce", castDir * RecoilForce * -1);
+			}
+		}
+		
 	}
 }

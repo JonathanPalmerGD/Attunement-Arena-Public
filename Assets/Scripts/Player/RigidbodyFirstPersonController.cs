@@ -28,27 +28,28 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		{
 			if (input == Vector2.zero)
 			{
+				CurrentTargetSpeed = 0;
 				//if (CurrentTargetSpeed != 0)
 				//{
 				//	Debug.Log("Decaying\n");
 				//}
-				float decayAmt = Mathf.Clamp(CurrentTargetSpeed * .1f, .5f, 1);
-				if (CurrentTargetSpeed > 0)
-				{
-					CurrentTargetSpeed -= decayAmt;
-					if (CurrentTargetSpeed < 0)
-					{
-						CurrentTargetSpeed = 0;
-					}
-				}
-				else if(CurrentTargetSpeed < 0)
-				{
-					CurrentTargetSpeed += decayAmt;
-					if (CurrentTargetSpeed > 0)
-					{
-						CurrentTargetSpeed = 0;
-					}
-				}
+				//float decayAmt = Mathf.Clamp(CurrentTargetSpeed * .1f, .5f, 1);
+				//if (CurrentTargetSpeed > 0)
+				//{
+				//	CurrentTargetSpeed -= decayAmt;
+				//	if (CurrentTargetSpeed < 0)
+				//	{
+				//		CurrentTargetSpeed = 0;
+				//	}
+				//}
+				//else if(CurrentTargetSpeed < 0)
+				//{
+				//	CurrentTargetSpeed += decayAmt;
+				//	if (CurrentTargetSpeed > 0)
+				//	{
+				//		CurrentTargetSpeed = 0;
+				//	}
+				//}
 
 				//Debug.Log("\n" + CurrentTargetSpeed);
 				return;
@@ -190,7 +191,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			desiredMove.x = desiredMove.x * movementSettings.CurrentTargetSpeed;
 			desiredMove.z = desiredMove.z * movementSettings.CurrentTargetSpeed;
 			desiredMove.y = desiredMove.y * movementSettings.CurrentTargetSpeed;
-			Debug.DrawLine(transform.position, transform.position + desiredMove * 5, Color.blue, .1f);
+			//Debug.DrawLine(transform.position, transform.position + desiredMove * 5, Color.blue, .1f);
 			if (mRigidBody.velocity.sqrMagnitude <
 				(movementSettings.CurrentTargetSpeed * movementSettings.CurrentTargetSpeed))
 			{
