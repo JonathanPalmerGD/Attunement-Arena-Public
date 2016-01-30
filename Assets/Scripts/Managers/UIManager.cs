@@ -27,8 +27,10 @@ public class UIManager : Singleton<UIManager>
 
 	#region Ingame UI references
 	public GameObject inGameUI;
-	
 
+	public GameObject[] playerUIParents;
+	public PopulateContainer[] PlayerAbilityDisplay;
+	
 	public Image transitionImage;
 
 	public CanvasGroup WinState;
@@ -38,10 +40,6 @@ public class UIManager : Singleton<UIManager>
 	#region Menu States
 	public enum MenuState { Closed, Open, Suppressed, Error }
 	//public MenuState journalState;
-
-	//TODO: Turn the inventory states into a state machine
-	//public bool allowInventoryControl = true;
-	//public bool allowJournalControl = true;
 	#endregion
 
 	#region Fade Controls
@@ -71,7 +69,7 @@ public class UIManager : Singleton<UIManager>
 			inGameUI = go;
 			go.name = "In-Game UI - Canvas";
 		}
-	} // end Awake
+	}
 
 	private void LookupPrefabs()
 	{
@@ -87,6 +85,9 @@ public class UIManager : Singleton<UIManager>
 
 	void Start()
 	{
+
+
+
 		//if (inspection.gameObject.activeSelf)
 		//{
 		//	inspection.Init();
@@ -128,7 +129,7 @@ public class UIManager : Singleton<UIManager>
 		//CloseJournal();
 
 
-	}// end Start
+	}
 
 	private void InitButtonListeners()
 	{
@@ -199,6 +200,22 @@ public class UIManager : Singleton<UIManager>
 		//}
 		//	 );
 		#endregion
+	}
+
+	public AbilityDisplayUI AddAbilityDisplay(Ability ability)
+	{
+		//Find the parent ID.
+		int id = ability.Owner.playerID;
+		AbilityDisplayUI aDisUI = null;
+		
+		GameObject go = PlayerAbilityDisplay[id].AddPrefabToContainerReturn();
+
+		aDisUI = go.GetComponent<AbilityDisplayUI>();
+
+		//We're adding this here as a bit of an unnecessary step to make sure it's set.
+		ability.abilDispUI = aDisUI;
+
+		return aDisUI;
 	}
 
 	void Update()

@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Player : MonoBehaviour
 {
+	public int playerID;
+
+	public RigidbodyFirstPersonController controller;
 	//public List<Ability> rituals;
 
 	private float health;
@@ -34,11 +38,11 @@ public class Player : MonoBehaviour
 	public List<Ability> abilities;
 	public Dictionary<string, Ability> abilityBindings;
 
-	public Ability AddAbility(string abilityName, string keyBinding)
+	public Ability AddAbility(string abilityName, string keyBinding, string displayKeyBinding)
 	{
 		Ability newAbility = ScriptableObject.CreateInstance(abilityName) as Ability;
 
-		newAbility.Init(this, keyBinding);
+		newAbility.Init(this, keyBinding, displayKeyBinding);
 
 		abilities.Add(newAbility);
 		abilityBindings.Add(keyBinding, newAbility);
@@ -60,6 +64,11 @@ public class Player : MonoBehaviour
 	void Update()
 	{
 		GetInput();
+
+		for (int i = 0; i < abilities.Count; i++)
+		{
+			
+		}
 	}
 
 	public void GetInput()

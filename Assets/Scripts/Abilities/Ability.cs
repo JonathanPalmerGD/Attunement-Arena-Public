@@ -7,6 +7,10 @@ public class Ability : ScriptableObject
 
 	public bool initialized = false;
 	public string keyBinding;
+	public string keyBindingUserDisplay;
+
+	public AbilityDisplayUI abilDispUI;
+	public int IconID;
 
 	public virtual bool UseCharges {
         get { return false; }
@@ -24,7 +28,7 @@ public class Ability : ScriptableObject
     public float CurrentCooldown;
 	public float MaxCooldown;
 
-	public void Init(Player newOwner, string newKeyBinding)
+	public void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{
 		if (!initialized)
 		{
@@ -32,6 +36,12 @@ public class Ability : ScriptableObject
 			Owner = newOwner;
 
 			keyBinding = newKeyBinding;
+			keyBindingUserDisplay = displayKeyBinding;
+
+			//Note, this property is set by AddAbilityDisplay, therefore assigning it here is for understanding what's going on more than actually doing anything.
+			abilDispUI = UIManager.Instance.AddAbilityDisplay(this);
+
+			abilDispUI.SetupDisplay(this);
 
 			initialized = true;
 		}
