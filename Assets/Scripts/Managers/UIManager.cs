@@ -49,6 +49,8 @@ public class UIManager : Singleton<UIManager>
 	#endregion
 	#endregion
 
+	private bool initialized = false;
+
 	#region Awake, Start & Update
 	void Awake()
 	{
@@ -97,17 +99,20 @@ public class UIManager : Singleton<UIManager>
 	}
 
 	public void Init()
-	{
-		//For each player
-
-		//Create a Player UI
-		
+	{		
 		PlayerAbilityDisplay = new PopulateContainer[GameManager.Instance.NumPlayers];
 
 		for (int i = 0; i < PlayerAbilityDisplay.Length; i++)
 		{
+			//Debug.Log("Looking up: " + "P" + i + " Ability Parent" + "\n" + GameCanvas.Instance.compDict.Count);
+		
 			PlayerAbilityDisplay[i] = GameCanvas.Instance.LookupComponent<PopulateContainer>("P" + i + " Ability Parent");
 		}
+
+		Debug.Log("Hit\n");
+		GameManager.Instance.AddPlayerAbilities();
+
+		initialized = true;
 	}
 
 	public void AddPlayerUI(Player newPlayer)
@@ -119,14 +124,31 @@ public class UIManager : Singleton<UIManager>
 		playerUIParents[newPlayer.playerID] = UIGameObject.GetComponent<RectTransform>();
 		playerUIParents[newPlayer.playerID].localScale = Vector3.one;
 
-		playerUIParents[newPlayer.playerID].name = "Player UI";
+		//EXTREMELY IMPORTANT: We use .Name, which is a special thing of UIComponents.
+		playerUIParents[newPlayer.playerID].GetComponent<UIComponent>().Name = "Player UI";
 		RecursiveChildNaming(newPlayer.playerID, playerUIParents[newPlayer.playerID]);
 		//playerUIParents[newPlayer.playerID].
+
+
 	}
 
 	private void RecursiveChildNaming(int id, Transform target)
 	{
-		target.name = target.name.Replace("Player", "P" + id);
+		//This entire method is messy. Be careful if you change.
+		
+		string oldName = target.name;
+		string newName = target.name.Replace("Player", "P" + id);
+
+		Debug.Log("Comparing " + oldName + "  " + newName + "\n" + (newName != oldName));
+		if (newName != oldName)
+		{
+			UIComponent comp = target.GetComponent<UIComponent>();
+			if(comp)
+			{
+				//EXTREMELY IMPORTANT: We use .Name, which is a special thing of UIComponents.
+				comp.Name = newName;
+			}
+		}
 
 		for (int i = 0; i < target.childCount; i++)
 		{
@@ -212,7 +234,7 @@ public class UIManager : Singleton<UIManager>
 		AbilityDisplayUI aDisUI = null;
 		
 		GameObject go = PlayerAbilityDisplay[id].AddPrefabToContainerReturn();
-
+		Debug.Log("Hit\n");
 		aDisUI = go.GetComponent<AbilityDisplayUI>();
 
 		//We're adding this here as a bit of an unnecessary step to make sure it's set.

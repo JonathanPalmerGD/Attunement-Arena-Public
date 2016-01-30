@@ -52,6 +52,8 @@ public class Player : MonoBehaviour
 
 	public Ability AddAbility(string abilityName, string keyBinding, string displayKeyBinding)
 	{
+		Debug.Log("Hit\n");
+
 		Ability newAbility = ScriptableObject.CreateInstance(abilityName) as Ability;
 
 		newAbility.Init(this, keyBinding, displayKeyBinding);

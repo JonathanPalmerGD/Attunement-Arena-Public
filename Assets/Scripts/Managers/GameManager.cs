@@ -66,6 +66,16 @@ public class GameManager : Singleton<GameManager>
 		playerGO.name = "Player " + newID;
 	}
 
+	public void AddPlayerAbilities()
+	{
+		Debug.Log("Hit\n");
+		for (int i = 0; i < NumPlayers; i++)
+		{
+			Debug.Log("Hit\n");
+			players[i].AddAbility("Gust", "Player " + i + " Q", "Q");
+		}
+	}
+
 	void Update()
 	{
 #if UNITY_EDITOR

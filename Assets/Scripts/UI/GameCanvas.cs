@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameCanvas : MonoBehaviour 
+public class GameCanvas : MonoBehaviour
 {
 	private static GameCanvas _instance;
 	public static GameCanvas Instance
 	{
-		get 
+		get
 		{
 			if (_instance == null)
 			{
@@ -20,11 +20,11 @@ public class GameCanvas : MonoBehaviour
 			}
 
 			//Debug.Log("Hit\n" + (_instance == null).ToString());
-			return _instance; 
+			return _instance;
 		}
 	}
 	public Dictionary<string, UIComponent> compDict;
-	
+
 	public bool displayInspectorInfo = true;
 
 	[Header("Dictionary Information")]
@@ -85,7 +85,7 @@ public class GameCanvas : MonoBehaviour
 
 	public void RegisterComponent(string LookupKey, UIComponent comp)
 	{
-		if(LookupKey.Length < 1)
+		if (LookupKey.Length < 1)
 		{
 			//Debug.Log("Defaulting Lookup Key as name\n");
 			LookupKey = comp.name;
@@ -109,14 +109,38 @@ public class GameCanvas : MonoBehaviour
 		registeredCount = compDict.Count;
 	}
 
+	public void AlterRegistration(string oldKey, string newKey, UIComponent comp)
+	{
+		if (compDict.ContainsKey(oldKey))
+		{
+			compDict.Remove(oldKey);
+			compDict.Add(newKey, comp);
+
+			try
+			{
+				if (displayInspectorInfo)
+				{
+					int indexOf = componentKeys.IndexOf(oldKey);
+					componentKeys[indexOf] = newKey;
+				}
+			}
+
+			catch (System.Exception e)
+			{
+				Debug.LogError("Error with altering registration of " + oldKey + " to " + newKey + "\nComponent: " + comp.name);
+			}
+		}
+	}
+
 	public T LookupComponent<T>(string compName) where T : Component
 	{
 		try
 		{
 			return compDict[compName].GetComponent<T>();
 		}
-		catch(System.Exception e)
+		catch (System.Exception e)
 		{
+			Debug.Log(compDict.ContainsKey(compName) + "\n" + compDict.Count);
 			Debug.LogError("[GameCanvas].Lookup Component error with " + compName + "\t\t" + typeof(T).ToString() + "\n" + e.Message);
 			return compDict[compName].GetComponent<T>();
 		}

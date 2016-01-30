@@ -273,6 +273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentType: 5
   alternateLookupKey: 
+  registered: 0
   important: 1
 --- !u!114 &11411698
 MonoBehaviour:
@@ -307,6 +308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentType: 5
   alternateLookupKey: 
+  registered: 0
   important: 1
 --- !u!114 &11413866
 MonoBehaviour:
@@ -321,6 +323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentType: 0
   alternateLookupKey: 
+  registered: 0
   important: 1
 --- !u!114 &11420068
 MonoBehaviour:
@@ -461,6 +464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentType: 3
   alternateLookupKey: 
+  registered: 0
   important: 1
 --- !u!114 &11437648
 MonoBehaviour:
@@ -475,6 +479,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentType: 1
   alternateLookupKey: 
+  registered: 0
   important: 1
 --- !u!114 &11441222
 MonoBehaviour:
@@ -605,6 +610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentType: 3
   alternateLookupKey: 
+  registered: 0
   important: 1
 --- !u!114 &11477194
 MonoBehaviour:
@@ -646,6 +652,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentType: 5
   alternateLookupKey: 
+  registered: 0
   important: 1
 --- !u!114 &11484294
 MonoBehaviour:
