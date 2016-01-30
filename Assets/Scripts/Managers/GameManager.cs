@@ -33,7 +33,7 @@ public class GameManager : Singleton<GameManager>
 	{
 		LookupPrefabs();
 
-		int playerCount = 2;
+		int playerCount = 1;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");

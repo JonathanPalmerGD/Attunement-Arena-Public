@@ -136,15 +136,18 @@ public class UIManager : Singleton<UIManager>
 		//Min	0		0
 		//Max	1		.5
 
-		if (player.playerID == 0)
+		if (GameManager.Instance.NumPlayers == 2)
 		{
-			playerUIParents[id].anchorMin = anchMinp0;
-			playerUIParents[id].anchorMax = anchMaxp0;
-		}
-		else
-		{
-			playerUIParents[id].anchorMin = anchMinp1;
-			playerUIParents[id].anchorMax = anchMaxp1;
+			if (player.playerID == 0)
+			{
+				playerUIParents[id].anchorMin = anchMinp0;
+				playerUIParents[id].anchorMax = anchMaxp0;
+			}
+			else
+			{
+				playerUIParents[id].anchorMin = anchMinp1;
+				playerUIParents[id].anchorMax = anchMaxp1;
+			}
 		}
 
 		//playerUIParents[id].anchorMin = new Vector2(player.myCamera.rect.x, player.myCamera.rect.y);

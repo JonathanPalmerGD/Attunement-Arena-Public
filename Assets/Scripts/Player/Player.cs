@@ -112,6 +112,12 @@ public class Player : MonoBehaviour
 			initialized = true;
 
 			UIManager.Instance.ConfigureUISize(this);
+
+			if (ControlType == PlayerControls.Mouse)
+			{
+				Cursor.visible = false;
+				Cursor.lockState = CursorLockMode.Locked;
+			}
 		}
 	}
 
@@ -199,6 +205,20 @@ public class Player : MonoBehaviour
 
 	public void GetInput()
 	{
-
+#if UNITY_EDITOR
+		if(Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (Cursor.lockState == CursorLockMode.Locked)
+			{
+				Cursor.visible = true;
+				Cursor.lockState = CursorLockMode.None;
+			}
+			else
+			{
+				Cursor.visible = false;
+				Cursor.lockState = CursorLockMode.Locked;
+			}
+		}
+#endif
 	}
 }
