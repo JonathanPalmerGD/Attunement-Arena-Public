@@ -8,12 +8,20 @@ public class Ability : ScriptableObject
 	public bool initialized = false;
 	public string keyBinding;
 
-	public bool UseCharges;
-	public int Charges;
-	public int Cost;
-	public float GeneralDamage;
-	public float SpecialDamage;
-	public float CurrentCooldown;
+	public virtual bool UseCharges {
+        get { return false; }
+    }
+	public int Charges = 0;
+	public virtual int Cost {
+        get { return 0; }
+    }
+	public virtual float GeneralDamage {
+        get { return 0f; }
+    }
+    public virtual float SpecialDamage {
+        get { return 0f; }
+    }
+    public float CurrentCooldown;
 	public float MaxCooldown;
 
 	public void Init(Player newOwner, string newKeyBinding)
