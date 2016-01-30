@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -46,6 +47,9 @@ public class Player : MonoBehaviour
 		get { return controller.Grounded; }
 	}
 
+	public bool damaged = false;
+
+	#region Health & HealthAdj
 	private float health;
 	public float Health
 	{
@@ -58,6 +62,32 @@ public class Player : MonoBehaviour
 			health = value;
 		}
 	}
+	private float maxHealth;
+	public float MaxHealth
+	{
+		get
+		{
+			return maxHealth;
+		}
+		set
+		{
+			maxHealth = value;
+		}
+	}
+	private float healthToAdj;
+	public float HealthToAdj
+	{
+		get
+		{
+			return healthToAdj;
+		}
+		set
+		{
+			healthToAdj = value;
+		}
+	}
+	#endregion
+	#region Mana & ManaAdj
 	private float mana;
 	public float Mana
 	{
@@ -68,6 +98,18 @@ public class Player : MonoBehaviour
 		set
 		{
 			mana = value;
+		}
+	}
+	private float manaToAdj;
+	public float ManaToAdj
+	{
+		get
+		{
+			return manaToAdj;
+		}
+		set
+		{
+			manaToAdj = value;
 		}
 	}
 	private float maxMana;
@@ -82,6 +124,7 @@ public class Player : MonoBehaviour
 			maxMana = value;
 		}
 	}
+	#endregion
 	#endregion
 
 	#region Ability List and Dict
@@ -156,11 +199,115 @@ public class Player : MonoBehaviour
 	{
 		GetInput();
 
+		if (damaged)
+		{
+			//Coroutine to flash the damage screen
+		}
+
 		hitscanTarget = TargetScan();
 
 		for (int i = 0; i < abilities.Count; i++)
 		{
 			abilities[i].UpdateAbility(GameManager.Instance.modifiedTimeScale * Time.deltaTime);
+		}
+	}
+
+	public void AdjustHealth(float amount)
+	{
+		if (amount < 0)
+		{
+			damaged = true;
+		}
+		if (Health + amount >= MaxHealth)
+		{
+			HealthToAdj += MaxHealth - Health;
+		}
+		else
+		{
+			if (amount < 0)
+			{
+				HealthToAdj += amount;
+			}
+			else
+			{
+				HealthToAdj += amount;
+			}
+		}
+	}
+
+	void UpdateHealth()
+	{
+		//If our displayed health value isn't correct
+		if (HealthToAdj != 0)
+		{
+			float rate = Time.deltaTime * 8;
+			float gainThisFrame = 0;
+			if (HealthToAdj < 0)
+			{
+				if (Health + HealthToAdj < 0)
+				{
+					rate *= 10;
+				}
+
+				//If the health left to adjust is LESS than the rate, just lose the remaining debt.
+				gainThisFrame = HealthToAdj > -rate ? HealthToAdj : -rate;
+			}
+			else
+			{
+				if (Health + HealthToAdj >= MaxHealth)
+				{
+					rate *= 4;
+				}
+
+				//If the health left to adjust is greater than the rate, use the rate.
+				gainThisFrame = HealthToAdj > rate ? rate : HealthToAdj;
+			}
+
+			//Note this damage as taken, pay off our debt
+			HealthToAdj -= gainThisFrame;
+
+			//Add it to displayed HP
+			Health += gainThisFrame;
+
+			//if (Health <= 0 && !isDead)
+			//{
+			//	KillEntity();
+			//}
+		}
+	}
+	void UpdateMana()
+	{
+		//If our displayed Mana value isn't correct
+		if (ManaToAdj != 0)
+		{
+			float rate = Time.deltaTime * 8;
+			float gainThisFrame = 0;
+			if (ManaToAdj < 0)
+			{
+				if (Mana + ManaToAdj < 0)
+				{
+					rate *= 10;
+				}
+
+				//If the Mana left to adjust is LESS than the rate, just lose the remaining debt.
+				gainThisFrame = ManaToAdj > -rate ? ManaToAdj : -rate;
+			}
+			else
+			{
+				if (Mana + ManaToAdj >= MaxMana)
+				{
+					rate *= 4;
+				}
+
+				//If the Mana left to adjust is greater than the rate, use the rate.
+				gainThisFrame = ManaToAdj > rate ? rate : ManaToAdj;
+			}
+
+			//Note this Mana spent, pay off our debt
+			ManaToAdj -= gainThisFrame;
+
+			//Add it to displayed Mana
+			Mana += gainThisFrame;
 		}
 	}
 
@@ -231,6 +378,11 @@ public class Player : MonoBehaviour
 
 	public void GetInput()
 	{
+		if (Input.GetKeyDown(KeyCode.G))
+		{
+			AdjustHealth(-15);
+		}
+
 		#region Jumping
 		if (Input.GetButtonDown(PlayerInput + "Jump"))
 		{
@@ -268,5 +420,19 @@ public class Player : MonoBehaviour
 		}
 #endif
 		#endregion
+	}
+
+	public Image damageIndicator;
+
+	public IEnumerator DamageFlash(float fadeDur)
+	{
+		damageIndicator.enabled = true;
+		for (float i = 0.2f; i < 0; i -= .01f)
+		{
+			//damageIndicator.color = new Color(damageIndicator.color.r, damageIndicator.color.g, damageIndicator.color.b, 
+			///yield return new WaitForSeconds(.01f);
+		}
+		float alpha = .2f;
+		yield return new WaitForSeconds(1);
 	}
 }

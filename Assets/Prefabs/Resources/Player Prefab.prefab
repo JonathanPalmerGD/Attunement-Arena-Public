@@ -262,8 +262,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Camera: {fileID: 2060296}
   motionBob:
-    HorizontalBobRange: .0500000007
-    VerticalBobRange: .0199999996
+    HorizontalBobRange: .0199999996
+    VerticalBobRange: .0500000007
     Bobcurve:
       serializedVersion: 2
       m_Curve:
@@ -294,12 +294,12 @@ MonoBehaviour:
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-    VerticaltoHorizontalRatio: 1
+    VerticaltoHorizontalRatio: 2
   jumpAndLandingBob:
-    BobDuration: .0700000003
-    BobAmount: .100000001
+    BobDuration: .150000006
+    BobAmount: .200000003
   rigidbodyFirstPersonController: {fileID: 11413502}
-  StrideInterval: 2
+  StrideInterval: 4
   RunningStrideLengthen: .722000003
 --- !u!114 &11471986
 MonoBehaviour:
@@ -322,6 +322,7 @@ MonoBehaviour:
   mySpawn: {fileID: 0}
   cameraController: {fileID: 11402282}
   myCamera: {fileID: 2060296}
+  damaged: 0
   abilities: []
 --- !u!136 &13606810
 CapsuleCollider:
@@ -446,19 +447,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: jumpAndLandingBob.BobDuration
-      value: .0700000003
+      value: .200000003
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: jumpAndLandingBob.BobAmount
-      value: .100000001
+      value: .300000012
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: motionBob.VerticalBobRange
-      value: .0199999996
+      value: .0500000007
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: motionBob.HorizontalBobRange
-      value: .0500000007
+      value: .0199999996
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
