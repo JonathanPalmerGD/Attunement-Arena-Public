@@ -85,7 +85,7 @@ public class UIManager : Singleton<UIManager>
 		//solutionUIPrefab = Resources.Load<GameObject>("Display Solution");
 		//reqUIPrefab = Resources.Load<GameObject>("Display Requirement");
 
-		//Icons = Resources.LoadAll<Sprite>("Icons");
+		Icons = Resources.LoadAll<Sprite>("Icons");
 	}
 
 	void Start()
@@ -99,20 +99,45 @@ public class UIManager : Singleton<UIManager>
 	}
 
 	public void Init()
-	{		
-		PlayerAbilityDisplay = new PopulateContainer[GameManager.Instance.NumPlayers];
-
-		for (int i = 0; i < PlayerAbilityDisplay.Length; i++)
+	{
+		if (!initialized)
 		{
-			//Debug.Log("Looking up: " + "P" + i + " Ability Parent" + "\n" + GameCanvas.Instance.compDict.Count);
-		
-			PlayerAbilityDisplay[i] = GameCanvas.Instance.LookupComponent<PopulateContainer>("P" + i + " Ability Parent");
+			PlayerAbilityDisplay = new PopulateContainer[GameManager.Instance.NumPlayers];
+
+			for (int i = 0; i < PlayerAbilityDisplay.Length; i++)
+			{
+				//Debug.Log("Looking up: " + "P" + i + " Ability Parent" + "\n" + GameCanvas.Instance.compDict.Count);
+
+				PlayerAbilityDisplay[i] = GameCanvas.Instance.LookupComponent<PopulateContainer>("P" + i + " Ability Parent");
+			}
+
+			GameManager.Instance.AddPlayerAbilities();
+
+			initialized = true;
 		}
+	}
 
-		Debug.Log("Hit\n");
-		GameManager.Instance.AddPlayerAbilities();
+	public void ConfigureUISize(Player player)
+	{
+		int id = player.playerID;
 
-		initialized = true;
+		Debug.Log(player.myCamera.rect + "\n" + id);
+
+		//P0
+		//Min	0		.5
+		//Max	1		1
+		
+		//P1
+		//Min	0		0
+		//Max	1		.5
+
+
+
+		playerUIParents[id].anchorMin = new Vector2(player.myCamera.rect.x, player.myCamera.rect.y);
+		playerUIParents[id].anchorMax = new Vector2(player.myCamera.rect.width, player.myCamera.rect.width - player.myCamera.rect.y);
+		//playerUIParents[id].offsetMin = new Vector2(player.myCamera.rect.x * Screen.width, player.myCamera.rect.width);
+		//playerUIParents[id].offsetMax = new Vector2(player.myCamera.rect.y * Screen.width, player.myCamera.rect.height);
+
 	}
 
 	public void AddPlayerUI(Player newPlayer)
@@ -120,13 +145,17 @@ public class UIManager : Singleton<UIManager>
 		//Debug.Log("TODO: Create player UI per player\n");
 		GameObject UIGameObject = GameObject.Instantiate(playerUIPrefab);
 
+		int id = newPlayer.playerID;
 		UIGameObject.transform.SetParent(inGameUI.transform);
-		playerUIParents[newPlayer.playerID] = UIGameObject.GetComponent<RectTransform>();
-		playerUIParents[newPlayer.playerID].localScale = Vector3.one;
+		playerUIParents[id] = UIGameObject.GetComponent<RectTransform>();
+		playerUIParents[id].localScale = Vector3.one;
+
 
 		//EXTREMELY IMPORTANT: We use .Name, which is a special thing of UIComponents.
 		playerUIParents[newPlayer.playerID].GetComponent<UIComponent>().Name = "Player UI";
 		RecursiveChildNaming(newPlayer.playerID, playerUIParents[newPlayer.playerID]);
+
+
 		//playerUIParents[newPlayer.playerID].
 
 
@@ -139,7 +168,7 @@ public class UIManager : Singleton<UIManager>
 		string oldName = target.name;
 		string newName = target.name.Replace("Player", "P" + id);
 
-		Debug.Log("Comparing " + oldName + "  " + newName + "\n" + (newName != oldName));
+		//Debug.Log("Comparing " + oldName + "  " + newName + "\n" + (newName != oldName));
 		if (newName != oldName)
 		{
 			UIComponent comp = target.GetComponent<UIComponent>();
@@ -234,7 +263,6 @@ public class UIManager : Singleton<UIManager>
 		AbilityDisplayUI aDisUI = null;
 		
 		GameObject go = PlayerAbilityDisplay[id].AddPrefabToContainerReturn();
-		Debug.Log("Hit\n");
 		aDisUI = go.GetComponent<AbilityDisplayUI>();
 
 		//We're adding this here as a bit of an unnecessary step to make sure it's set.

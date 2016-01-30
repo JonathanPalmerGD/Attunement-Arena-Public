@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityStandardAssets.Characters.FirstPerson;
 
 public class Player : MonoBehaviour
 {
@@ -16,6 +15,8 @@ public class Player : MonoBehaviour
 
 	public CameraController cameraController;
 	public Camera myCamera;
+
+	public bool initialized;
 
 	public bool Grounded
 	{
@@ -52,8 +53,7 @@ public class Player : MonoBehaviour
 
 	public Ability AddAbility(string abilityName, string keyBinding, string displayKeyBinding)
 	{
-		Debug.Log("Hit\n");
-
+		Init();
 		Ability newAbility = ScriptableObject.CreateInstance(abilityName) as Ability;
 
 		newAbility.Init(this, keyBinding, displayKeyBinding);
@@ -66,21 +66,34 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
-		if (myCamera == null)
-		{
-			myCamera = GetComponent<Camera>();
-		} 
-		if (cameraController == null)
-		{
-			cameraController = GetComponent<CameraController>();
-		}
-		cameraController.Owner = this;
-		cameraController.PositionCamera((byte)playerID);
-		
-		abilities = new List<Ability>();
-		abilityBindings = new Dictionary<string, Ability>();
+		Init();
+	}
 
-		controller = GetComponent<RigidbodyFirstPersonController>();
+	void Init()
+	{
+		if (!initialized)
+		{
+			if (myCamera == null)
+			{
+				myCamera = GetComponent<Camera>();
+			}
+			if (cameraController == null)
+			{
+				cameraController = GetComponent<CameraController>();
+			}
+			cameraController.Owner = this;
+			cameraController.PositionCamera((byte)playerID);
+
+			abilities = new List<Ability>();
+			abilityBindings = new Dictionary<string, Ability>();
+
+			controller = GetComponent<RigidbodyFirstPersonController>();
+			controller.Owner = this;
+
+			initialized = true;
+
+			UIManager.Instance.ConfigureUISize(this);
+		}
 	}
 
 	public void UseAbility()
@@ -151,8 +164,8 @@ public class Player : MonoBehaviour
 			//}
 			//else
 			//{
-				//Catch all case.
-				return hit.collider.gameObject;
+			//Catch all case.
+			return hit.collider.gameObject;
 			//}
 			//Debug.Log(hit.collider.gameObject.name + "\n");
 		}

@@ -68,10 +68,8 @@ public class GameManager : Singleton<GameManager>
 
 	public void AddPlayerAbilities()
 	{
-		Debug.Log("Hit\n");
 		for (int i = 0; i < NumPlayers; i++)
 		{
-			Debug.Log("Hit\n");
 			players[i].AddAbility("Gust", "Player " + i + " Q", "Q");
 		}
 	}

@@ -14,7 +14,6 @@ public class UIComponent : MonoBehaviour
 		get { return name; }
 		set
 		{
-			Debug.Log("Hit\n" + name + "\t" + value);
 			if (registered)
 			{
 				GameCanvas.Instance.AlterRegistration(name, value, this);
