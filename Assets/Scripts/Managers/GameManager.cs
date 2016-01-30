@@ -20,6 +20,10 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
+    void Awake() {
+        players = GameObject.FindObjecstOfType<Player>();
+    }
+
 	void Start()
 	{
 	}

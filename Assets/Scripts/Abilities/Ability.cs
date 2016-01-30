@@ -76,8 +76,7 @@ public class Ability : ScriptableObject
 		return false;
 	}
 
-	public virtual void ExecuteAbility()
-	{
-
+	public virtual void ExecuteAbility() {
+        return;
 	}
 }
