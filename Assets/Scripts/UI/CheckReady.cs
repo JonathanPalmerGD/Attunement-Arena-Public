@@ -11,6 +11,10 @@ public class CheckReady : MonoBehaviour
 	public string FriendlyReadyButton = "Jump";
 	public string UnreadyButton = "B";
 	public string FriendlyUnreadyButton = "Primary";
+
+	public GameObject[] DisableOnNext;
+	public GameObject[] EnableOnNext;
+
 	public bool IsReady
 	{
 		get { return ready; }
@@ -47,7 +51,13 @@ public class CheckReady : MonoBehaviour
 
 			if (allReady)
 			{
+				PlayerPrefs.SetInt("PlayerCount", 2);
+
 				// Move to Ritual Select
+				foreach (GameObject go in DisableOnNext)
+					go.SetActive(false);
+				foreach (GameObject go in EnableOnNext)
+					go.SetActive(true);
 			}
 		}
 		else if (IsReady && Input.GetButtonDown((ctrlType == Player.PlayerControls.GamePad ? ("P" + (pNum) + " ") : "") + UnreadyButton))
