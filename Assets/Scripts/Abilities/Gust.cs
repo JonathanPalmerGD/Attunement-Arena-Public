@@ -70,5 +70,7 @@ public class Gust : Ability
 
             p.SendMessage("ApplyExternalForce", castDir * Force);
         }
+
+        Owner.SendMessage("ApplyExternalForce", castDir * Force * -1f);
     }
 }
