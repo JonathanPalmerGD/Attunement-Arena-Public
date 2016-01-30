@@ -39,6 +39,9 @@ public class Player : MonoBehaviour
 	public PlayerSpawn mySpawn;
 	public CameraController cameraController;
 	public Camera myCamera;
+
+	public Scrollbar hpBar;
+	public Scrollbar mpBar;
 	#endregion
 
 	#region Properties
@@ -59,6 +62,9 @@ public class Player : MonoBehaviour
 		}
 		set
 		{
+			//Debug.Log("" + hpBar.name + "\n" + Health + " " + MaxHealth + "\n");
+
+			hpBar.size = Health / MaxHealth;
 			health = value;
 		}
 	}
@@ -142,7 +148,17 @@ public class Player : MonoBehaviour
 	{
 		if (!initialized)
 		{
+			hpBar = GameCanvas.Instance.LookupComponent<Scrollbar>("P" + playerID + " Health");
+			mpBar = GameCanvas.Instance.LookupComponent<Scrollbar>("P" + playerID + " Mana");
+
+			MaxHealth = 100;
+			MaxMana = 100;
+			Health = 100;
 			Mana = 100;
+
+			hpBar.size = Health / MaxHealth;
+			mpBar.size = Mana / MaxMana;
+
 			if (myCamera == null)
 			{
 				myCamera = GetComponent<Camera>();
@@ -199,6 +215,9 @@ public class Player : MonoBehaviour
 	{
 		GetInput();
 
+		UpdateHealth();
+		UpdateMana();
+
 		if (damaged)
 		{
 			StartCoroutine("DamageFlash");
@@ -249,13 +268,13 @@ public class Player : MonoBehaviour
 		//If our displayed health value isn't correct
 		if (HealthToAdj != 0)
 		{
-			float rate = Time.deltaTime * 8;
+			float rate = Time.deltaTime * 30;
 			float gainThisFrame = 0;
 			if (HealthToAdj < 0)
 			{
 				if (Health + HealthToAdj < 0)
 				{
-					rate *= 10;
+					rate *= 5;
 				}
 
 				//If the health left to adjust is LESS than the rate, just lose the remaining debt.
@@ -265,7 +284,7 @@ public class Player : MonoBehaviour
 			{
 				if (Health + HealthToAdj >= MaxHealth)
 				{
-					rate *= 4;
+					rate *= 2;
 				}
 
 				//If the health left to adjust is greater than the rate, use the rate.
@@ -289,7 +308,7 @@ public class Player : MonoBehaviour
 		//If our displayed Mana value isn't correct
 		if (ManaToAdj != 0)
 		{
-			float rate = Time.deltaTime * 8;
+			float rate = Time.deltaTime * 30;
 			float gainThisFrame = 0;
 			if (ManaToAdj < 0)
 			{
@@ -392,6 +411,26 @@ public class Player : MonoBehaviour
 			AdjustHealth(-15);
 		}
 
+		for (int i = 0; i < abilities.Count; i++)
+		{
+			if (abilities[i].activationCond == Ability.KeyActivateCond.KeyDown)
+			{
+				Debug.Log(abilities[i].keyBinding + "\n");
+				if (Input.GetKeyDown(abilities[i].keyBinding))
+				{
+					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
+				}
+			}
+			else if (abilities[i].activationCond == Ability.KeyActivateCond.KeyHold)
+			{
+				Debug.Log(abilities[i].keyBinding + "\n");
+				if (Input.GetKey(abilities[i].keyBinding))
+				{
+					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
+				}
+			}
+		}
+
 		#region Jumping
 		if (Input.GetButtonDown(PlayerInput + "Jump"))
 		{
@@ -403,13 +442,13 @@ public class Player : MonoBehaviour
 			}
 		}
 
-		if (Input.GetButtonDown(PlayerInput + "Primary"))
-		{
-			if (abilityBindings.ContainsKey(PlayerInput + "Primary"))
-			{
-				abilityBindings[PlayerInput + "Primary"].ActivateAbilityOverhead(targetScanDir);
-			}
-		}
+		//if (Input.GetButtonDown(PlayerInput + "Primary"))
+		//{
+		//	if (abilityBindings.ContainsKey(PlayerInput + "Primary"))
+		//	{
+		//		abilityBindings[PlayerInput + "Primary"].ActivateAbilityOverhead(targetScanDir);
+		//	}
+		//}
 		#endregion
 
 		#region Cursor Unlocking

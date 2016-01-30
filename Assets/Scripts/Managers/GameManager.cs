@@ -100,6 +100,13 @@ public class GameManager : Singleton<GameManager>
 			newGust.MaxCooldown = .5f;
 			players[i].AddAbilityBinding(newGust, players[i].PlayerInput + "Jump");
 
+
+			Skate newSkate= (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Secondary", "X");
+			newSkate.MaxCooldown = .1f;
+			newSkate.Cost = 1;
+			newSkate.MaxCooldown = .25f;
+			newSkate.Duration = 1.5f;
+
 			//RITUAL:
 				//If the player doesn't have Gust
 					//Give them Gust

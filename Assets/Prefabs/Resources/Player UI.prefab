@@ -269,9 +269,9 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 11477194}
   m_HandleRect: {fileID: 22485336}
-  m_Direction: 0
-  m_Value: 0
-  m_Size: .614000022
+  m_Direction: 1
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -613,9 +613,9 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 11431332}
   m_HandleRect: {fileID: 22441640}
-  m_Direction: 0
-  m_Value: 0
-  m_Size: .614000022
+  m_Direction: 1
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

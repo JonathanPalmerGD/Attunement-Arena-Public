@@ -10,7 +10,16 @@ public class Ability : ScriptableObject
 	public string keyBindingUserDisplay;
 
 	public AbilityDisplayUI abilDispUI;
-	public int IconID;
+	public enum KeyActivateCond { KeyDown, KeyHold }
+	public virtual KeyActivateCond activationCond
+	{
+		get { return KeyActivateCond.KeyDown; }
+	}
+
+	public virtual int IconID
+	{
+		get { return 0; }
+	}
 
 	public virtual bool UseCharges
 	{
@@ -66,10 +75,12 @@ public class Ability : ScriptableObject
 	{
 		get { return 0f; }
 	}
+	public float Duration;
+	
 	public float CurrentCooldown;
 	public float MaxCooldown;
 
-	public void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
+	public virtual void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{
 		if (!initialized)
 		{

@@ -11,6 +11,11 @@ public class Gust : Ability
 		}
 	}
 
+	public override int IconID
+	{
+		get { return 0; }
+	}
+
 	public override float GeneralDamage
 	{
 		get

@@ -12,6 +12,7 @@ public class AbilityDisplayUI : MonoBehaviour
 
 	public void SetupDisplay(Ability ability)
 	{
+
 		Icon.sprite = UIManager.Icons[ability.IconID];
 		SetCooldownPercentage(0);
 		CostDisplay.text = "" + (int)ability.Cost;
