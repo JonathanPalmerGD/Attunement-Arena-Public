@@ -12,6 +12,7 @@ public class MouseLook
 	public bool smooth;
 	public float smoothTime = 5f;
 
+	public RigidbodyFirstPersonController controller;
 
 	private Quaternion m_CharacterTargetRot;
 	private Quaternion m_CameraTargetRot;
@@ -26,8 +27,8 @@ public class MouseLook
 
 	public void LookRotation(Transform character, Transform camera)
 	{
-		float yRot = Input.GetAxis("Mouse X") * XSensitivity;
-		float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
+		float yRot = Input.GetAxis(controller.Owner.PlayerInput + "Mouse X") * XSensitivity;
+		float xRot = Input.GetAxis(controller.Owner.PlayerInput + "Mouse Y") * YSensitivity;
 
 		m_CharacterTargetRot *= Quaternion.Euler(0f, yRot, 0f);
 		m_CameraTargetRot *= Quaternion.Euler(-xRot, 0f, 0f);

@@ -122,6 +122,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		mRigidBody = GetComponent<Rigidbody>();
 		mCapsule = GetComponent<CapsuleCollider>();
 		mouseLook.Init(transform, cam.transform);
+		mouseLook.controller = this;
 	}
 
 
@@ -135,7 +136,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 		RotateView();
 
-		if (Input.GetButtonDown("Jump") && !mJump)
+		if (Input.GetButtonDown(Owner.PlayerInput + "Jump") && !mJump)
 		{
 			mJump = true;
 		}
@@ -226,11 +227,10 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 	private Vector2 GetInput()
 	{
-
 		Vector2 input = new Vector2
 			{
-				x = Input.GetAxis("Horizontal"),
-				y = Input.GetAxis("Vertical")
+				x = Input.GetAxis(Owner.PlayerInput + "Horizontal"),
+				y = Input.GetAxis(Owner.PlayerInput + "Vertical")
 			};
 		movementSettings.UpdateDesiredTargetSpeed(input);
 		return input;

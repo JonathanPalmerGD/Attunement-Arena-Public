@@ -5,6 +5,25 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
 	public int playerID = 0;
+	public enum PlayerControls { Mouse, GamePad}
+	private PlayerControls playerInput;
+	public string PlayerInput
+	{
+		get
+		{
+			if (playerInput == PlayerControls.Mouse)
+			{
+				return "";
+			}
+			else if (playerInput == PlayerControls.GamePad)
+			{
+				return "P" + playerID + " ";
+			}
+
+			Debug.LogError("Player Input Selector error\n");
+			return "";
+		}
+	}
 
 	public RigidbodyFirstPersonController controller;
 	//public List<Ability> rituals;
