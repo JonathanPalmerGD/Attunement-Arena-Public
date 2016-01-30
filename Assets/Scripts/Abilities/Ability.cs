@@ -16,13 +16,47 @@ public class Ability : ScriptableObject
 	{
 		get { return false; }
 	}
-	public int Charges = 0;
-	public int MaxCharges = 0;
-	private int cost = 0;
-	public virtual int Cost
+	private int charges;
+	public int Charges
 	{
-		set { cost = value; }
+		get { return charges; }
+		set
+		{
+			if (value < 0)
+			{
+				value = 0;
+			}
+			if (value >= MaxCharges)
+			{
+				value = MaxCharges;
+			}
+			if (UseCharges)
+			{
+				abilDispUI.ChargeDisplay.text = "" + value;
+				charges = value;
+			}
+		}
+	}
+	public int MaxCharges = 0;
+	private float cost = 0;
+	public virtual float Cost
+	{
 		get { return 0; }
+		set
+		{
+			if (value <= 0)
+			{
+				value = 0;
+			}
+			if (value <= Owner.MaxMana)
+			{
+				value = Owner.MaxMana;
+			}
+
+			abilDispUI.CostDisplay.text = "" + (int)value;
+			cost = value;
+		}
+
 	}
 	public virtual float GeneralDamage
 	{
@@ -131,7 +165,7 @@ public class Ability : ScriptableObject
 		{
 			Charges--;
 		}
-	
+
 		//Pay the cost
 		Owner.Mana -= Cost;
 

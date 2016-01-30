@@ -70,6 +70,18 @@ public class Player : MonoBehaviour
 			mana = value;
 		}
 	}
+	private float maxMana;
+	public float MaxMana
+	{
+		get
+		{
+			return maxMana;
+		}
+		set
+		{
+			maxMana = value;
+		}
+	}
 	#endregion
 
 	#region Ability List and Dict

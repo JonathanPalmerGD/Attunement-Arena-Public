@@ -17,6 +17,15 @@ public class AbilityDisplayUI : MonoBehaviour
 		CostDisplay.text = "" + (int)ability.Cost;
 		HotkeyDisplay.text = ability.keyBindingUserDisplay;
 
+		if (!ability.UseCharges)
+		{
+			ChargeDisplay.color = new Color(0, 0, 0, 0);
+		}
+		else
+		{
+			ChargeDisplay.text = ""+ability.Charges;
+		}
+
 		Icon.sprite = UIManager.Icons[ability.IconID];
 		Icon.sprite = UIManager.Icons[ability.IconID];
 	}

@@ -26,7 +26,33 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 		public void UpdateDesiredTargetSpeed(Vector2 input)
 		{
-			if (input == Vector2.zero) return;
+			if (input == Vector2.zero)
+			{
+				//if (CurrentTargetSpeed != 0)
+				//{
+				//	Debug.Log("Decaying\n");
+				//}
+				float decayAmt = Mathf.Clamp(CurrentTargetSpeed * .1f, .5f, 1);
+				if (CurrentTargetSpeed > 0)
+				{
+					CurrentTargetSpeed -= decayAmt;
+					if (CurrentTargetSpeed < 0)
+					{
+						CurrentTargetSpeed = 0;
+					}
+				}
+				else if(CurrentTargetSpeed < 0)
+				{
+					CurrentTargetSpeed += decayAmt;
+					if (CurrentTargetSpeed > 0)
+					{
+						CurrentTargetSpeed = 0;
+					}
+				}
+
+				//Debug.Log("\n" + CurrentTargetSpeed);
+				return;
+			}
 			if (input.x > 0 || input.x < 0)
 			{
 				//strafe
@@ -102,6 +128,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 	public bool Jumping
 	{
 		get { return mJumping; }
+		set { mJumping = value; }
 	}
 
 	public bool Running
@@ -116,7 +143,6 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		}
 	}
 
-
 	private void Start()
 	{
 		mRigidBody = GetComponent<Rigidbody>();
@@ -125,14 +151,13 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		mouseLook.controller = this;
 	}
 
-
 	private void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.LeftControl))
-		{
-			mRigidBody.useGravity = !mRigidBody.useGravity;
-			mRigidBody.velocity = Vector3.zero;
-		}
+		//if (Input.GetKeyDown(KeyCode.LeftControl))
+		//{
+		//	mRigidBody.useGravity = !mRigidBody.useGravity;
+		//	mRigidBody.velocity = Vector3.zero;
+		//}
 
 		RotateView();
 
@@ -144,24 +169,28 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 	void ApplyExternalForce(Vector3 force)
 	{
-		Debug.Log("Hit\n");
 		accRBForces += force;
 	}
 
 	private void FixedUpdate()
 	{
+		//Debug.Log(mRigidBody.velocity + "\n" + mRigidBody.velocity.magnitude);
 		GroundCheck();
 		Vector2 input = GetInput();
 
 		if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && (advancedSettings.airControl || mIsGrounded))
 		{
+			//Debug.Log("Moving\n");
 			// always move along the camera forward as it is the direction that it being aimed at
-			Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
+			Vector3 desiredMove =	cam.transform.forward * input.y + cam.transform.right * input.x;
 			desiredMove = Vector3.ProjectOnPlane(desiredMove, mGroundContactNormal).normalized;
+
+			//mRigidBody.drag = 50f;
 
 			desiredMove.x = desiredMove.x * movementSettings.CurrentTargetSpeed;
 			desiredMove.z = desiredMove.z * movementSettings.CurrentTargetSpeed;
 			desiredMove.y = desiredMove.y * movementSettings.CurrentTargetSpeed;
+			Debug.DrawLine(transform.position, transform.position + desiredMove * 5, Color.blue, .1f);
 			if (mRigidBody.velocity.sqrMagnitude <
 				(movementSettings.CurrentTargetSpeed * movementSettings.CurrentTargetSpeed))
 			{
@@ -171,7 +200,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 		if (mIsGrounded)
 		{
-			mRigidBody.drag = 5f;
+			//mRigidBody.drag = 5f;
 
 			if (mJump)
 			{
@@ -188,7 +217,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		}
 		else
 		{
-			mRigidBody.drag = 0f;
+			mRigidBody.drag = 1f;
 			if (mPreviouslyGrounded && !mJumping)
 			{
 				StickToGroundHelper();

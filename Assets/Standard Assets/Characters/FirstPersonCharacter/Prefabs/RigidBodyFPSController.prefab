@@ -191,6 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c9795a96c094f4cbde4d65546aa9b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Owner: {fileID: 0}
   cam: {fileID: 2000000}
   movementSettings:
     ForwardSpeed: 8
@@ -228,11 +229,13 @@ MonoBehaviour:
     MaximumX: 90
     smooth: 1
     smoothTime: 18
+    controller: {fileID: 0}
   advancedSettings:
     groundCheckDistance: .100000001
     stickToGroundHelperDistance: .600000024
     slowDownRate: 20
     airControl: 1
+  mRigidBody: {fileID: 0}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -296,11 +299,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c121f7a4152f9db4688c7bbc61dd637d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
   playerID: 0
+  ControlType: 1
   controller: {fileID: 0}
   hitscanTarget: {fileID: 0}
   targetScanDir: {x: 0, y: 0, z: 0}
   hitscanContact: {x: 0, y: 0, z: 0}
+  mySpawn: {fileID: 0}
   cameraController: {fileID: 0}
   myCamera: {fileID: 0}
   abilities: []
@@ -336,7 +342,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: advancedSettings.stickToGroundHelperDistance
+      value: .600000024
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100006}
