@@ -26,9 +26,13 @@ public class Gust : Ability
         {
             return 2f;
         }
-    }
+	}
+	public float RecoilForce
+	{
+		get { return 5f; }
+	}
 
-    public float Force
+	public float Force
     {
         get { return 5f; }
     }
@@ -71,6 +75,6 @@ public class Gust : Ability
             p.SendMessage("ApplyExternalForce", castDir * Force);
         }
 
-        Owner.SendMessage("ApplyExternalForce", castDir * Force * -1f);
+        Owner.SendMessage("ApplyExternalForce", castDir * RecoilForce * -1f);
     }
 }
