@@ -20,8 +20,6 @@ public class UIManager : Singleton<UIManager>
 	public static GameObject reqUIPrefab;
 	public static GameObject buttonPrefab;
 	public static Sprite[] Icons;
-	public static Sprite complete;
-	public static Sprite incomplete;
 	#endregion
 
 	TextAsset itemXML;
@@ -29,58 +27,21 @@ public class UIManager : Singleton<UIManager>
 
 	#region Ingame UI references
 	public GameObject inGameUI;
-	public GameObject inventory;
-	public GameObject journal;
-	public GameObject sockDrawer;
-	public GameObject chatBox;
-	public GameObject helpBox;
-	public GameObject menuParent;
-	//public ItemUI inspection;
-
-	//public PopulateContainer journalContainer;
-	//public PopulateContainer inventoryContainer;
-	public GameObject journalEntryContainer;
-	public GameObject inventoryItemContainer;
-
-	public Button journalCloseButton;
-	public Button inventoryCloseButton;
-	public Button helpCloseButton;
-
-	public GameObject interactPrompt;
-
-	public Scrollbar inventoryScrolling;
-	public Scrollbar journalScrolling;
-
-	//public PlayerController playerTalking;
+	
 
 	public Image transitionImage;
 
-	public GameObject playerButtons;
-	public Button inventoryButton;
-	public Button journalButton;
-	public Button journalShareButton;
-	public Button networkButton;
-	public Button helpButton;
-	public Button chatButton;
-
 	public CanvasGroup WinState;
 	public CanvasGroup LoseState;
-
-	private int noOfPlayers = -1;
 	#endregion
 
 	#region Menu States
 	public enum MenuState { Closed, Open, Suppressed, Error }
-	public MenuState journalState;
-	public MenuState inventoryState;
-	public MenuState sockState;
-	public MenuState interactState;
-	public MenuState uiButtonState;
-	public MenuState helpState;
+	//public MenuState journalState;
 
 	//TODO: Turn the inventory states into a state machine
-	public bool allowInventoryControl = true;
-	public bool allowJournalControl = true;
+	//public bool allowInventoryControl = true;
+	//public bool allowJournalControl = true;
 	#endregion
 
 	#region Fade Controls
@@ -110,69 +71,18 @@ public class UIManager : Singleton<UIManager>
 			inGameUI = go;
 			go.name = "In-Game UI - Canvas";
 		}
-
-		//inspection = inGameUI.transform.FindChild("Inspect Item").gameObject.GetComponent<ItemUI>();
-		menuParent = inGameUI.transform.FindChild("Menu").gameObject;
-
-		inventory = menuParent.transform.FindChild("Inventory").gameObject;
-		//inventoryContainer = inventory.GetComponent<PopulateContainer>();
-		inventoryItemContainer = FindChildRecursive(inventory.transform, "Entry Scrollable").gameObject;
-		inventoryCloseButton = inventory.transform.FindChild("Title").FindChild("Close Button").GetComponent<Button>();
-
-		journal = menuParent.transform.FindChild("Journal").gameObject;
-		//journalContainer = journal.GetComponent<PopulateContainer>();
-		journalEntryContainer = FindChildRecursive(journal.transform, "Entry Scrollable").gameObject;
-		journalCloseButton = journal.transform.FindChild("Title").FindChild("Close Button").GetComponent<Button>();
-
-		inventoryScrolling = FindChildRecursive(inventory.transform, "Inventory Scrollbar").GetComponent<Scrollbar>();
-		journalScrolling = FindChildRecursive(journal.transform, "Journal Scrollbar").GetComponent<Scrollbar>();
-
-		interactPrompt = inGameUI.transform.FindChild("Interaction Panel").gameObject;
-
 	} // end Awake
 
 	private void LookupPrefabs()
 	{
-		gameUIPrefab = Resources.Load<GameObject>("In-Game UI - Canvas");
-		buttonPrefab = Resources.Load<GameObject>("GivePlayerButton");
-		itemPrefab = Resources.Load<GameObject>("Item Entry");
-		infoPrefab = Resources.Load<GameObject>("Info Entry");
-		solutionUIPrefab = Resources.Load<GameObject>("Display Solution");
-		reqUIPrefab = Resources.Load<GameObject>("Display Requirement");
+		//gameUIPrefab = Resources.Load<GameObject>("In-Game UI - Canvas");
+		//buttonPrefab = Resources.Load<GameObject>("GivePlayerButton");
+		//itemPrefab = Resources.Load<GameObject>("Item Entry");
+		//infoPrefab = Resources.Load<GameObject>("Info Entry");
+		//solutionUIPrefab = Resources.Load<GameObject>("Display Solution");
+		//reqUIPrefab = Resources.Load<GameObject>("Display Requirement");
 
-		Icons = Resources.LoadAll<Sprite>("Icons");
-		complete = Icons[2];
-		incomplete = Icons[10];
-	}
-
-	private Transform FindChildRecursive(Transform current, string targetName, int counter = 0)
-	{
-		//Transform[] allChildren = current.GetComponentsInChildren<Transform>();
-		//Debug.Log("Find Child Recursive " + current.name + "  " + allChildren.Length + " for " + targetName + "\n");
-
-		if (counter > 15)
-			return null;
-		foreach (Transform child in current)
-		{
-			//Debug.Log("Comparing " + child.name + " to " + targetName + "\n");
-			if (child.name == targetName)
-			{
-				return child;
-			}
-			else if (child.childCount > 0)
-			{
-				counter++;
-				Transform t = FindChildRecursive(child, targetName, counter);
-
-				if (t != null || counter > 15)
-				{
-					return t;
-				}
-			}
-		}
-
-		//Does not exists
-		return null;
+		//Icons = Resources.LoadAll<Sprite>("Icons");
 	}
 
 	void Start()
@@ -184,36 +94,35 @@ public class UIManager : Singleton<UIManager>
 		//}
 
 		//sockDrawer = GameCanvas.Instance.LookupGameObject("Sock Drawer");
-		transitionImage = GameCanvas.Instance.LookupComponent<Image>("Transition");
+		//transitionImage = GameCanvas.Instance.LookupComponent<Image>("Transition");
 
-		playerButtons = GameCanvas.Instance.LookupGameObject("Player Buttons");
-		chatBox = GameCanvas.Instance.LookupGameObject("Chat");		
-		helpBox = GameCanvas.Instance.LookupGameObject("Help Screen");
+		//playerButtons = GameCanvas.Instance.LookupGameObject("Player Buttons");
+		//chatBox = GameCanvas.Instance.LookupGameObject("Chat");		
+		//helpBox = GameCanvas.Instance.LookupGameObject("Help Screen");
 
-		helpCloseButton = GameCanvas.Instance.LookupComponent<Button>("Help Close Button");
+		//helpCloseButton = GameCanvas.Instance.LookupComponent<Button>("Help Close Button");
 
 
-		LoseState = GameCanvas.Instance.LookupComponent<CanvasGroup>("Lose State");
-		WinState = GameCanvas.Instance.LookupComponent<CanvasGroup>("Win State");
-		LoseState.alpha = 0;
-		WinState.alpha = 0;
+		//LoseState = GameCanvas.Instance.LookupComponent<CanvasGroup>("Lose State");
+		//WinState = GameCanvas.Instance.LookupComponent<CanvasGroup>("Win State");
+		//LoseState.alpha = 0;
+		//WinState.alpha = 0;
 
-		InitButtonListeners();
+		//InitButtonListeners();
 
 		//Close any left open UI stuff.
-		inventoryState = MenuState.Closed;
-		journalState = MenuState.Closed;
-		sockState = MenuState.Closed;
-		interactState = MenuState.Closed;
-		uiButtonState = MenuState.Open;
-		helpState = MenuState.Open;
-		chatBox.SetActive(false);
-
+		//inventoryState = MenuState.Closed;
+		//journalState = MenuState.Closed;
+		//sockState = MenuState.Closed;
+		//interactState = MenuState.Closed;
+		//uiButtonState = MenuState.Open;
+		//helpState = MenuState.Open;
+		
 		//CloseSocks();
 		//CloseInteract();
 
 #if UNITY_EDITOR
-		CloseHelp();
+		//CloseHelp();
 #endif
 		//CloseInventory();
 		//CloseJournal();
@@ -223,26 +132,20 @@ public class UIManager : Singleton<UIManager>
 
 	private void InitButtonListeners()
 	{
-		inventoryButton = GameCanvas.Instance.LookupComponent<Button>("Inventory Button");
-		journalButton = GameCanvas.Instance.LookupComponent<Button>("Journal Button");
-		networkButton = GameCanvas.Instance.LookupComponent<Button>("Network Button");
-		helpButton = GameCanvas.Instance.LookupComponent<Button>("Help Button");
-		chatButton = GameCanvas.Instance.LookupComponent<Button>("Chat Button");
+		//inventoryButton = GameCanvas.Instance.LookupComponent<Button>("Inventory Button");
+		//journalButton = GameCanvas.Instance.LookupComponent<Button>("Journal Button");
+		//networkButton = GameCanvas.Instance.LookupComponent<Button>("Network Button");
+		//helpButton = GameCanvas.Instance.LookupComponent<Button>("Help Button");
+		//chatButton = GameCanvas.Instance.LookupComponent<Button>("Chat Button");
 		
-		if (PlayerPrefs.GetString("GameType") == "Multiplayer")
-		{
-			journalShareButton = GameCanvas.Instance.LookupComponent<Button>("Journal Share Button");
+		
+			//journalShareButton = GameCanvas.Instance.LookupComponent<Button>("Journal Share Button");
 
-			journalShareButton.onClick.AddListener(() =>
-			{
+			//journalShareButton.onClick.AddListener(() =>
+			//{
 				//StoryRecordManager.Instance.ShareJournal();
-			}
-				 );
-		}
-		else
-		{
-			GameObject.Destroy(GameCanvas.Instance.LookupGameObject("Bottom Region"));
-		}
+			//}
+				// );
 
 		#region UI Buttons
 		inventoryButton.onClick.AddListener(() =>
@@ -394,13 +297,6 @@ public class UIManager : Singleton<UIManager>
 	}
 	#endregion
 
-	#region Create Information
-	public void CreateInformationItem()
-	{
-
-	}
-	#endregion
-
 	#region Player Button UI
 	public bool AllowHotkeys()
 	{
@@ -421,38 +317,6 @@ public class UIManager : Singleton<UIManager>
 			uiButtonState = MenuState.Open;
 		}
 	}
-	#endregion
-
-	#region Inventory UI Management
-	//public GameObject AddInventoryGameObject()
-	//{
-	//	return inventoryContainer.AddPrefabToContainerReturn();
-	//}
-	//public ItemUI AddInventoryUI()
-	//{
-	//	ItemUI newItemUI = inventoryContainer.AddPrefabToContainerReturn().GetComponent<ItemUI>();
-
-	//	newItemUI.button.onClick.AddListener(() =>
-	//	{
-			
-	//		InspectItem(newItemUI.myItem);
-	//	}
-	//	);
-
-	//	return newItemUI;
-	//}
-
-	//This probably wants to return a bool depending on success
-	//public void RemoveItemUI(Item toRemove)
-	//{
-	//	inventoryContainer.RemoveFromContainer(toRemove.appearance.transform);
-	//}
-
-	////This probably wants to return a bool depending on success
-	//public void RemoveAllInventoryEntries()
-	//{
-	//	inventoryContainer.Clear();
-	//}
 	#endregion
 
 	#region Menu Management
@@ -506,85 +370,6 @@ public class UIManager : Singleton<UIManager>
 			//this.OutputInfo("Error Menu State for Journal State", ObjectExtensions.OutputType.Error);
 		}
 	}
-
-	/// <summary>
-	/// Handles the inventory ui switching (and state machine)
-	/// </summary>
-	/// <returns>Returns true if successful</returns>
-	//public bool InspectItem(Item itemToInspect = null)
-	//{
-	//	if (inventoryState == MenuState.Open)
-	//	{
-	//		inventoryState = MenuState.Suppressed;
-	//	}
-	//	if (journalState == MenuState.Open)
-	//	{
-	//		journalState = MenuState.Suppressed;
-	//	}
-
-	//	if (OpenInspection())
-	//	{
-	//		SetupInspectDisplay(itemToInspect);
-
-	//		return true;
-	//	}
-	//	else
-	//	{
-	//		inspection.Init();
-	//	}
-	//	return false;
-	//}
-
-	//private bool SetupInspectDisplay(Item itemToInspect)
-	//{
-	//	inspection.myItem = itemToInspect;
-
-	//	inspection.visualName.text = itemToInspect.itemName;
-	//	inspection.description.text = itemToInspect.description;
-
-	//	inspection.img.sprite = UIManager.Icons[inspection.myItem.iconID];
-	//	inspection.img.sprite = Resources.Load<Sprite>(inspection.myItem.itemName) as Sprite;
-
-	//	//for (int i = 0; i < itemToInspect.ClueSolutions.Count; i++)
-	//	//{
-	//		//Setup Clue Solutions
-
-	//	//	inspection.SetupSolutions(itemToInspect);
-	//	//}
-
-	//	for (int i = 0; i < InvManager.NumPlayers; i++)
-	//	{
-	//		if (InvManager.Instance.MyPlayerIndex != i && inspection.giftButtons != null)
-	//		{
-	//			Debug.Log(inspection.giftButtons.Length + "\n");
-	//			if (inspection.giftButtons[i] != null)
-	//			{
-	//				Debug.Log("Setting Gift Item Button: " + i + " " + inspection.myItem.uniqueID + "\n");
-	//				int targetPlayerID = i;
-	//				inspection.giftButtons[i].onClick.AddListener(() =>
-	//				{
-	//					if (PlayerPrefs.GetString("GameType") == "Multiplayer")
-	//					{
-	//						PlayerController myCurrentPlayer = PlayerController.getNetworkPlayer();
-	//						//Sets Item to inactive & transfers item
-	//						myCurrentPlayer.giftItemsAcrossnetwork(inspection.myItem.ownerIndex, targetPlayerID, inspection.myItem.uniqueID);
-	//					}
-	//					else
-	//					{
-	//						InvManager.Instance.ResetItemToInactive(inspection.myItem);
-	//						InvManager.Instance.TransferItem(targetPlayerID, inspection.myItem.uniqueID);
-	//					}
-	//					UIManager.Instance.EndInspect();
-
-	//				});
-	//			}
-	//		}
-	//	}
-
-	//	//TODO: Setup solution information display
-
-	//	return true;
-	//}
 
 	#region Close Menus
 	public void CloseInventory()
