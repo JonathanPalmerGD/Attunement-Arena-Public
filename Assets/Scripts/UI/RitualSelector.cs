@@ -17,11 +17,26 @@ public class RitualSelector : MonoBehaviour
 
 	public string HorizAxis = "Horizontal";
 	private bool prevLeft = false, prevRight = false;
+	public string FriendlyLeftButton = "LStick Left";
+	public string FriendlyRightButton = "LStick Right";
 	public string ToggleButton = "Jump";
+	public string FriendlyToggleButton = "A";
 	public string DoneButton = "Start";
+	public string FriendlyDoneButton = "Start";
+	public GameObject[] DisableOnDone;
+	public GameObject[] EnableOnDone;
+
+	[System.NonSerialized]
+	public bool Done = false;
+
+	private string BaseHint
+	{
+		get { return "<color=#FFAA00FF>[" + FriendlyLeftButton + "], [" + FriendlyRightButton + "]</color> Choose || <color=green>[" + FriendlyToggleButton + "]</color> Select"; }
+	}
 
 	public Coroutine PnPCR;
 	public Text TooManyText;
+	public Text InputHints;
 
 	void Start()
 	{
@@ -29,10 +44,14 @@ public class RitualSelector : MonoBehaviour
 		contentRect.offsetMin = new Vector2(-102f, 0f);
 		CurrRitual = 0;
 		TotalRitualCount = contentRect.childCount;
+
+		InputHints.text = BaseHint;
 	}
 
 	void Update()
 	{
+		if (Done) return;
+
 		if (GetLeft())
 		{
 			CurrRitual = Mathf.Max(0, CurrRitual - 1);
@@ -54,6 +73,8 @@ public class RitualSelector : MonoBehaviour
 
 				if (re.Selected) SelectedRitualCount++; else SelectedRitualCount--;
 
+				InputHints.text = BaseHint + ((SelectedRitualCount > 0) ? " || <color=blue>[" + FriendlyDoneButton + "]</color> Finish" : "");
+
 				// User has not done a dumb and picked more than three Rituals
 				// Clear error away
 				if (PnPCR != null) StopCoroutine(PnPCR);
@@ -63,8 +84,33 @@ public class RitualSelector : MonoBehaviour
 			}
 			else
 			{
+				// User has done a dumb and picked more than three Rituals
+				// Show error
 				if (PnPCR != null) StopCoroutine(PnPCR);
 				PnPCR = StartCoroutine(PopAndFade(TooManyText));
+			}
+		}
+
+		if(SelectedRitualCount > 0 && GetDone())
+		{
+			PlayerPrefs.SetString("P" + pNum + "Rits" , ((long)SelectedRituals).ToString());
+			foreach(GameObject go in DisableOnDone)
+				go.SetActive(false);
+			foreach(GameObject go in EnableOnDone)
+				go.SetActive(true);
+
+			Done = true;
+
+			bool AllDone = true;
+			foreach(RitualSelector rs in FindObjectsOfType<RitualSelector>())
+			{
+				AllDone &= rs.Done;
+			}
+
+			if(AllDone)
+			{
+				// Do Scene Change
+				Debug.LogWarning("Actual Scene Change not yet implemented!");
 			}
 		}
 	}
