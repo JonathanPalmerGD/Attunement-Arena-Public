@@ -47,7 +47,18 @@ public class GameManager : Singleton<GameManager>
 		}
 
         players = GameObject.FindObjectsOfType<Player>();
-		
+
+		for (int i = 0; i < playerCount; i++)
+		{
+			//players[i].playerID = i;
+
+#if UNITY_EDITOR
+			if (players[i].playerID == playerCount - 1)
+			{
+				players[i].ControlType = Player.PlayerControls.Mouse;
+			}
+#endif
+		}
     }
 
 	private void LookupPrefabs()

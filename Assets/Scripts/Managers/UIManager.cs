@@ -117,6 +117,11 @@ public class UIManager : Singleton<UIManager>
 		}
 	}
 
+	public Vector2 anchMinp0 = new Vector2(0, .5f);
+	public Vector2 anchMaxp0 = new Vector2(1, 1);
+	public Vector2 anchMinp1 = new Vector2(0, 0);
+	public Vector2 anchMaxp1 = new Vector2(1, .5f);
+
 	public void ConfigureUISize(Player player)
 	{
 		int id = player.playerID;
@@ -131,10 +136,19 @@ public class UIManager : Singleton<UIManager>
 		//Min	0		0
 		//Max	1		.5
 
+		if (player.playerID == 0)
+		{
+			playerUIParents[id].anchorMin = anchMinp0;
+			playerUIParents[id].anchorMax = anchMaxp0;
+		}
+		else
+		{
+			playerUIParents[id].anchorMin = anchMinp1;
+			playerUIParents[id].anchorMax = anchMaxp1;
+		}
 
-
-		playerUIParents[id].anchorMin = new Vector2(player.myCamera.rect.x, player.myCamera.rect.y);
-		playerUIParents[id].anchorMax = new Vector2(player.myCamera.rect.width, player.myCamera.rect.width - player.myCamera.rect.y);
+		//playerUIParents[id].anchorMin = new Vector2(player.myCamera.rect.x, player.myCamera.rect.y);
+		//playerUIParents[id].anchorMax = new Vector2(player.myCamera.rect.width, player.myCamera.rect.y - player.myCamera.rect.width);
 		//playerUIParents[id].offsetMin = new Vector2(player.myCamera.rect.x * Screen.width, player.myCamera.rect.width);
 		//playerUIParents[id].offsetMax = new Vector2(player.myCamera.rect.y * Screen.width, player.myCamera.rect.height);
 

@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c9795a96c094f4cbde4d65546aa9b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Owner: {fileID: 0}
   cam: {fileID: 2060296}
   movementSettings:
     ForwardSpeed: 8
@@ -241,6 +242,7 @@ MonoBehaviour:
     MaximumX: 90
     smooth: 1
     smoothTime: 18
+    controller: {fileID: 0}
   advancedSettings:
     groundCheckDistance: .100000001
     stickToGroundHelperDistance: .600000024
@@ -310,12 +312,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerID: 0
+  ControlType: 1
   controller: {fileID: 11413502}
   hitscanTarget: {fileID: 0}
   targetScanDir: {x: 0, y: 0, z: 0}
   hitscanContact: {x: 0, y: 0, z: 0}
   cameraController: {fileID: 11402282}
   myCamera: {fileID: 2060296}
+  initialized: 0
   abilities: []
 --- !u!136 &13606810
 CapsuleCollider:
@@ -365,6 +369,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ControlType
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

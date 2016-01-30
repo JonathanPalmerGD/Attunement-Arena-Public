@@ -6,16 +6,16 @@ public class Player : MonoBehaviour
 {
 	public int playerID = 0;
 	public enum PlayerControls { Mouse, GamePad}
-	private PlayerControls playerInput;
+	public PlayerControls ControlType = PlayerControls.GamePad;
 	public string PlayerInput
 	{
 		get
 		{
-			if (playerInput == PlayerControls.Mouse)
+			if (ControlType == PlayerControls.Mouse)
 			{
 				return "";
 			}
-			else if (playerInput == PlayerControls.GamePad)
+			else if (ControlType == PlayerControls.GamePad)
 			{
 				return "P" + playerID + " ";
 			}
