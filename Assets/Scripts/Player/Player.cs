@@ -17,6 +17,11 @@ public class Player : MonoBehaviour
 	public CameraController cameraController;
 	public Camera myCamera;
 
+	public bool Grounded
+	{
+		get { return controller.Grounded; }
+	}
+
 	private float health;
 	public float Health
 	{
@@ -59,15 +64,17 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
-		if (cameraController == null)
-		{
-			cameraController = GetComponent<CameraController>();
-			cameraController.PositionCamera((byte)playerID);
-		}
 		if (myCamera == null)
 		{
 			myCamera = GetComponent<Camera>();
+		} 
+		if (cameraController == null)
+		{
+			cameraController = GetComponent<CameraController>();
 		}
+		cameraController.Owner = this;
+		cameraController.PositionCamera((byte)playerID);
+		
 		abilities = new List<Ability>();
 		abilityBindings = new Dictionary<string, Ability>();
 

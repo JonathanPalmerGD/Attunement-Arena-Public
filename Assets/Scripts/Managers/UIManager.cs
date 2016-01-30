@@ -13,12 +13,8 @@ public class UIManager : Singleton<UIManager>
 	#region Variables & Assets
 	#region Assets
 	#region Static Prefabs & Assets
-	public static GameObject infoPrefab;
-	public static GameObject itemPrefab;
 	public static GameObject gameUIPrefab;
-	public static GameObject solutionUIPrefab;
-	public static GameObject reqUIPrefab;
-	public static GameObject buttonPrefab;
+	public static GameObject playerUIPrefab;
 	public static Sprite[] Icons;
 	#endregion
 
@@ -28,7 +24,7 @@ public class UIManager : Singleton<UIManager>
 	#region Ingame UI references
 	public GameObject inGameUI;
 
-	public GameObject[] playerUIParents;
+	public RectTransform[] playerUIParents;
 	public PopulateContainer[] PlayerAbilityDisplay;
 	
 	public Image transitionImage;
@@ -69,12 +65,19 @@ public class UIManager : Singleton<UIManager>
 			inGameUI = go;
 			go.name = "In-Game UI - Canvas";
 		}
+
+		for (int i = 0; i < GameManager.Instance.NumPlayers; i++)
+		{
+			AddPlayerUI(GameManager.Instance.players[i]);
+		}
+		
 	}
 
 	private void LookupPrefabs()
 	{
 		gameUIPrefab = Resources.Load<GameObject>("In-Game UI - Canvas");
-		//buttonPrefab = Resources.Load<GameObject>("GivePlayerButton");
+		playerUIPrefab = Resources.Load<GameObject>("Player UI");
+			//buttonPrefab = Resources.Load<GameObject>("GivePlayerButton");
 		//itemPrefab = Resources.Load<GameObject>("Item Entry");
 		//infoPrefab = Resources.Load<GameObject>("Info Entry");
 		//solutionUIPrefab = Resources.Load<GameObject>("Display Solution");
@@ -85,19 +88,50 @@ public class UIManager : Singleton<UIManager>
 
 	void Start()
 	{
-		//For each player
-
-		//Create a Player UI
-
-		PlayerAbilityDisplay = new PopulateContainer[1];
-		PlayerAbilityDisplay[0] = GameCanvas.Instance.LookupComponent<PopulateContainer>("P1 Ability Parent");
-
 		//LoseState = GameCanvas.Instance.LookupComponent<CanvasGroup>("Lose State");
 		//WinState = GameCanvas.Instance.LookupComponent<CanvasGroup>("Win State");
 		//LoseState.alpha = 0;
 		//WinState.alpha = 0;
 
 		//InitButtonListeners();
+	}
+
+	public void Init()
+	{
+		//For each player
+
+		//Create a Player UI
+		
+		PlayerAbilityDisplay = new PopulateContainer[GameManager.Instance.NumPlayers];
+
+		for (int i = 0; i < PlayerAbilityDisplay.Length; i++)
+		{
+			PlayerAbilityDisplay[i] = GameCanvas.Instance.LookupComponent<PopulateContainer>("P" + i + " Ability Parent");
+		}
+	}
+
+	public void AddPlayerUI(Player newPlayer)
+	{
+		//Debug.Log("TODO: Create player UI per player\n");
+		GameObject UIGameObject = GameObject.Instantiate(playerUIPrefab);
+
+		UIGameObject.transform.SetParent(inGameUI.transform);
+		playerUIParents[newPlayer.playerID] = UIGameObject.GetComponent<RectTransform>();
+		playerUIParents[newPlayer.playerID].localScale = Vector3.one;
+
+		playerUIParents[newPlayer.playerID].name = "Player UI";
+		RecursiveChildNaming(newPlayer.playerID, playerUIParents[newPlayer.playerID]);
+		//playerUIParents[newPlayer.playerID].
+	}
+
+	private void RecursiveChildNaming(int id, Transform target)
+	{
+		target.name = target.name.Replace("Player", "P" + id);
+
+		for (int i = 0; i < target.childCount; i++)
+		{
+			RecursiveChildNaming(id, target.GetChild(i));
+		}
 	}
 
 	private void InitButtonListeners()

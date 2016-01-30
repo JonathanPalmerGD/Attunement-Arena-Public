@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
-	private Player Owner;
+	public Player Owner;
 
 	public void PositionCamera(byte myPlayerID)
 	{

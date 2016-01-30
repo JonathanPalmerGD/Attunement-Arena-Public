@@ -8,7 +8,8 @@ public class SetupSingletons : MonoBehaviour
 		GameCanvas.Instance.DoNothing();
 		UIManager.Instance.DoNothing();
 		GameManager.Instance.DoNothing();
-
+		UIManager.Instance.Init();
+		
 		Destroy(gameObject);
 	}
 }

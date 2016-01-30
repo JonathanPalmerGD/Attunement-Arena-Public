@@ -77,7 +77,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
 	public virtual void Awake()
 	{
-		DontDestroyOnLoad(gameObject);
+		//DontDestroyOnLoad(gameObject);
 	}
 
 	void OnLevelWasLoaded(int level)

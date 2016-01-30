@@ -4,12 +4,15 @@ using System.Collections.Generic;
 
 public class GameManager : Singleton<GameManager>
 {
-
 	#region Prefabs
 	public GameObject playerPrefab;
 	#endregion
 	public float modifiedTimeScale = 1;
 
+	public int NumPlayers
+	{
+		get { return players.Length; }
+	}
 	public Player[] players;
 
 	public enum GamePhase { Intro, Tutorial, EndTutorial, MainPlay, BeginAccuse, Accusation, EndGame };
@@ -26,15 +29,17 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
-    void Awake() 
+    void Awake()
 	{
 		LookupPrefabs();
 
-		int playerCount = 1;
+		int playerCount = 2;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
 		}
+
+		UIManager.Instance.playerUIParents = new RectTransform[playerCount];
 
 		for (int i = 0; i < playerCount; i++)
 		{
@@ -42,6 +47,7 @@ public class GameManager : Singleton<GameManager>
 		}
 
         players = GameObject.FindObjectsOfType<Player>();
+		
     }
 
 	private void LookupPrefabs()
@@ -77,11 +83,6 @@ public class GameManager : Singleton<GameManager>
 			}
 		}
 #endif
-	}
-
-	public void ProcessNPCRelocation()
-	{
-		
 	}
 
 	public void OnDestroy()

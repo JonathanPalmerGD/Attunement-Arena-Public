@@ -8,7 +8,7 @@ public class UIComponent : MonoBehaviour
 	public string alternateLookupKey;
 	public bool important = true;
 
-	void Awake()
+	void Start()
 	{
 		if (important)
 		{
