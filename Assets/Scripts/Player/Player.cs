@@ -256,6 +256,10 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Affect the player's health
+	/// </summary>
+	/// <param name="amount">Positive for healing, negative for damage</param>
 	public void AdjustHealth(float amount)
 	{
 		if (amount < 0)

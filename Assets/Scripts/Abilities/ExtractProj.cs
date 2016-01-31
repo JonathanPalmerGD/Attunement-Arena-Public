@@ -9,7 +9,7 @@ public class ExtractProj : MonoBehaviour
 	}
 	private ProjType projType;
 
-	private float Radius
+	public float Radius
 	{
 		get { return transform.localScale.x * 0.5f; }
 	}
@@ -82,24 +82,53 @@ public class ExtractProj : MonoBehaviour
 				break;
 		}
 		transform.SetParent(origin.Owner.transform.parent);
+		GetComponent<SphereCollider>().enabled = true;
 		Destroy(gameObject, 10f);
 	}
 
 	void OnCollisionEnter(Collision collision)
 	{
 		Vector3 where = collision.contacts[0].point;
+		float blastRadius = Radius * 3f * origin.ProjSpreadMult;
 
 		foreach(Player p in GameManager.Instance.players)
 		{
-			if ((p.transform.position - where).sqrMagnitude > Radius * 9f * origin.ProjSpreadMult) continue;
+			var tetherVector = where - p.transform.position;
+			if (tetherVector.sqrMagnitude > blastRadius*blastRadius) continue;
+			Debug.Log("Found Player P" + p.playerID, p);
 
 			float effect = 1.0f;
 			if(p == origin.Owner)
 			{
+				Debug.Log("Owner hit self!");
 				effect = 0.5f;
 			}
 
-			
+			Debug.Log ("Distance Mult: " + (1f/ Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+
+			switch(projType)
+			{
+				case ProjType.Air:
+					Debug.Log("[Air] Applying knockback force of " + (effect * 30f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 30f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+                    break;
+				case ProjType.Lava:
+					Debug.Log("[Lava] Applying knockback force of " + (effect * 2f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 2f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					Debug.Log("[Lava] Applying damage of " + (effect * -25f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.AdjustHealth((effect * -25f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					break;
+				case ProjType.Water:
+					Debug.Log("[Water] Applying knockback force of " + (effect * 5f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 5f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					Debug.Log("[Water] Applying damage of " + (effect * -15f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.AdjustHealth((effect * -15f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					break;
+				default:
+					break;
+			}
 		}
+
+		Destroy(gameObject);
 	}
 }
