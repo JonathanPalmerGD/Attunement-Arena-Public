@@ -20,13 +20,6 @@ public class Skate : Ability
 	{
 		get { return 14; }
 	}
-	public override float GeneralDamage
-	{
-		get
-		{
-			return 0f;
-		}
-	}
 	public float Force = 15;
 
 	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
@@ -50,6 +43,13 @@ public class Skate : Ability
 
 		GameObject newPlatform = GameObject.Instantiate<GameObject>(icePrefab);
 		newPlatform.name = "[P" + Owner.playerID + "] Ice";
+		if (GeneralDamage > 0)
+		{
+			IceAreaEffect iceEff = newPlatform.AddComponent<IceAreaEffect>();
+
+			iceEff.Owner = Owner;
+			iceEff.Creator = this;
+		}
 		newPlatform.transform.SetParent(iceParent.transform);
 		float yDiff = inputVector.normalized.y;
 		newPlatform.transform.position = Owner.transform.position - (inputVector * .4f) - (Vector3.up * yDiff);
