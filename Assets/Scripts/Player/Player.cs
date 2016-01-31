@@ -415,6 +415,9 @@ public class Player : MonoBehaviour
 	}
 	void UpdateMana()
 	{
+		if (!playerDead)
+			return;
+		
 		if (controller.Grounded)
 		{
 			ManaToAdj += Time.deltaTime * ManaRegenRate * 1.6f;
@@ -423,8 +426,7 @@ public class Player : MonoBehaviour
 		{
 			ManaToAdj += Time.deltaTime * ManaRegenRate * 0.4f;
 		}
-		if(!playerDead)
-			ManaToAdj += Time.deltaTime * ManaRegenRate;
+		
 
 		//If our displayed Mana value isn't correct
 		if (ManaToAdj != 0)
