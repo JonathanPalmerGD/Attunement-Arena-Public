@@ -4,6 +4,7 @@ using System.Collections;
 public class Extract : Ability
 {
 	private GameObject ExProj;
+	public AudioSource extractAud;
 
 	public override int IconID
 	{
@@ -54,12 +55,24 @@ public class Extract : Ability
 		}
 	}
 
+	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
+	{
+		extractAud = AudioManager.Instance.MakeSource("Extract");
+
+		extractAud.volume = 0;
+		extractAud.loop = true;
+		extractAud.Play();
+
+		base.Init(newOwner, newKeyBinding, displayKeyBinding);
+	}
+
 	public override void UpdateAbility(float deltaTime)
 	{
 		base.UpdateAbility(deltaTime);
 		if (ExProj == null) ExProj = Resources.Load<GameObject>("ExProj");
 		if (currState == ExtractState.Pulling)
 		{
+			extractAud.volume = .35f;
 			projectile.transform.localScale = Vector3.one * Mathf.Min(projectile.transform.localScale.x + (AccretionSpeed * Time.deltaTime), MaxRadius * 2);
 			if (Automated)
 			{
@@ -94,6 +107,11 @@ public class Extract : Ability
 			{
 				lastHeld = false;
 			}
+
+		if (currState != ExtractState.Pulling)
+		{
+			extractAud.volume = 0f;
+		}
 
 		if (extractBeam && showPull)
 		{

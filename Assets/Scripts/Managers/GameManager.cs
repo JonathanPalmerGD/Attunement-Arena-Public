@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
 		get { return players.Length; }
 	}
 	public Player[] players;
+	public AudioSource music;
 
 	public List<PlayerSpawn> SpawnPoints;
 
@@ -40,7 +41,7 @@ public class GameManager : Singleton<GameManager>
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
 
-		int playerCount = 1;
+		int playerCount = 2;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
@@ -73,6 +74,12 @@ public class GameManager : Singleton<GameManager>
 			}
 #endif
 		}
+
+		music = AudioManager.Instance.MakeSource("Meditate_Theme");
+		music.volume = .5f;
+		music.Play();
+
+		AudioManager.Instance.AddMusicTrack(music, true);
     }
 
 	private void LookupPrefabs()

@@ -184,9 +184,11 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 			//mRigidBody.drag = 50f;
 
-			desiredMove.x = desiredMove.x * movementSettings.CurrentTargetSpeed;
-			desiredMove.z = desiredMove.z * movementSettings.CurrentTargetSpeed;
-			desiredMove.y = desiredMove.y * movementSettings.CurrentTargetSpeed;
+			float speedMult = Owner.buffState == Player.PlayerBuff.Chilled ? .5f : 1;
+
+			desiredMove.x = desiredMove.x * movementSettings.CurrentTargetSpeed * speedMult;
+			desiredMove.z = desiredMove.z * movementSettings.CurrentTargetSpeed * speedMult;
+			desiredMove.y = desiredMove.y * movementSettings.CurrentTargetSpeed * speedMult;
 
 			if (mRigidBody.velocity.sqrMagnitude <
 				(movementSettings.CurrentTargetSpeed * movementSettings.CurrentTargetSpeed))

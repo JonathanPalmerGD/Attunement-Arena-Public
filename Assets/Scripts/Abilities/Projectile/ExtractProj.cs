@@ -100,21 +100,21 @@ public class ExtractProj : MonoBehaviour
 			float effect = 1.0f;
 			if(p == origin.Owner)
 			{
-				effect = 0.5f;
+				continue;
 			}
 
 			switch(projType)
 			{
 				case ProjType.Air:
-					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 300f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 300f * Radius));
                     break;
 				case ProjType.Lava:
-					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 20f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
-					p.AdjustHealth((effect * -25f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 20f * Radius ));
+					p.AdjustHealth((effect * -25f * Radius));
 					break;
 				case ProjType.Water:
-					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 50f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
-					p.AdjustHealth((effect * -15f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 50f * Radius));
+					p.AdjustHealth((effect * -15f * Radius));
 					break;
 				default:
 					break;
