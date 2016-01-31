@@ -71,6 +71,7 @@ public class ExtractProj : MonoBehaviour
 		switch (projType)
 		{
 			case ProjType.Air:
+				rb.useGravity = false;
 				rb.velocity = transform.forward * (25f * origin.ProjSpeedMult);
 				break;
 			case ProjType.Water:
@@ -89,11 +90,11 @@ public class ExtractProj : MonoBehaviour
 	void OnCollisionEnter(Collision collision)
 	{
 		Vector3 where = collision.contacts[0].point;
-		float blastRadius = Radius * 3f * origin.ProjSpreadMult;
+		float blastRadius = Radius * 9f * origin.ProjSpreadMult;
 
 		foreach(Player p in GameManager.Instance.players)
 		{
-			var tetherVector = where - p.transform.position;
+			var tetherVector = p.transform.position - where;
 			if (tetherVector.sqrMagnitude > blastRadius*blastRadius) continue;
 
 			float effect = 1.0f;
@@ -105,20 +106,26 @@ public class ExtractProj : MonoBehaviour
 			switch(projType)
 			{
 				case ProjType.Air:
-					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 30f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 300f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
                     break;
 				case ProjType.Lava:
-					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 2f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 20f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					p.AdjustHealth((effect * -25f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					break;
 				case ProjType.Water:
-					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 5f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 50f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					p.AdjustHealth((effect * -15f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					break;
 				default:
 					break;
 			}
 		}
+
+		ParticleSystem particles = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>(projType.ToString() + "BallPff")).GetComponent<ParticleSystem>();
+		particles.transform.position = where;
+		particles.Emit(450);
+		Destroy(particles.gameObject, 5f);
+
 
 		Destroy(gameObject);
 	}
