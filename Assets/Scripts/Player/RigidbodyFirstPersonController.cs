@@ -123,19 +123,8 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 	private void Update()
 	{
-		//if (Input.GetKeyDown(KeyCode.LeftControl))
-		//{
-		//	mRigidBody.useGravity = !mRigidBody.useGravity;
-		//	mRigidBody.velocity = Vector3.zero;
-		//}
-
 		if(!Owner.playerDead)
 			RotateView();
-
-		//if (Input.GetButtonDown(Owner.PlayerInput + "Jump") && !mJump)
-		//{
-		//	mJump = true;
-		//}
 	}
 
 	void ApplyExternalForce(Vector3 force)

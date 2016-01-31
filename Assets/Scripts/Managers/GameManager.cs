@@ -19,20 +19,6 @@ public class GameManager : Singleton<GameManager>
 
 	public List<PlayerSpawn> SpawnPoints;
 
-	public enum GamePhase { Intro, Tutorial, EndTutorial, MainPlay, BeginAccuse, Accusation, EndGame };
-	public GamePhase currentPhase = GamePhase.Intro;
-	public GamePhase CurrentPhase
-	{
-		get 
-		{
-			return currentPhase;
-		}
-		set 
-		{
-			currentPhase = value;
-		}
-	}
-
     void Awake()
 	{
 		LookupPrefabs();
@@ -172,23 +158,6 @@ public class GameManager : Singleton<GameManager>
 				AudioManager.Instance.maxMusicVol = 0f;
 			}
 		}
-
-
-#if UNITY_EDITOR
-		if(Input.GetKey(KeyCode.RightControl))
-		{
-			if (Input.GetKeyDown(KeyCode.K))
-			{
-				
-			}
-
-			if (Input.GetKeyDown(KeyCode.Delete))
-			{
-				CurrentPhase = GamePhase.MainPlay;
-				
-			}
-		}
-#endif
 	}
 
 	public void OnDestroy()

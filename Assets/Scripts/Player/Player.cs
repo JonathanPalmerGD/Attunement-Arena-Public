@@ -447,7 +447,6 @@ public class Player : MonoBehaviour
 		if (playerDead)
 			return;
 
-		Debug.Log("Updating mana\n");
 		if (controller.Grounded)
 		{
 			ManaToAdj += Time.deltaTime * ManaRegenRate * 1.6f;
@@ -599,6 +598,7 @@ public class Player : MonoBehaviour
 
 	public void GetInput()
 	{
+#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.G))
 		{
 			AdjustHealth(-15);
@@ -608,6 +608,7 @@ public class Player : MonoBehaviour
 			AdjustHealth(100);
 			Mana += 100;
 		}
+#endif
 
 		for (int i = 0; i < abilities.Count; i++)
 		{
