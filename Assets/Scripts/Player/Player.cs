@@ -342,8 +342,31 @@ public class Player : MonoBehaviour
 						// Give the player a darkened "you're dead" screen
 						damageIndicator.gameObject.SetActive(true);
 						damageIndicator.color = new Color(0.5f, 0f, 0f, 0.3f);
-
 						StartCoroutine(DeadTextFadein(GameCanvas.Instance.LookupComponent<Text>("P" + playerID + " DeadText")));
+
+						// Test live player count
+						byte livePlayers = 0;
+						foreach(Player p in GameManager.Instance.players)
+						{
+							if (!p.playerDead) livePlayers++;
+						}
+
+						// We have winrar!
+						if(livePlayers == 1)
+						{
+							foreach (Player p in GameManager.Instance.players)
+							{
+								if (p.playerDead) continue;
+
+								Text winText = GameCanvas.Instance.LookupComponent<Text>("P" + p.playerID + " DeadText");
+								winText.text = "You are an Attunement Master!";
+								p.StartCoroutine(p.DeadTextFadein(winText));
+								p.damageIndicator.gameObject.SetActive(true);
+								p.damageIndicator.color = new Color(1.0f, 0.75f, 0f, 0.3f);
+								break;
+                            }
+							StartCoroutine(WaitThenChangeScene());  // Change back to main menu upon finish
+						}
 					}
 				}
 			}
@@ -672,7 +695,11 @@ public class Player : MonoBehaviour
 			deadText.color = new Color(1f, 0f, 0f, alpha);
 			yield return null;
 		}
+	}
 
-
+	public IEnumerator WaitThenChangeScene()
+	{
+		yield return new WaitForSeconds(8.0f);
+		Application.LoadLevel(Application.loadedLevel - 1);
 	}
 }
