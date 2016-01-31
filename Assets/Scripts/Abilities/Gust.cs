@@ -67,12 +67,12 @@ public class Gust : Ability
 			// If the other player is not in the cone of influence, ignore
 			//if (Vector3.Angle(castDir, tetherVector) > MaxAngle) continue;
 
-			Debug.DrawRay(Owner.transform.position, p.transform.position - Owner.transform.position, Color.black, 5.0f);
+			//Debug.DrawRay(Owner.transform.position, p.transform.position - Owner.transform.position, Color.black, 5.0f);
 			RaycastHit hit;
 			if (Physics.Raycast(Owner.transform.position, p.transform.position - Owner.transform.position, out hit, Range))
 			{
-				Debug.DrawRay(Owner.transform.position, p.transform.position - Owner.transform.position, Color.black, 5.0f);
-				Debug.Log(hit.collider.gameObject.name + "\n" + Owner.name + "   " + hit.collider.gameObject.tag);
+				//Debug.DrawRay(Owner.transform.position, p.transform.position - Owner.transform.position, Color.black, 5.0f);
+				//Debug.Log(hit.collider.gameObject.name + "\n" + Owner.name + "   " + hit.collider.gameObject.tag);
 				if (hit.collider.gameObject.tag == "Player" && hit.collider.name != Owner.name)
 				{
 					if (p.Grounded)

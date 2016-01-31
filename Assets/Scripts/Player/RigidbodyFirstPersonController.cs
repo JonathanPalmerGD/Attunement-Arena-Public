@@ -185,7 +185,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			return;
 		}
 
-		Debug.Log("Hit\n" + Owner.name + "\n" + accRBForces + " " + force);
+		//Debug.Log("Hit\n" + Owner.name + "\n" + accRBForces + " " + force);
 		accRBForces += force;
 	}
 

@@ -8,7 +8,7 @@ public class Bolt : Ability
 	private BoltEffect boltEff;
 	public override KeyActivateCond activationCond
 	{
-		get { return KeyActivateCond.KeyDown; }
+		get { return KeyActivateCond.KeyHold; }
 	}
 
 	public override bool UseCharges
@@ -28,7 +28,7 @@ public class Bolt : Ability
 	{
 		get
 		{
-			return 8f;
+			return 1.5f;
 		}
 	}
 	public float MaxAngle

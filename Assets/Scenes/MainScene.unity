@@ -295,7 +295,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 485474, guid: d98d4a8aa7055b24daf750abcc4508c4, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 410980, guid: d98d4a8aa7055b24daf750abcc4508c4, type: 2}
       propertyPath: m_LocalPosition.y
@@ -524,13 +524,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c236c3d073c81645818a8dc28901dc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineRend: {fileID: 1942847457}
+  lRend: {fileID: 0}
   target: {fileID: 1762366205}
+  zapPoint: {x: 0, y: 0, z: 0}
   arcLength: 1
   arcVariation: 1
   inaccuracy: .5
   timeOfZap: .25
   zapTimer: 0
+  trackTarget: 0
 --- !u!4 &1942847459
 Transform:
   m_ObjectHideFlags: 0

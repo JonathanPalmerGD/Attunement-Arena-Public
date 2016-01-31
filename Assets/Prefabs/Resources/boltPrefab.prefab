@@ -40,14 +40,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c236c3d073c81645818a8dc28901dc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineRend: {fileID: 12075308}
+  lRend: {fileID: 0}
   target: {fileID: 0}
+  zapPoint: {x: 0, y: 0, z: 0}
   arcLength: 1
   arcVariation: 1
   inaccuracy: .5
-  timeOfZap: .25
+  timeOfZap: .0500000007
   zapTimer: 0
-  numBoltPoints: 0
+  trackTarget: 0
 --- !u!120 &12075308
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -104,6 +105,10 @@ Prefab:
       propertyPath: lineRend
       value: 
       objectReference: {fileID: 12075308}
+    - target: {fileID: 0}
+      propertyPath: timeOfZap
+      value: .0500000007
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 146076}
