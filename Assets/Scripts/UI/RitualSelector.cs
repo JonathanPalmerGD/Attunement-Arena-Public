@@ -17,21 +17,27 @@ public class RitualSelector : MonoBehaviour
 
 	public string HorizAxis = "Horizontal";
 	private bool prevLeft = false, prevRight = false;
-	public string FriendlyLeftButton = "LStick Left";
-	public string FriendlyRightButton = "LStick Right";
 	public string ToggleButton = "Jump";
-	public string FriendlyToggleButton = "A";
 	public string DoneButton = "Start";
-	public string FriendlyDoneButton = "Start";
 	public GameObject[] DisableOnDone;
 	public GameObject[] EnableOnDone;
 
 	[System.NonSerialized]
 	public bool Done = false;
 
-	private string BaseHint
+	private string Hint
 	{
-		get { return "<color=#FFAA00FF>[" + FriendlyLeftButton + "], [" + FriendlyRightButton + "]</color> Choose || <color=green>[" + FriendlyToggleButton + "]</color> Select"; }
+		get
+		{
+			if (ctrlType == Player.PlayerControls.GamePad)
+			{
+				return "<color=#FFAA00FF>[LStick Left], [LStick Right]</color> Choose || <color=green>[A]</color> Select" + (SelectedRitualCount > 0 ? " || <color=blue>[Start]</color> Finish" : "");
+			}
+			else
+			{
+				return "<color=#FFAA00FF>[Left Arrow], [Right Arrow]</color> Choose || <color=green>[Space]</color> Select" + (SelectedRitualCount > 0 ? " || <color=blue>[Enter]</color> Finish" : "");
+			}
+		}
 	}
 
 	public Coroutine PnPCR;
@@ -45,7 +51,7 @@ public class RitualSelector : MonoBehaviour
 		CurrRitual = 0;
 		TotalRitualCount = contentRect.childCount;
 
-		InputHints.text = BaseHint;
+		InputHints.text = Hint;
 	}
 
 	void Update()
@@ -73,7 +79,7 @@ public class RitualSelector : MonoBehaviour
 
 				if (re.Selected) SelectedRitualCount++; else SelectedRitualCount--;
 
-				InputHints.text = BaseHint + ((SelectedRitualCount > 0) ? " || <color=blue>[" + FriendlyDoneButton + "]</color> Finish" : "");
+				InputHints.text = Hint;
 
 				// User has not done a dumb and picked more than three Rituals
 				// Clear error away
@@ -91,23 +97,23 @@ public class RitualSelector : MonoBehaviour
 			}
 		}
 
-		if(SelectedRitualCount > 0 && GetDone())
+		if (SelectedRitualCount > 0 && GetDone())
 		{
-			PlayerPrefs.SetString("P" + pNum + "Rits" , ((long)SelectedRituals).ToString());
-			foreach(GameObject go in DisableOnDone)
+			PlayerPrefs.SetString("P" + pNum + "Rits", ((long)SelectedRituals).ToString());
+			foreach (GameObject go in DisableOnDone)
 				go.SetActive(false);
-			foreach(GameObject go in EnableOnDone)
+			foreach (GameObject go in EnableOnDone)
 				go.SetActive(true);
 
 			Done = true;
 
 			bool AllDone = true;
-			foreach(RitualSelector rs in FindObjectsOfType<RitualSelector>())
+			foreach (RitualSelector rs in FindObjectsOfType<RitualSelector>())
 			{
 				AllDone &= rs.Done;
 			}
 
-			if(AllDone)
+			if (AllDone)
 			{
 				// Do Scene Change
 				Application.LoadLevel(Application.loadedLevel + 1);
@@ -121,13 +127,13 @@ public class RitualSelector : MonoBehaviour
 		Color c = element.color; // Get color reference
 		c.a = 1f;
 		element.color = c; // Max alpha color
-		while(totalTime < 2f) // Keep for two seconds
+		while (totalTime < 2f) // Keep for two seconds
 		{
 			totalTime += Time.deltaTime;
 			yield return null;
 		}
 		totalTime = 0f; // Reset timer
-		while(totalTime < 2f) // Fade over two seconds
+		while (totalTime < 2f) // Fade over two seconds
 		{
 			totalTime += Time.deltaTime;
 			c.a = 1f - (totalTime / 2f); // Alpha should fade from full to zero over two seconds

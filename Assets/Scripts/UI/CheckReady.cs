@@ -7,10 +7,21 @@ public class CheckReady : MonoBehaviour
 	private UnityEngine.UI.Text t;
 	public byte pNum = 0;
 	public Player.PlayerControls ctrlType = Player.PlayerControls.Mouse;
-	public string ReadyButton = "A";
-	public string FriendlyReadyButton = "Jump";
-	public string UnreadyButton = "B";
-	public string FriendlyUnreadyButton = "Primary";
+	public Player.PlayerControls CtrlType
+	{
+		set
+		{
+			if (ctrlType != value)
+			{
+				ctrlType = value;
+				ready = false;
+				if (t)
+					t.text = "Awaiting Player " + (pNum + 1) + " Ready!\n" + (ctrlType == Player.PlayerControls.GamePad ? "Controller " + (pNum + 1) : "Mouse & Keyboard");
+			}
+		}
+	}
+	public string ReadyButton = "Jump";
+	public string UnreadyButton = "Primary";
 
 	public GameObject[] DisableOnNext;
 	public GameObject[] EnableOnNext;
@@ -24,8 +35,8 @@ public class CheckReady : MonoBehaviour
 			{
 				ready = value;
 
-				t.text = ready ? "All Good!\nPress <color=red>[" + FriendlyUnreadyButton + "]</color> to back out"
-							   : "Awaiting Player " + (pNum + 1) + " Ready!\nPress <color=green>[" + FriendlyReadyButton + "]</color> to be Ready";
+				t.text = ready ? "All Good!"
+							   : "Awaiting Player " + (pNum + 1) + " Ready!\n" + (ctrlType == Player.PlayerControls.GamePad ? "Controller " + (pNum + 1) : "Mouse & Keyboard");
 			}
 		}
 	}
@@ -33,25 +44,32 @@ public class CheckReady : MonoBehaviour
 	void Start()
 	{
 		if (!t) t = GetComponentInChildren<UnityEngine.UI.Text>();
-		t.text = "Awaiting Player " + (pNum + 1) + " Ready!\nPress <color=green>[" + FriendlyReadyButton + "]</color> to be Ready";
+		t.text = "Awaiting Player " + (pNum + 1) + " Ready!\n" + (ctrlType == Player.PlayerControls.GamePad ? "Controller " + (pNum + 1) : "Mouse & Keyboard");
 	}
 
 	void Update()
 	{
-		if (!t) t = GetComponentInChildren<UnityEngine.UI.Text>();
+		if (!t)
+		{
+			t = GetComponentInChildren<UnityEngine.UI.Text>();
+			t.text = "Awaiting Player " + (pNum + 1) + " Ready!\n" + (ctrlType == Player.PlayerControls.GamePad ? "Controller " + (pNum + 1) : "Mouse & Keyboard");
+		}
 		if (!IsReady && Input.GetButtonDown((ctrlType == Player.PlayerControls.GamePad ? ("P" + (pNum) + " ") : "") + ReadyButton))
 		{
+			var players = FindObjectsOfType<CheckReady>();
+			Debug.Log("Player Ready!\nWe have " + players.Length + " players this go around.");
+
 			IsReady = true;
 
 			bool allReady = true;
-			foreach (CheckReady cr in FindObjectsOfType<CheckReady>())
+			foreach (CheckReady cr in players)
 			{
 				allReady &= cr.IsReady;
 			}
 
 			if (allReady)
 			{
-				PlayerPrefs.SetInt("PlayerCount", 2);
+				PlayerPrefs.SetInt("PlayerCount", players.Length);
 
 				// Move to Ritual Select
 				foreach (GameObject go in DisableOnNext)
