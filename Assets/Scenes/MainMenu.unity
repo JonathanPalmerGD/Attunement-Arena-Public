@@ -3445,7 +3445,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pNum: 3
-  ctrlType: 0
+  ctrlType: 1
   SelectedRitualCount: 0
   SelectedRituals: 0
   HorizAxis: Horizontal
@@ -5235,7 +5235,7 @@ GameObject:
   - 114: {fileID: 544996545}
   - 114: {fileID: 544996544}
   m_Layer: 5
-  m_Name: P1 Panel
+  m_Name: P2 Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5253,7 +5253,7 @@ RectTransform:
   m_Children:
   - {fileID: 1758915045}
   m_Father: {fileID: 1667663745}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -5271,7 +5271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ready: 0
-  pNum: 1
+  pNum: 2
   ctrlType: 1
   ReadyButton: Jump
   UnreadyButton: Primary
@@ -6126,7 +6126,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Select your Rituals
 
-    (Max of 3 per player)'
+    (Max of 2 per player)'
 --- !u!222 &615247252
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10106,8 +10106,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Join in: <color=green>[A]</color> / <color=green>[Space]</color> || Back
-    Out: <color=red>[B]</color> / <color=red>[Left Mouse Button]</color>
+  m_Text: 'Join in: <color=green>[A]</color> || Back Out: <color=red>[B]</color>
 
     <size=16>Press <color=blue>[2] [3]</color> or <color=blue>[4]</color> on keyboard
     to choose number of players</size>'
@@ -12219,7 +12218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pNum: 1
-  ctrlType: 0
+  ctrlType: 1
   SelectedRitualCount: 0
   SelectedRituals: 0
   HorizAxis: Horizontal
@@ -15769,8 +15768,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 566877163}
-  - {fileID: 544996543}
   - {fileID: 1773400443}
+  - {fileID: 544996543}
   - {fileID: 2096938365}
   m_Father: {fileID: 2088524815}
   m_RootOrder: 2
@@ -17041,7 +17040,7 @@ RectTransform:
   m_Children:
   - {fileID: 1890556248}
   m_Father: {fileID: 1667663745}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -17059,7 +17058,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ready: 0
-  pNum: 2
+  pNum: 1
   ctrlType: 1
   ReadyButton: Jump
   UnreadyButton: Primary

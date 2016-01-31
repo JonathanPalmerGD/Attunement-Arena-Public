@@ -54,29 +54,35 @@ public class CheckReady : MonoBehaviour
 			t = GetComponentInChildren<UnityEngine.UI.Text>();
 			t.text = "Awaiting Player " + (pNum + 1) + " Ready!\n" + (ctrlType == Player.PlayerControls.GamePad ? "Controller " + (pNum + 1) : "Mouse & Keyboard");
 		}
-		if (!IsReady && Input.GetButtonDown((ctrlType == Player.PlayerControls.GamePad ? ("P" + (pNum) + " ") : "") + ReadyButton))
+		if (!IsReady)
 		{
-			var players = FindObjectsOfType<CheckReady>();
-			Debug.Log("Player Ready!\nWe have " + players.Length + " players this go around.");
+            string useString = (ctrlType == Player.PlayerControls.GamePad ? ("P" + (pNum) + " ") : "");
+             if (Input.GetButtonDown(useString + ReadyButton))
+            {
+               // Debug.Log("Testing " + ((ctrlType == Player.PlayerControls.GamePad ? ("P" + (pNum) + " ") : "") + ReadyButton) + "\n" + Input.GetButtonDown((ctrlType == Player.PlayerControls.GamePad ? ("P" + (pNum) + " ") : "") + ReadyButton));
+                var players = FindObjectsOfType<CheckReady>();
+                //Debug.Log("Player " + pNum + " Ready!\nWe have " + players.Length + " players this go around.", this);
 
-			IsReady = true;
+                IsReady = true;
 
-			bool allReady = true;
-			foreach (CheckReady cr in players)
-			{
-				allReady &= cr.IsReady;
-			}
+                bool allReady = true;
+                foreach (CheckReady cr in players)
+                {
+                    allReady &= cr.IsReady;
+                }
 
-			if (allReady)
-			{
-				PlayerPrefs.SetInt("PlayerCount", players.Length);
+                if (allReady)
+                {
+                    PlayerPrefs.SetInt("PlayerCount", players.Length);
 
-				// Move to Ritual Select
-				foreach (GameObject go in DisableOnNext)
-					go.SetActive(false);
-				foreach (GameObject go in EnableOnNext)
-					go.SetActive(true);
-			}
+                    // Move to Ritual Select
+                    foreach (GameObject go in DisableOnNext)
+                        go.SetActive(false);
+                    foreach (GameObject go in EnableOnNext)
+                        go.SetActive(true);
+                }
+            }
+           
 		}
 		else if (IsReady && Input.GetButtonDown((ctrlType == Player.PlayerControls.GamePad ? ("P" + (pNum) + " ") : "") + UnreadyButton))
 		{
