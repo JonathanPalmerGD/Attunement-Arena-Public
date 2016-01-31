@@ -95,33 +95,24 @@ public class ExtractProj : MonoBehaviour
 		{
 			var tetherVector = where - p.transform.position;
 			if (tetherVector.sqrMagnitude > blastRadius*blastRadius) continue;
-			Debug.Log("Found Player P" + p.playerID, p);
 
 			float effect = 1.0f;
 			if(p == origin.Owner)
 			{
-				Debug.Log("Owner hit self!");
 				effect = 0.5f;
 			}
-
-			Debug.Log ("Distance Mult: " + (1f/ Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 
 			switch(projType)
 			{
 				case ProjType.Air:
-					Debug.Log("[Air] Applying knockback force of " + (effect * 30f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 30f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
                     break;
 				case ProjType.Lava:
-					Debug.Log("[Lava] Applying knockback force of " + (effect * 2f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 2f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
-					Debug.Log("[Lava] Applying damage of " + (effect * -25f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					p.AdjustHealth((effect * -25f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					break;
 				case ProjType.Water:
-					Debug.Log("[Water] Applying knockback force of " + (effect * 5f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 5f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
-					Debug.Log("[Water] Applying damage of " + (effect * -15f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					p.AdjustHealth((effect * -15f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
 					break;
 				default:
