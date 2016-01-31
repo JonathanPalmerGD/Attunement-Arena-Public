@@ -23,9 +23,9 @@ public class Gust : Ability
 			return 2f;
 		}
 	}
-	public float RecoilForce = 290;
+	public float RecoilForce = 140;
 	public float JumpForce = 140;
-	public float Force = 5;
+	public float Force = 50;
 	public float Range = 10;
 	public float MaxAngle = 15;
 	public bool wasGrounded = false;
@@ -52,30 +52,41 @@ public class Gust : Ability
 	{
 		var castDir = inputVector.normalized;
 
-		Debug.DrawLine(Owner.transform.position, Owner.transform.position + castDir * Range, Color.green, 5.0f);
+		//Debug.DrawLine(Owner.transform.position, Owner.transform.position + castDir * Range, Color.green, 5.0f);
 
 		foreach (Player p in GameManager.Instance.players)
 		{
 			if (p == Owner) continue; // Don't influence self just yet
 
 			// Get vector from owner to other player
-			var tetherVector = Owner.transform.position - p.transform.position;
+			var tetherVector = p.transform.position - Owner.transform.position;
 
 			// If out of range, ignore
-			if (tetherVector.sqrMagnitude > Range * Range) continue;
-
-			// If there's something in the way, ignore player
-			if (Physics.Linecast(Owner.transform.position, p.transform.position)) continue;
+			//if (tetherVector.sqrMagnitude > Range * Range) continue;
 
 			// If the other player is not in the cone of influence, ignore
-			if (Vector3.Angle(castDir, tetherVector) > MaxAngle) continue;
+			//if (Vector3.Angle(castDir, tetherVector) > MaxAngle) continue;
 
-			Debug.DrawLine(Owner.transform.position, Owner.transform.position + tetherVector, Color.red, 5.0f);
-
-			Owner.controller.ApplyExternalForce(castDir * Force, false);
+			Debug.DrawRay(Owner.transform.position, p.transform.position - Owner.transform.position, Color.black, 5.0f);
+			RaycastHit hit;
+			if (Physics.Raycast(Owner.transform.position, p.transform.position - Owner.transform.position, out hit, Range))
+			{
+				Debug.DrawRay(Owner.transform.position, p.transform.position - Owner.transform.position, Color.black, 5.0f);
+				Debug.Log(hit.collider.gameObject.name + "\n" + Owner.name + "   " + hit.collider.gameObject.tag);
+				if (hit.collider.gameObject.tag == "Player" && hit.collider.name != Owner.name)
+				{
+					if (p.Grounded)
+					{
+						p.controller.ApplyExternalForce((new Vector3(castDir.x, 0, castDir.z) + Vector3.up * 3) * Force);
+					}
+					else
+					{
+						p.controller.ApplyExternalForce(castDir * Force);
+					}
+				}
+			}
+			//Debug.DrawLine(Owner.transform.position, Owner.transform.position + tetherVector, Color.red, 5.0f);
 		}
-
-		
 
 		Vector3 oldVel = Owner.controller.mRigidBody.velocity;
 
@@ -94,7 +105,7 @@ public class Gust : Ability
 			if (!Owner.Grounded)
 			{
 				Owner.controller.mRigidBody.velocity = new Vector3(0, 0, 0);
-				Owner.controller.AddExternalForce(castDir * RecoilForce * -1, ForceMode.Acceleration, false);
+				Owner.controller.ApplyExternalForce(castDir * RecoilForce * -1);
 			}
 		}
 		
