@@ -4,7 +4,7 @@ using System.Collections;
 
 public class RitualElement : MonoBehaviour
 {
-	public RitualID connectedRitual = RitualID.AnIceGuy;
+	public RitualID connectedRitual = RitualID.Cyclone;
 
 	private Image bg;
 	public bool Selected = false; private bool PrevSelected = false;
