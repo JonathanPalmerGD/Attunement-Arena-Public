@@ -6,7 +6,7 @@ public class IceAreaEffect : MonoBehaviour
 	public Player Owner;
 	public Skate Creator;
 
-	public void OnTriggerStay(Collider c)
+	public void OnTriggerEnter(Collider c)
 	{
 		if (c.name != Owner.name)
 		{
@@ -15,7 +15,8 @@ public class IceAreaEffect : MonoBehaviour
 				Player other = c.GetComponent<Player>();
 				if (other != null)
 				{
-					other.AdjustHealth(-Creator.GeneralDamage * Time.deltaTime);
+					other.SetChilledState(Creator.Duration);
+					//other.AdjustHealth(-Creator.GeneralDamage * Time.deltaTime);
 				}
 			}
 		}
