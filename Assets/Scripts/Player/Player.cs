@@ -33,7 +33,10 @@ public class Player : MonoBehaviour
 
 	#region Object References
 	public RigidbodyFirstPersonController controller;
-	//public List<Ability> rituals;
+	/// <summary>
+	/// A Flagged Enum that has all of the player's selected Rituals
+	/// </summary>
+	public RitualID rituals;
 
 	public GameObject hitscanTarget = null;
 	public Vector3 targetScanDir = Vector3.zero;

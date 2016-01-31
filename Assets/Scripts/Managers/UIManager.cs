@@ -156,6 +156,8 @@ public class UIManager : Singleton<UIManager>
 			}
 		}
 
+		playerUIParents[id].offsetMin = playerUIParents[id].offsetMax = Vector2.zero;
+
 		//playerUIParents[id].anchorMin = new Vector2(player.myCamera.rect.x, player.myCamera.rect.y);
 		//playerUIParents[id].anchorMax = new Vector2(player.myCamera.rect.width, player.myCamera.rect.y - player.myCamera.rect.width);
 		//playerUIParents[id].offsetMin = new Vector2(player.myCamera.rect.x * Screen.width, player.myCamera.rect.width);

@@ -122,7 +122,7 @@ public class Ability : ScriptableObject
 		}
 	}
 
-	public bool CanUseAbility()
+	public virtual bool CanUseAbility()
 	{
 		bool canPayCost = false;
 		bool chargeValid = false;
