@@ -14,7 +14,7 @@ GameObject:
   - 136: {fileID: 13631882}
   m_Layer: 0
   m_Name: Player Prefab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,7 +32,7 @@ GameObject:
   - 23: {fileID: 2323560}
   m_Layer: 0
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -315,8 +315,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialized: 0
   playerID: 0
+  buffState: 2
   ControlType: 1
   controller: {fileID: 11413502}
+  rituals: 0
   hitscanTarget: {fileID: 0}
   targetScanDir: {x: 0, y: 0, z: 0}
   hitscanContact: {x: 0, y: 0, z: 0}
@@ -473,6 +475,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: airDrag
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

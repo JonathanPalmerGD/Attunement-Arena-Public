@@ -208,6 +208,7 @@ public class Player : MonoBehaviour
 
 	public Ability CreateAbility(string abilityName, string keyBinding, string displayKeyBinding)
 	{
+		//Debug.Log("Creating " + abilityName + " " + keyBinding + "\n");
 		Ability newAbility = ScriptableObject.CreateInstance(abilityName) as Ability;
 
 		newAbility.Init(this, keyBinding, displayKeyBinding);
@@ -238,6 +239,11 @@ public class Player : MonoBehaviour
 
 		if (damaged)
 		{
+			if (damageIndicator == null)
+			{
+				damageIndicator = GameCanvas.Instance.LookupComponent<Image>("P" + playerID + " Damage Indicator");
+
+			}
 			StartCoroutine("DamageFlash");
 			//Coroutine to flash the damage screen
 		}
@@ -362,7 +368,7 @@ public class Player : MonoBehaviour
 	GameObject TargetScan()
 	{
 		//Where the mouse is currently targeting.
-		Ray ray = myCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+		Ray ray = myCamera.ScreenPointToRay(new Vector3(myCamera.rect.width * Screen.width / 2, myCamera.rect.height * Screen.height / 2));
 		RaycastHit hit;
 		//Debug.DrawLine(transform.position, (transform.position + ray) * 100, Color.green);
 
@@ -442,7 +448,7 @@ public class Player : MonoBehaviour
 			if (abilities[i].activationCond == Ability.KeyActivateCond.KeyDown)
 			{
 				//Debug.Log("["+ PlayerInput +"][" + abilities[i].keyBinding + "]\n");
-				if (Input.GetButtonDown(PlayerInput + abilities[i].keyBinding))
+				if (Input.GetButtonDown(abilities[i].keyBinding))
 				{
 					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
 				}
@@ -450,7 +456,7 @@ public class Player : MonoBehaviour
 			else if (abilities[i].activationCond == Ability.KeyActivateCond.KeyHold)
 			{
 				//Debug.Log("Button Down ["+ PlayerInput +"][" + abilities[i].keyBinding + "]\n");
-				if (Input.GetButton(PlayerInput + abilities[i].keyBinding))
+				if (Input.GetButton(abilities[i].keyBinding))
 				{
 					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
 				}
