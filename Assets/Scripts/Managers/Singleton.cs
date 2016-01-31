@@ -62,6 +62,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	}
 
 	private static bool applicationIsQuitting = false;
+	private bool safeCleanup = false;
 	/// <summary>
 	/// When Unity quits, it destroys objects in a random order.
 	/// In principle, a Singleton is only destroyed when application quits.
@@ -72,7 +73,13 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	/// </summary>
 	public void OnDestroy()
 	{
-		applicationIsQuitting = true;
+		if(!safeCleanup)
+			applicationIsQuitting = true;
+	}
+
+	public void SafeCleanup()
+	{
+		safeCleanup = true;
 	}
 
 	public virtual void Awake()
