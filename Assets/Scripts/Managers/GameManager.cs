@@ -107,6 +107,9 @@ public class GameManager : Singleton<GameManager>
 			newSkate.MaxCooldown = .25f;
 			newSkate.Duration = 1.5f;
 
+
+			Extract newExtract = (Extract)players[i].CreateAbility("Extract", players[i].PlayerInput + "Special", "Y");
+
 			//RITUAL:
 				//If the player doesn't have Gust
 					//Give them Gust

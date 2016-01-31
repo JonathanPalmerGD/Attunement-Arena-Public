@@ -11,7 +11,7 @@ public class RitualSelector : MonoBehaviour
 	private int CurrRitual;
 	public byte SelectedRitualCount;
 	[SerializeField, EnumFlagsField]
-	public Ritual SelectedRituals;
+	public RitualID SelectedRituals;
 
 	private RectTransform contentRect;
 

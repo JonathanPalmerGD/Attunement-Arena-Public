@@ -2,16 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
-[System.Flags]
-public enum Ritual
-{
-	GenericRitual01 = 1, // Minor HP / MP boost
-	AnIceGuy = 2
-}
-
 public class RitualElement : MonoBehaviour
 {
-	public Ritual connectedRitual = Ritual.AnIceGuy;
+	public RitualID connectedRitual = RitualID.AnIceGuy;
 
 	private Image bg;
 	public bool Selected = false; private bool PrevSelected = false;

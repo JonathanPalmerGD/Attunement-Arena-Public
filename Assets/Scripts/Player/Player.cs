@@ -30,7 +30,10 @@ public class Player : MonoBehaviour
 
 	#region Object References
 	public RigidbodyFirstPersonController controller;
-	//public List<Ability> rituals;
+	/// <summary>
+	/// A Flagged Enum that has all of the player's selected Rituals
+	/// </summary>
+	public RitualID rituals;
 
 	public GameObject hitscanTarget = null;
 	public Vector3 targetScanDir = Vector3.zero;
@@ -416,7 +419,7 @@ public class Player : MonoBehaviour
 			if (abilities[i].activationCond == Ability.KeyActivateCond.KeyDown)
 			{
 				Debug.Log(abilities[i].keyBinding + "\n");
-				if (Input.GetKeyDown(abilities[i].keyBinding))
+				if (Input.GetButtonDown(abilities[i].keyBinding))
 				{
 					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
 				}
@@ -424,7 +427,7 @@ public class Player : MonoBehaviour
 			else if (abilities[i].activationCond == Ability.KeyActivateCond.KeyHold)
 			{
 				Debug.Log(abilities[i].keyBinding + "\n");
-				if (Input.GetKey(abilities[i].keyBinding))
+				if (Input.GetButton(abilities[i].keyBinding))
 				{
 					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
 				}
