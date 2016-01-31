@@ -369,6 +369,29 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	public void SetGustCharges(int newChargeCount, bool canReduceCharges = false)
+	{
+		for (int i = 0; i < abilities.Count; i++)
+		{
+			if (abilities[i].GetType() == typeof(Gust))
+			{
+				if (newChargeCount < 0)
+					newChargeCount = 0;
+				if (newChargeCount > abilities[i].MaxCharges)
+					newChargeCount = abilities[i].MaxCharges;
+
+				if (canReduceCharges)
+				{
+					abilities[i].Charges = newChargeCount;
+				}
+				else if(newChargeCount > abilities[i].Charges)
+				{
+					abilities[i].Charges = newChargeCount;
+				}
+			}
+		}
+	}
+
 	GameObject TargetScan()
 	{
 		//Where the mouse is currently targeting.
