@@ -19,7 +19,7 @@ public class GameManager : Singleton<GameManager>
 
 	public List<PlayerSpawn> SpawnPoints;
 
-    void Awake()
+	void Awake()
 	{
 		LookupPrefabs();
 
@@ -40,7 +40,7 @@ public class GameManager : Singleton<GameManager>
 			AddPlayer(i);
 		}
 
-        players = GameObject.FindObjectsOfType<Player>();
+		players = GameObject.FindObjectsOfType<Player>();
 
 		for (int i = 0; i < playerCount; i++)
 		{
@@ -53,11 +53,20 @@ public class GameManager : Singleton<GameManager>
 
 			players[i].transform.position = players[i].mySpawn.transform.position;
 			players[i].transform.rotation = players[i].mySpawn.transform.rotation;
-#if UNITY_EDITOR
-			if (players[i].playerID == playerCount - 1)
+			if (Input.GetJoystickNames().Length < NumPlayers)
 			{
-				players[i].ControlType = Player.PlayerControls.Mouse;
+				if (players[i].playerID == playerCount - 1)
+				{
+					//Debug.Log("Joy Count: " + Input.GetJoystickNames().Length + "\n");
+					players[i].ControlType = Player.PlayerControls.Mouse;
+				}
 			}
+
+#if UNITY_EDITOR
+			//if (players[i].playerID == playerCount - 1)
+			//{
+			//	players[i].ControlType = Player.PlayerControls.Mouse;
+			//}
 #endif
 		}
 
@@ -67,7 +76,7 @@ public class GameManager : Singleton<GameManager>
 		music.Play();
 
 		AudioManager.Instance.AddMusicTrack(music, true);
-    }
+	}
 
 	private void LookupPrefabs()
 	{
@@ -90,21 +99,18 @@ public class GameManager : Singleton<GameManager>
 		for (int i = 0; i < NumPlayers; i++)
 		{
 			players[i].Init();
-			Gust newGust = (Gust)players[i].CreateAbility("Gust", players[i].PlayerInput + "Primary", "A");
+
+			//A/B
+			Gust newGust = (Gust)players[i].CreateAbility("Gust", players[i].PlayerInput + "Primary", "A B");
 			newGust.MaxCooldown = .5f;
 			players[i].AddAbilityBinding(newGust, players[i].PlayerInput + "Jump");
 			newGust.MaxCharges = 5;
 			newGust.Charges = 5;
+			
+			//X Button
+			Extract newExtract = (Extract)players[i].CreateAbility("Extract", players[i].PlayerInput + "Secondary", "X");
 
-			Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Secondary", "X");
-			newSkate.Cost = 2f;
-			newSkate.Force = 32;
-			newSkate.MaxCooldown = .05f;
-			newSkate.Duration = 5f;
-			newSkate.GeneralDamage = 0f;
-
-			Extract newExtract = (Extract)players[i].CreateAbility("Extract", players[i].PlayerInput + "Special", "Y");
-
+			//Right Bumper
 			Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "Right Bumper", "RB");
 			newBolt.MaxCooldown = .07f;
 			newBolt.MaxAngle = 8;
@@ -112,14 +118,20 @@ public class GameManager : Singleton<GameManager>
 			newBolt.Cost = 3;
 			newBolt.Duration = .35f;
 
+			//Left Bumper
+			Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Left Bumper", "LB");
+			newSkate.Cost = 2f;
+			newSkate.Force = 32;
+			newSkate.MaxCooldown = .05f;
+			newSkate.Duration = 5f;
+			newSkate.GeneralDamage = 0f;
 
-			WaterShield shield = (WaterShield)players[i].CreateAbility("WaterShield", players[i].PlayerInput + "Left Bumper", "LB");
+			//Y
+			WaterShield shield = (WaterShield)players[i].CreateAbility("WaterShield", players[i].PlayerInput + "Special", "Y");
 			shield.MaxCooldown = 8f;
 			shield.Cost = 15;
 			shield.Duration = 4f;
 		}
-
-
 	}
 
 	public void ApplyPlayerRituals()
@@ -130,7 +142,7 @@ public class GameManager : Singleton<GameManager>
 			if (PlayerPrefs.HasKey(ritualKey))
 			{
 				long ritLong = long.Parse(PlayerPrefs.GetString(ritualKey));
-				
+
 				Ritual[] rituals = Ritual.GetRitualsForIDs((RitualID)ritLong);
 				var playerText = GameCanvas.Instance.LookupComponent<UnityEngine.UI.Text>("P" + players[i].playerID + " Name Text");
 				playerText.text = "";
@@ -147,6 +159,13 @@ public class GameManager : Singleton<GameManager>
 
 	void Update()
 	{
+
+#if UNITY_EDITOR
+		if (Input.GetKeyDown(KeyCode.Delete))
+		{
+			PlayerPrefs.DeleteAll();
+		}
+#endif
 		if (Input.GetKeyDown(KeyCode.M))
 		{
 			if (music.volume == 0)
