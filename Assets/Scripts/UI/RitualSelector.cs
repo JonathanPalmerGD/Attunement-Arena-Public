@@ -110,7 +110,7 @@ public class RitualSelector : MonoBehaviour
 			if(AllDone)
 			{
 				// Do Scene Change
-				Debug.LogWarning("Actual Scene Change not yet implemented!");
+				Application.LoadLevel(Application.loadedLevel + 1);
 			}
 		}
 	}

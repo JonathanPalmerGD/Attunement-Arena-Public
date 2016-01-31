@@ -115,6 +115,7 @@ public class UIManager : Singleton<UIManager>
 			{
 				GameManager.Instance.players[i].damageIndicator = GameCanvas.Instance.LookupComponent<Image>("P" + GameManager.Instance.players[i].playerID + " Damage Indicator");
 				GameManager.Instance.players[i].damageIndicator.gameObject.SetActive(false);
+				GameCanvas.Instance.LookupComponent<Text>("P" + GameManager.Instance.players[i].playerID + " DeadText").gameObject.SetActive(false);
 			}
 
 			GameManager.Instance.AddPlayerAbilities();
