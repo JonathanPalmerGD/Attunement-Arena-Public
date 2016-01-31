@@ -19,20 +19,6 @@ public class GameManager : Singleton<GameManager>
 
 	public List<PlayerSpawn> SpawnPoints;
 
-	public enum GamePhase { Intro, Tutorial, EndTutorial, MainPlay, BeginAccuse, Accusation, EndGame };
-	public GamePhase currentPhase = GamePhase.Intro;
-	public GamePhase CurrentPhase
-	{
-		get 
-		{
-			return currentPhase;
-		}
-		set 
-		{
-			currentPhase = value;
-		}
-	}
-
     void Awake()
 	{
 		LookupPrefabs();
@@ -76,7 +62,8 @@ public class GameManager : Singleton<GameManager>
 		}
 
 		music = AudioManager.Instance.MakeSource("Meditate_Theme");
-		music.volume = .5f;
+		music.volume = .3f;
+		music.loop = true;
 		music.Play();
 
 		AudioManager.Instance.AddMusicTrack(music, true);
@@ -160,21 +147,17 @@ public class GameManager : Singleton<GameManager>
 
 	void Update()
 	{
-#if UNITY_EDITOR
-		if(Input.GetKey(KeyCode.RightControl))
+		if (Input.GetKeyDown(KeyCode.M))
 		{
-			if (Input.GetKeyDown(KeyCode.K))
+			if (music.volume == 0)
 			{
-				
+				AudioManager.Instance.maxMusicVol = .3f;
 			}
-
-			if (Input.GetKeyDown(KeyCode.Delete))
+			else
 			{
-				CurrentPhase = GamePhase.MainPlay;
-				
+				AudioManager.Instance.maxMusicVol = 0f;
 			}
 		}
-#endif
 	}
 
 	public void OnDestroy()
