@@ -129,7 +129,8 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		//	mRigidBody.velocity = Vector3.zero;
 		//}
 
-		RotateView();
+		if(!Owner.playerDead)
+			RotateView();
 
 		//if (Input.GetButtonDown(Owner.PlayerInput + "Jump") && !mJump)
 		//{
@@ -172,7 +173,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 	{
 		//Debug.Log(mRigidBody.velocity + "\n" + mRigidBody.velocity.magnitude);
 		GroundCheck();
-		Vector2 input = GetInput();
+		Vector2 input = Owner.playerDead ? Vector2.zero : GetInput();
 
 		if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && (advancedSettings.airControl || mIsGrounded))
 		{

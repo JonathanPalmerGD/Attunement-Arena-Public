@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
 	public enum PlayerBuff { Burning, Shielded, None }
 	public PlayerBuff buffState = PlayerBuff.None;
 
+	public bool playerDead = false;
+
 	public enum PlayerControls { Mouse, GamePad}
 	public PlayerControls ControlType = PlayerControls.GamePad;
 	public string PlayerInput
@@ -232,10 +234,12 @@ public class Player : MonoBehaviour
 
 	void Update()
 	{
-		GetInput();
-
 		UpdateHealth();
 		UpdateMana();
+
+		if (playerDead) return;
+
+		GetInput();
 
 		if (damaged)
 		{
@@ -262,6 +266,8 @@ public class Player : MonoBehaviour
 	/// <param name="amount">Positive for healing, negative for damage</param>
 	public void AdjustHealth(float amount)
 	{
+		if (playerDead) return;
+
 		if (amount < 0 && buffState != PlayerBuff.Shielded)
 		{
 			if (!damaged)
@@ -289,6 +295,22 @@ public class Player : MonoBehaviour
 				else
 				{
 					HealthToAdj += amount;
+
+					if(Health + amount <= 0)
+					{
+						playerDead = true;
+
+						// Stop the damage flashing
+						damaged = false;
+						damageFlashTimer = 0f;
+						StopAllCoroutines();
+
+						// Give the player a darkened "you're dead" screen
+						damageIndicator.gameObject.SetActive(true);
+						damageIndicator.color = new Color(0.5f, 0f, 0f, 0.3f);
+
+						StartCoroutine(DeadTextFadein(GameCanvas.Instance.LookupComponent<Text>("P" + playerID + " DeadText")));
+					}
 				}
 			}
 			else
@@ -360,7 +382,8 @@ public class Player : MonoBehaviour
 	}
 	void UpdateMana()
 	{
-		ManaToAdj += Time.deltaTime * ManaRegenRate;
+		if(!playerDead)
+			ManaToAdj += Time.deltaTime * ManaRegenRate;
 
 		//If our displayed Mana value isn't correct
 		if (ManaToAdj != 0)
@@ -583,5 +606,19 @@ public class Player : MonoBehaviour
 		col.a = 0f;
 		damageIndicator.color = col;
 		damageIndicator.gameObject.SetActive(false);
+	}
+
+	public IEnumerator DeadTextFadein(Text deadText)
+	{
+		deadText.gameObject.SetActive(true);
+		deadText.color = new Color(1f, 0f, 0f, 0f);
+
+		for(float alpha = 0f; alpha < 1f; alpha += Time.deltaTime * 0.25f)
+		{
+			deadText.color = new Color(1f, 0f, 0f, alpha);
+			yield return null;
+		}
+
+
 	}
 }
