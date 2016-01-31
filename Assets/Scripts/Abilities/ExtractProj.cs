@@ -24,7 +24,7 @@ public class ExtractProj : MonoBehaviour
 		name = from.Owner.name + "'s " + projType.ToString() + " Extract Projectile";
 		transform.SetParent(from.Owner.transform);
 		transform.localPosition = new Vector3(0f, 2f, 1.5f);
-		transform.localScale = Vector3.one * 0.1f;
+		transform.localScale = Vector3.one * 0.3f;
 		transform.localRotation = Quaternion.identity;
 
 		RenderBallisticPath rbp = gameObject.GetComponent<RenderBallisticPath>();
