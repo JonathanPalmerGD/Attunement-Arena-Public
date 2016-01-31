@@ -138,11 +138,14 @@ public class GameManager : Singleton<GameManager>
 				long ritLong = long.Parse(PlayerPrefs.GetString(ritualKey));
 				
 				Ritual[] rituals = Ritual.GetRitualsForIDs((RitualID)ritLong);
+				var playerText = GameCanvas.Instance.LookupComponent<UnityEngine.UI.Text>("P" + players[i].playerID + " Name Text");
+				playerText.text = "";
 
 				for (int k = 0; k < rituals.Length; k++)
 				{
 					Debug.Log("Applying ritual " + rituals[k].GetType() + " to player " + players[i].playerID + "\n");
 					rituals[k].ApplyToPlayer(players[i]);
+					playerText.text += (string.IsNullOrEmpty(playerText.text) ? "" : "  ") + (rituals[k]).ToString();
 				}
 			}
 		}

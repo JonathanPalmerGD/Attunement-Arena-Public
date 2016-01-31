@@ -36,10 +36,6 @@ public class Player : MonoBehaviour
 
 	#region Object References
 	public RigidbodyFirstPersonController controller;
-	/// <summary>
-	/// A Flagged Enum that has all of the player's selected Rituals
-	/// </summary>
-	public RitualID rituals;
 
 	public GameObject hitscanTarget = null;
 	public Vector3 targetScanDir = Vector3.zero;
@@ -522,7 +518,7 @@ public class Player : MonoBehaviour
 	GameObject TargetScan()
 	{
 		//Where the mouse is currently targeting.
-		Ray ray = myCamera.ScreenPointToRay(new Vector3(myCamera.rect.width * Screen.width / 2, myCamera.rect.height * Screen.height / 2));
+		Ray ray = myCamera.ViewportPointToRay(Vector3.one * 0.5f);
 		RaycastHit hit;
 		//Debug.DrawLine(transform.position, (transform.position + ray) * 100, Color.green);
 
