@@ -31,7 +31,7 @@ public class Bolt : Ability
 			return generalDamage;
 		}
 	}
-	private float maxAngle;
+	private float maxAngle = 8;
 	public float MaxAngle
 	{
 		get
@@ -40,7 +40,7 @@ public class Bolt : Ability
 		}
 		set
 		{
-			MaxAngle = value;
+			maxAngle = value;
 		}
 	}
 
@@ -72,7 +72,7 @@ public class Bolt : Ability
 
 		foreach (Player p in GameManager.Instance.players)
 		{
-			if (p == Owner) continue; // Don't influence self
+			if (p == Owner && GameManager.Instance.NumPlayers > 1) continue; // Don't influence self
 
 			// Get vector from owner to other player
 			var tetherVector = p.transform.position - Owner.transform.position;

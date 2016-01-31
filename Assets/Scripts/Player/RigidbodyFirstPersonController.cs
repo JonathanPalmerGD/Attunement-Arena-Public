@@ -18,8 +18,8 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		public KeyCode RunKey = KeyCode.LeftShift;
 		public float JumpForce = 30f;
 		public AnimationCurve SlopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
-		[HideInInspector]
-		public float CurrentTargetSpeed = 8f;
+		//[HideInInspector]
+		public float CurrentTargetSpeed = 0f;
 
 #if !MOBILE_INPUT
 		private bool m_Running;
@@ -27,61 +27,29 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 		public void UpdateDesiredTargetSpeed(Vector2 input)
 		{
-			if (input == Vector2.zero)
+			if (input.x < .05f && input.x > -.05f && input.y < .05f && input.y > -.05f)
 			{
 				CurrentTargetSpeed = 0;
-				//if (CurrentTargetSpeed != 0)
-				//{
-				//	Debug.Log("Decaying\n");
-				//}
-				//float decayAmt = Mathf.Clamp(CurrentTargetSpeed * .1f, .5f, 1);
-				//if (CurrentTargetSpeed > 0)
-				//{
-				//	CurrentTargetSpeed -= decayAmt;
-				//	if (CurrentTargetSpeed < 0)
-				//	{
-				//		CurrentTargetSpeed = 0;
-				//	}
-				//}
-				//else if(CurrentTargetSpeed < 0)
-				//{
-				//	CurrentTargetSpeed += decayAmt;
-				//	if (CurrentTargetSpeed > 0)
-				//	{
-				//		CurrentTargetSpeed = 0;
-				//	}
-				//}
 
 				//Debug.Log("\n" + CurrentTargetSpeed);
 				return;
 			}
-			if (input.x > 0 || input.x < 0)
+			if (input.x > 0.05f || input.x < -.05f)
 			{
 				//strafe
 				CurrentTargetSpeed = StrafeSpeed;
 			}
-			if (input.y < 0)
+			if (input.y < -.05f)
 			{
 				//backwards
 				CurrentTargetSpeed = BackwardSpeed;
 			}
-			if (input.y > 0)
+			if (input.y > 0.05f)
 			{
 				//forwards
 				//handled last as if strafing and moving forward at the same time forwards speed should take precedence
 				CurrentTargetSpeed = ForwardSpeed;
 			}
-#if !MOBILE_INPUT
-			if (Input.GetKey(RunKey))
-			{
-				CurrentTargetSpeed *= RunMultiplier;
-				m_Running = true;
-			}
-			else
-			{
-				m_Running = false;
-			}
-#endif
 		}
 
 #if !MOBILE_INPUT
@@ -218,7 +186,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			desiredMove.x = desiredMove.x * movementSettings.CurrentTargetSpeed;
 			desiredMove.z = desiredMove.z * movementSettings.CurrentTargetSpeed;
 			desiredMove.y = desiredMove.y * movementSettings.CurrentTargetSpeed;
-			//Debug.DrawLine(transform.position, transform.position + desiredMove * 5, Color.blue, .1f);
+
 			if (mRigidBody.velocity.sqrMagnitude <
 				(movementSettings.CurrentTargetSpeed * movementSettings.CurrentTargetSpeed))
 			{

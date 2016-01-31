@@ -40,7 +40,7 @@ public class GameManager : Singleton<GameManager>
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
 
-		int playerCount = 2;
+		int playerCount = 1;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
@@ -65,7 +65,7 @@ public class GameManager : Singleton<GameManager>
 			}
 
 			players[i].transform.position = players[i].mySpawn.transform.position;
-
+			players[i].transform.rotation = players[i].mySpawn.transform.rotation;
 #if UNITY_EDITOR
 			if (players[i].playerID == playerCount - 1)
 			{
@@ -117,6 +117,8 @@ public class GameManager : Singleton<GameManager>
 			newBolt.Cost = 3;
 			newBolt.Duration = .35f;
 		}
+
+
 	}
 
 	void Update()
