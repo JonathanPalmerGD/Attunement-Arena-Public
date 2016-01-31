@@ -3,6 +3,13 @@ using System.Collections;
 
 public class Bolt : Ability
 {
+	public GameObject boltPrefab;
+	public GameObject bolt;
+	public override KeyActivateCond activationCond
+	{
+		get { return KeyActivateCond.KeyDown; }
+	}
+
 	public override bool UseCharges
 	{
 		get
@@ -37,6 +44,17 @@ public class Bolt : Ability
 		{
 			return 135f;
 		}
+	}
+
+	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
+	{
+		boltPrefab = Resources.Load<GameObject>("boltPrefab");
+		bolt = GameObject.Instantiate(boltPrefab, newOwner.transform.position, newOwner.transform.rotation) as GameObject;
+		boltPrefab.name = "Bolt Renderer [P" + newOwner.playerID + "]";
+
+		boltPrefab.transform.SetParent(newOwner.transform);
+
+		base.Init(newOwner, newKeyBinding, displayKeyBinding);
 	}
 
 	public override void ExecuteAbility(Vector3 inputVector = default(Vector3))

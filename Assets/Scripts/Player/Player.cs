@@ -455,6 +455,10 @@ public class Player : MonoBehaviour
 					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
 				}
 			}
+			else if(abilities[i].activationCond == Ability.KeyActivateCond.GetAxis)
+			{
+
+			}
 		}
 
 		#region Jumping

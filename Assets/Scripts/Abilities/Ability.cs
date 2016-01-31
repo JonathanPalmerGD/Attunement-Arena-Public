@@ -10,7 +10,7 @@ public class Ability : ScriptableObject
 	public string keyBindingUserDisplay;
 
 	public AbilityDisplayUI abilDispUI;
-	public enum KeyActivateCond { KeyDown, KeyHold }
+	public enum KeyActivateCond { KeyDown, KeyHold, GetAxis }
 	public virtual KeyActivateCond activationCond
 	{
 		get { return KeyActivateCond.KeyDown; }

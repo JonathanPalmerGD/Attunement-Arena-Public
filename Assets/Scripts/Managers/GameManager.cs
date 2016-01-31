@@ -103,10 +103,14 @@ public class GameManager : Singleton<GameManager>
 			newGust.Charges = 5;
 
 			Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Secondary", "X");
-			newSkate.MaxCooldown = .1f;
 			newSkate.Cost = 2;
 			newSkate.MaxCooldown = .05f;
 			newSkate.Duration = 5f;
+
+			Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "Right Bumper", "RT");
+			newBolt.MaxCooldown = 2f;
+			newBolt.Cost = 15;
+			newBolt.Duration = .35f;
 		}
 	}
 

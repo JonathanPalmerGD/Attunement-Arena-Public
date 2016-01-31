@@ -4,6 +4,7 @@ using System.Collections;
 public class Skate : Ability
 {
 	public GameObject icePrefab;
+	public GameObject iceParent;
 	public override KeyActivateCond activationCond
 	{
 		get { return KeyActivateCond.KeyHold; }
@@ -31,7 +32,9 @@ public class Skate : Ability
 	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{
 		icePrefab = Resources.Load<GameObject>("icePrefab");
-		
+		iceParent = new GameObject();
+		iceParent.name = "[P" + newOwner.playerID + "] Ice Parent";
+
 		base.Init(newOwner, newKeyBinding, displayKeyBinding);
 	}
 
@@ -46,7 +49,8 @@ public class Skate : Ability
 		//Debug.Log("Execute Skate!\n");
 
 		GameObject newPlatform = GameObject.Instantiate<GameObject>(icePrefab);
-		
+		newPlatform.name = "[P" + Owner.playerID + "] Ice";
+		newPlatform.transform.SetParent(iceParent.transform);
 		float yDiff = inputVector.normalized.y;
 		newPlatform.transform.position = Owner.transform.position - (inputVector * .4f) - (Vector3.up * yDiff);
 
