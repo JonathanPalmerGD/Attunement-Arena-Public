@@ -8,6 +8,9 @@ public class Player : MonoBehaviour
 	public bool initialized;
 
 	public int playerID = 0;
+	public enum PlayerBuff { Burning, Shielded, None }
+	public PlayerBuff buffState = PlayerBuff.None;
+
 	public enum PlayerControls { Mouse, GamePad}
 	public PlayerControls ControlType = PlayerControls.GamePad;
 	public string PlayerInput

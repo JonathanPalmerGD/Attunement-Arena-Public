@@ -23,14 +23,21 @@ public class Gust : Ability
 			return 2f;
 		}
 	}
-	public float RecoilForce = 140;
+	public float RecoilForce = 290;
+	public float JumpForce = 140;
 	public float Force = 5;
 	public float Range = 10;
 	public float MaxAngle = 15;
+	public bool wasGrounded = false;
 
 	public override void UpdateAbility(float deltaTime)
 	{
-		if (Owner.controller.Grounded)
+		if (Owner.controller.Grounded && !wasGrounded)
+		{
+			CurrentCooldown = 0.15f;
+			wasGrounded = true;
+		}
+		else if(Owner.controller.Grounded && wasGrounded)
 		{
 			//Debug.Log("Updating Gust - Grounded\n" + deltaTime);
 			base.UpdateAbility(deltaTime);
@@ -65,27 +72,29 @@ public class Gust : Ability
 
 			Debug.DrawLine(Owner.transform.position, Owner.transform.position + tetherVector, Color.red, 5.0f);
 
-			p.SendMessage("ApplyExternalForce", castDir * Force);
+			Owner.controller.ApplyExternalForce(castDir * Force, false);
 		}
 
-		if (Owner.Grounded)
-		{
-			Owner.controller.Jumping = true;
-		}
+		
 
 		Vector3 oldVel = Owner.controller.mRigidBody.velocity;
 
 		if (Vector3.Angle(castDir, Vector3.down) < 15)
 		{
 			Owner.controller.mRigidBody.velocity = new Vector3(oldVel.x, 0, oldVel.z);
-			Owner.SendMessage("ApplyExternalForce", castDir * RecoilForce * -1);
+			Owner.controller.ApplyExternalForce(castDir * JumpForce * -1, true);
+			if (Owner.Grounded)
+			{
+				wasGrounded = false;
+				Owner.controller.Jumping = true;
+			}
 		}
 		else
 		{
 			if (!Owner.Grounded)
 			{
 				Owner.controller.mRigidBody.velocity = new Vector3(0, 0, 0);
-				Owner.SendMessage("ApplyExternalForce", castDir * RecoilForce * -1);
+				Owner.controller.AddExternalForce(castDir * RecoilForce * -1, ForceMode.Acceleration, false);
 			}
 		}
 		

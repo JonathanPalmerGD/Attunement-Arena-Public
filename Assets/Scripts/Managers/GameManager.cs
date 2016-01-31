@@ -40,7 +40,7 @@ public class GameManager : Singleton<GameManager>
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
 
-		int playerCount = 1;
+		int playerCount = 2;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
@@ -99,22 +99,14 @@ public class GameManager : Singleton<GameManager>
 			Gust newGust = (Gust)players[i].CreateAbility("Gust", players[i].PlayerInput + "Primary", "A");
 			newGust.MaxCooldown = .5f;
 			players[i].AddAbilityBinding(newGust, players[i].PlayerInput + "Jump");
+			newGust.MaxCharges = 5;
+			newGust.Charges = 5;
 
 			Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Secondary", "X");
 			newSkate.MaxCooldown = .1f;
 			newSkate.Cost = 2;
 			newSkate.MaxCooldown = .05f;
-			newSkate.Duration = 1.5f;
-
-			//RITUAL:
-				//If the player doesn't have Gust
-					//Give them Gust
-				//Modify Gust
-
-			//Gust newGust = (Gust)players[i].AddAbility("Gust", players[i].PlayerInput + "Jump", "Jump");
-			newGust.MaxCharges = 5;
-			newGust.Charges = 5;
-
+			newSkate.Duration = 5f;
 		}
 	}
 

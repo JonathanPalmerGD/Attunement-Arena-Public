@@ -174,6 +174,28 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		accRBForces += force;
 	}
 
+	public void ApplyExternalForce(Vector3 force, bool friendly = false)
+	{
+		if (!friendly && Owner.buffState != Player.PlayerBuff.Shielded)
+		{
+			//Negate the player's shielded state?
+			return;
+		}
+		
+		accRBForces += force;
+	}
+
+	public void AddExternalForce(Vector3 force, ForceMode fMode = ForceMode.Force, bool friendly = false)
+	{
+		if (!friendly && Owner.buffState != Player.PlayerBuff.Shielded)
+		{
+			//Negate the player's shielded state?
+			return;
+		}
+
+		mRigidBody.AddForce(force, fMode);
+	}
+
 	private void FixedUpdate()
 	{
 		//Debug.Log(mRigidBody.velocity + "\n" + mRigidBody.velocity.magnitude);

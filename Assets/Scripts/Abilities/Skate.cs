@@ -61,23 +61,24 @@ public class Skate : Ability
 			Owner.controller.Jumping = true;
 		}
 
-		Owner.controller.mRigidBody.velocity = new Vector3(oldVel.x, 0, oldVel.z);
 		Vector3 forwardForce;
 		if (Owner.transform.position.y < Owner.transform.position.y + inputVector.y)
 		{
+			Owner.controller.mRigidBody.velocity = new Vector3(oldVel.x, Mathf.Clamp(oldVel.y, 0, 100), oldVel.z);
 			//Debug.Log("Gain height\n");
-			forwardForce = new Vector3(inputVector.x / 4, inputVector.y * 10, inputVector.z / 4).normalized;
-			Owner.controller.mRigidBody.AddForce(Vector3.up * Force * 2, ForceMode.Impulse);
+			forwardForce = new Vector3(inputVector.x, inputVector.y * 8, inputVector.z).normalized;
+			
 			//Owner.SendMessage("ApplyExternalForce", );
 		}
 		else
 		{
+			Owner.controller.mRigidBody.velocity = new Vector3(oldVel.x, Mathf.Clamp(oldVel.y, -12, 100), oldVel.z);
 			//Debug.Log("Forward\n");
-			forwardForce = new Vector3(inputVector.x, inputVector.y, inputVector.z);
-			Owner.SendMessage("ApplyExternalForce", inputVector * Force);
+			forwardForce = new Vector3(inputVector.x, inputVector.y * 6, inputVector.z).normalized;
+			//Owner.SendMessage("ApplyExternalForce", inputVector * Force);
 		}
 
-		
+		Owner.controller.AddExternalForce(forwardForce * Force, ForceMode.Impulse, true);
 		//Owner.SendMessage("ApplyExternalForce", Vector3.up * Force);
 		
 		GameObject.Destroy(newPlatform, Duration);
