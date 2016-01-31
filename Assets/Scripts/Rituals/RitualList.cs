@@ -79,7 +79,7 @@ public class AspectBlizzard : Ritual
 				skate.GeneralDamage += 2;
 			}
 		}
-		plyr.ManaRegenRate += 120;
+		plyr.ManaRegenRate += 3*1.2f;
 	}
 }
 

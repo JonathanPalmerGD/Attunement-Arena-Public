@@ -66,7 +66,7 @@ public class RitualSelector : MonoBehaviour
 		if (GetSelect())
 		{
 			RitualElement re = contentRect.GetChild(CurrRitual).GetComponent<RitualElement>();
-			if (SelectedRitualCount < 3 || re.Selected)
+			if (SelectedRitualCount < 2 || re.Selected)
 			{
 				re.Selected = !re.Selected;
 				SelectedRituals ^= re.connectedRitual;

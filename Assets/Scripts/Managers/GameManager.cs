@@ -27,7 +27,7 @@ public class GameManager : Singleton<GameManager>
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
 
-		int playerCount = 3;
+		int playerCount = 2;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
@@ -99,21 +99,18 @@ public class GameManager : Singleton<GameManager>
 		for (int i = 0; i < NumPlayers; i++)
 		{
 			players[i].Init();
-			Gust newGust = (Gust)players[i].CreateAbility("Gust", players[i].PlayerInput + "Primary", "A");
+
+			//A/B
+			Gust newGust = (Gust)players[i].CreateAbility("Gust", players[i].PlayerInput + "Primary", "A B");
 			newGust.MaxCooldown = .5f;
 			players[i].AddAbilityBinding(newGust, players[i].PlayerInput + "Jump");
 			newGust.MaxCharges = 5;
 			newGust.Charges = 5;
+			
+			//X Button
+			Extract newExtract = (Extract)players[i].CreateAbility("Extract", players[i].PlayerInput + "Secondary", "X");
 
-			Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Secondary", "X");
-			newSkate.Cost = 2f;
-			newSkate.Force = 32;
-			newSkate.MaxCooldown = .05f;
-			newSkate.Duration = 5f;
-			newSkate.GeneralDamage = 0f;
-
-			Extract newExtract = (Extract)players[i].CreateAbility("Extract", players[i].PlayerInput + "Special", "Y");
-
+			//Right Bumper
 			Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "Right Bumper", "RB");
 			newBolt.MaxCooldown = .07f;
 			newBolt.MaxAngle = 8;
@@ -121,14 +118,20 @@ public class GameManager : Singleton<GameManager>
 			newBolt.Cost = 3;
 			newBolt.Duration = .35f;
 
+			//Left Bumper
+			Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Left Bumper", "LB");
+			newSkate.Cost = 2f;
+			newSkate.Force = 32;
+			newSkate.MaxCooldown = .05f;
+			newSkate.Duration = 5f;
+			newSkate.GeneralDamage = 0f;
 
-			WaterShield shield = (WaterShield)players[i].CreateAbility("WaterShield", players[i].PlayerInput + "Left Bumper", "LB");
+			//Y
+			WaterShield shield = (WaterShield)players[i].CreateAbility("WaterShield", players[i].PlayerInput + "Special", "Y");
 			shield.MaxCooldown = 8f;
 			shield.Cost = 15;
 			shield.Duration = 4f;
 		}
-
-
 	}
 
 	public void ApplyPlayerRituals()
@@ -156,6 +159,13 @@ public class GameManager : Singleton<GameManager>
 
 	void Update()
 	{
+
+#if UNITY_EDITOR
+		if (Input.GetKeyDown(KeyCode.Delete))
+		{
+			PlayerPrefs.DeleteAll();
+		}
+#endif
 		if (Input.GetKeyDown(KeyCode.M))
 		{
 			if (music.volume == 0)
