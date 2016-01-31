@@ -15,7 +15,6 @@ public class GameManager : Singleton<GameManager>
 		get { return players.Length; }
 	}
 	public Player[] players;
-	public GameObject chilledPrefab;
 
 	public List<PlayerSpawn> SpawnPoints;
 
@@ -104,7 +103,8 @@ public class GameManager : Singleton<GameManager>
 			newGust.Charges = 5;
 
 			Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Secondary", "X");
-			newSkate.Cost = 2;
+			newSkate.Cost = 2f;
+			newSkate.Force = 32;
 			newSkate.MaxCooldown = .05f;
 			newSkate.Duration = 5f;
 			newSkate.GeneralDamage = 0f;

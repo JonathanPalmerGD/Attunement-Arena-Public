@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
 
 	public Scrollbar hpBar;
 	public Scrollbar mpBar;
+	public ParticleSystem chilledParticles;
 	#endregion
 
 	#region Properties
@@ -235,6 +236,8 @@ public class Player : MonoBehaviour
 	{
 		GetInput();
 
+		UpdateBuffState();
+
 		UpdateHealth();
 		UpdateMana();
 
@@ -259,12 +262,17 @@ public class Player : MonoBehaviour
 
 	public void UpdateBuffState()
 	{
+		if (Input.GetKeyDown(KeyCode.L))
+		{
+			SetChilledState(5);
+		}
+
 		if (buffState != PlayerBuff.None)
 		{
 			if (buffState == PlayerBuff.Chilled)
 			{
 				remainingStatDur -= Time.deltaTime;
-				AdjustHealth(-2 * Time.deltaTime);
+				AdjustHealth(-2 * Time.deltaTime, false);
 			}
 
 			if (remainingStatDur <= 0)
@@ -273,25 +281,32 @@ public class Player : MonoBehaviour
 				buffState = PlayerBuff.None;
 			}
 		}
+		else
+		{
+			chilledParticles.enableEmission = false;
+		}
 	}
 
 	/// <summary>
 	/// Affect the player's health
 	/// </summary>
 	/// <param name="amount">Positive for healing, negative for damage</param>
-	public void AdjustHealth(float amount)
+	public void AdjustHealth(float amount, bool causeFlicker = true)
 	{
 		if (amount < 0 && buffState != PlayerBuff.Shielded)
 		{
-			if (!damaged)
+			if (causeFlicker)
 			{
-				damageFlashTimer = .75f;
+				if (!damaged)
+				{
+					damageFlashTimer = .75f;
+				}
+				else
+				{
+					damageFlashTimer += .25f;
+				}
+				damaged = true;
 			}
-			else
-			{
-				damageFlashTimer += .25f;
-			}
-			damaged = true;
 		}
 		if (Health + amount >= MaxHealth)
 		{
@@ -378,8 +393,14 @@ public class Player : MonoBehaviour
 	}
 	void UpdateMana()
 	{
-		ManaToAdj += Time.deltaTime * ManaRegenRate;
-
+		if (controller.Grounded)
+		{
+			ManaToAdj += Time.deltaTime * ManaRegenRate * 1.6f;
+		}
+		else
+		{
+			ManaToAdj += Time.deltaTime * ManaRegenRate * 0.4f;
+		}
 		//If our displayed Mana value isn't correct
 		if (ManaToAdj != 0)
 		{
@@ -418,7 +439,9 @@ public class Player : MonoBehaviour
 	{
 		if(buffState == PlayerBuff.None || buffState == PlayerBuff.Chilled)
 		{
+			Debug.Log("hit\n");
 			remainingStatDur = chillDur;
+			chilledParticles.enableEmission = true;
 			buffState = PlayerBuff.Chilled;
 		}
 	}
