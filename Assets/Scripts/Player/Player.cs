@@ -700,6 +700,10 @@ public class Player : MonoBehaviour
 	public IEnumerator WaitThenChangeScene()
 	{
 		yield return new WaitForSeconds(8.0f);
+		UIManager.Instance.SafeCleanup();
+		GameManager.Instance.SafeCleanup();
+		//AudioManager.Instance.SafeCleanup();
+		
 		Application.LoadLevel(Application.loadedLevel - 1);
 	}
 }
