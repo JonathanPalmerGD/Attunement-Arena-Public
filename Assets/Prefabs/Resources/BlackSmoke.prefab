@@ -11,7 +11,7 @@ GameObject:
   - 198: {fileID: 19829356}
   - 199: {fileID: 19984108}
   m_Layer: 0
-  m_Name: Danger
+  m_Name: BlackSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

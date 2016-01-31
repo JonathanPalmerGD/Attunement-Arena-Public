@@ -11,7 +11,7 @@ GameObject:
   - 198: {fileID: 19858122}
   - 199: {fileID: 19937426}
   m_Layer: 0
-  m_Name: Gusted
+  m_Name: AirGusts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
