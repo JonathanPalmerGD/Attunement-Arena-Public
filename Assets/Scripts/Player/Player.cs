@@ -303,7 +303,7 @@ public class Player : MonoBehaviour
 	/// <param name="amount">Positive for healing, negative for damage</param>
 	public void AdjustHealth(float amount, bool causeFlicker = true)
 	{
-		if (playerDead) return;
+		if (playerDead) { return; }
 
 		if (amount < 0 && buffState != PlayerBuff.Shielded)
 		{
@@ -444,9 +444,10 @@ public class Player : MonoBehaviour
 	}
 	void UpdateMana()
 	{
-		if (!playerDead)
+		if (playerDead)
 			return;
-		
+
+		Debug.Log("Updating mana\n");
 		if (controller.Grounded)
 		{
 			ManaToAdj += Time.deltaTime * ManaRegenRate * 1.6f;

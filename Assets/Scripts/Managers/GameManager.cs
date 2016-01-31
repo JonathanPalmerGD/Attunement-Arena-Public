@@ -76,7 +76,8 @@ public class GameManager : Singleton<GameManager>
 		}
 
 		music = AudioManager.Instance.MakeSource("Meditate_Theme");
-		music.volume = .5f;
+		music.volume = .3f;
+		music.loop = true;
 		music.Play();
 
 		AudioManager.Instance.AddMusicTrack(music, true);
@@ -160,6 +161,19 @@ public class GameManager : Singleton<GameManager>
 
 	void Update()
 	{
+		if (Input.GetKeyDown(KeyCode.M))
+		{
+			if (music.volume == 0)
+			{
+				AudioManager.Instance.maxMusicVol = .3f;
+			}
+			else
+			{
+				AudioManager.Instance.maxMusicVol = 0f;
+			}
+		}
+
+
 #if UNITY_EDITOR
 		if(Input.GetKey(KeyCode.RightControl))
 		{
