@@ -176,18 +176,22 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 	public void ApplyExternalForce(Vector3 force, bool friendly = false)
 	{
-		if (!friendly && Owner.buffState != Player.PlayerBuff.Shielded)
+		//Debug.Log("Hit\n" + Owner.name + "\t" + force);
+		if (!friendly && Owner.buffState == Player.PlayerBuff.Shielded)
 		{
+			//Debug.Log("Hit\n" + Owner.name + "\t" + force);
+
 			//Negate the player's shielded state?
 			return;
 		}
-		
+
+		Debug.Log("Hit\n" + Owner.name + "\n" + accRBForces + " " + force);
 		accRBForces += force;
 	}
 
 	public void AddExternalForce(Vector3 force, ForceMode fMode = ForceMode.Force, bool friendly = false)
 	{
-		if (!friendly && Owner.buffState != Player.PlayerBuff.Shielded)
+		if (!friendly && Owner.buffState == Player.PlayerBuff.Shielded)
 		{
 			//Negate the player's shielded state?
 			return;
