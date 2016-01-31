@@ -211,7 +211,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 192000}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!114 &11402282
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -348,6 +348,7 @@ MonoBehaviour:
   playerID: 0
   buffState: 3
   remainingStatDur: 0
+  playerDead: 0
   ControlType: 1
   controller: {fileID: 11413502}
   rituals: 0
@@ -1492,7 +1493,7 @@ Prefab:
       objectReference: {fileID: 11413502}
     - target: {fileID: 0}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: ControlType

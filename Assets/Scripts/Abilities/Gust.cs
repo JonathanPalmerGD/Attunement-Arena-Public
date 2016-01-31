@@ -79,6 +79,8 @@ public class Gust : Ability
 
 		//Debug.DrawLine(Owner.transform.position, Owner.transform.position + castDir * Range, Color.green, 5.0f);
 
+		AudioManager.Instance.MakeSource("Gust").Play();
+
 		foreach (Player p in GameManager.Instance.players)
 		{
 			if (p == Owner) continue; // Don't influence self just yet
