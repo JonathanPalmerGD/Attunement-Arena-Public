@@ -52,6 +52,7 @@ public class Player : MonoBehaviour
 	public Scrollbar hpBar;
 	public Scrollbar mpBar;
 	public ParticleSystem chilledParticles;
+	public ParticleSystem shieldParticles;
 	#endregion
 
 	#region Properties
@@ -207,6 +208,8 @@ public class Player : MonoBehaviour
 				Cursor.visible = false;
 				Cursor.lockState = CursorLockMode.Locked;
 			}
+
+			shieldParticles.enableEmission = false;
 		}
 	}
 
@@ -266,28 +269,35 @@ public class Player : MonoBehaviour
 
 	public void UpdateBuffState()
 	{
+		#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.L))
 		{
 			SetChilledState(5);
 		}
+		#endif
 
-		if (buffState != PlayerBuff.None)
+		if (buffState == PlayerBuff.Chilled)
 		{
-			if (buffState == PlayerBuff.Chilled)
-			{
-				remainingStatDur -= Time.deltaTime;
-				AdjustHealth(-2 * Time.deltaTime, false);
-			}
-
+			remainingStatDur -= Time.deltaTime;
+			AdjustHealth(-2 * Time.deltaTime, false);
 			if (remainingStatDur <= 0)
 			{
 				remainingStatDur = 0;
 				buffState = PlayerBuff.None;
 			}
 		}
-		else
+		
+		if (buffState != PlayerBuff.Chilled)
 		{
 			chilledParticles.enableEmission = false;
+		}
+		if (buffState == PlayerBuff.Shielded)
+		{
+			shieldParticles.enableEmission = true;
+		}
+		else
+		{
+			shieldParticles.enableEmission = false;
 		}
 	}
 
@@ -483,6 +493,12 @@ public class Player : MonoBehaviour
 			//Add it to displayed Mana
 			Mana += gainThisFrame;
 		}
+	}
+
+	public void SetShieldedState(float chillDur)
+	{
+		shieldParticles.enableEmission = true;
+		buffState = PlayerBuff.Shielded;
 	}
 
 	public void SetChilledState(float chillDur)
