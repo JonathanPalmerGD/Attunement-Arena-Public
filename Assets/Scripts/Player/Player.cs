@@ -352,7 +352,7 @@ public class Player : MonoBehaviour
 						}
 
 						// We have winrar!
-						if(livePlayers == 1)
+						if(livePlayers < 2)
 						{
 							foreach (Player p in GameManager.Instance.players)
 							{
