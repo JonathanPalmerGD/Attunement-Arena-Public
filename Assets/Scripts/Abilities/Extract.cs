@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Extract : Ability
 {
+	private GameObject ExProj;
+
 	public override int IconID
 	{
 		get
@@ -29,22 +31,16 @@ public class Extract : Ability
 	public float DamageMult = 1f;
 	public float KnockbackMult = 1f;
 	public float ProjSpeedMult = 1f;
-
-	public enum ProjType
-	{
-		Air, Water, Lava
-	}
-
-	private Vector3 extractingFrom;
-	private ProjType projType;
+	public float ProjSpreadMult = 1f;
 
 	private enum ExtractState
 	{
-		EmptyHanded, Pulling, FullHands
+		EmptyHanded, Pulling, FullHands, JustThrew
 	}
 
 	private ExtractState currState;
-	private bool keepPulling = false;
+	private bool lastHeld = false;
+	private bool showPull = false;
 	private LineRenderer extractBeam;
 
 	private ExtractProj projectile;
@@ -60,73 +56,91 @@ public class Extract : Ability
 	public override void UpdateAbility(float deltaTime)
 	{
 		base.UpdateAbility(deltaTime);
+		if (ExProj == null) ExProj = Resources.Load<GameObject>("ExProj");
 		if (currState == ExtractState.Pulling)
-			if (!keepPulling || projectile.transform.localScale.x >= MaxRadius)
+			if (!lastHeld || projectile.transform.localScale.x >= MaxRadius)
 			{
-				Debug.Log("No longer Extracting!");
-				if (extractBeam) Destroy(extractBeam);
+				showPull = false;
 				currState = ExtractState.FullHands;
 			}
 			else
 			{
-				if (extractBeam) extractBeam.SetPosition(1, projectile.transform.position);
-				keepPulling = false;
+				showPull = true;
+				lastHeld = false;
 			}
+		else if (currState == ExtractState.FullHands)
+			projectile.transform.localEulerAngles = Owner.myCamera.transform.localEulerAngles;
+		else if (currState == ExtractState.JustThrew)
+			if (!lastHeld)
+			{
+				currState = ExtractState.EmptyHanded;
+			}
+			else
+			{
+				lastHeld = false;
+			}
+		
+		if(showPull)
+		{
+			extractBeam.SetPosition(1, projectile.transform.position);
+		}
+		else
+		{
+			if(projectile && projectile.GetComponent<RenderBallisticPath>().enabled ^ currState == ExtractState.FullHands)
+				projectile.GetComponent<RenderBallisticPath>().enabled = currState == ExtractState.FullHands;
+		}
 	}
 
 	public override void ExecuteAbility(Vector3 inputVector = default(Vector3))
 	{
 		if (currState == ExtractState.EmptyHanded)
 		{
-			if (Owner.hitscanTarget && Owner.hitscanTarget.CompareTag("Stream"))
+			var projType = ExtractProj.ProjType.Air;
+            if (Owner.hitscanTarget && Owner.hitscanTarget.CompareTag("Stream"))
 			{
 				if (Owner.hitscanTarget.name.StartsWith("Lava"))
 				{
-					projType = ProjType.Lava;
+					projType = ExtractProj.ProjType.Lava;
 				}
 				else if (Owner.hitscanTarget.name.StartsWith("Water"))
 				{
-					projType = ProjType.Water;
+					projType = ExtractProj.ProjType.Water;
 				}
-				else
-				{
-					projType = ProjType.Air;
-				}
-			}
-			else
-			{
-				projType = ProjType.Air;
 			}
 
-			projectile = GameObject.CreatePrimitive(PrimitiveType.Sphere).AddComponent<ExtractProj>();
+			projectile = GameObject.Instantiate<GameObject>(ExProj).GetComponent<ExtractProj>();
 
 			projectile.Init(this, projType);
 
-			if (projType != ProjType.Air)
+			if (projType != ExtractProj.ProjType.Air)
 			{
-				extractBeam = projectile.gameObject.AddComponent<LineRenderer>();
-				extractBeam.material = projectile.GetComponent<MeshRenderer>().material;
+				extractBeam = projectile.GetComponent<LineRenderer>();
 				extractBeam.SetVertexCount(2);
 				extractBeam.SetPosition(0, Owner.hitscanContact);
 				extractBeam.SetPosition(1, projectile.transform.position);
-				Color clr = projectile.GetComponent<MeshRenderer>().material.color;
-				extractBeam.SetColors(clr, clr);
-				extractBeam.SetWidth(AccretionSpeed * 0.25f, AccretionSpeed * 0.33f);
+				extractBeam.SetWidth(AccretionSpeed, AccretionSpeed * 0.25f);
+				showPull = true;
 			}
 
 			currState = ExtractState.Pulling;
-			keepPulling = true;
+			lastHeld = true;
 		}
 		else if (currState == ExtractState.Pulling)
 		{
 			projectile.transform.localScale = Vector3.one * Mathf.Min(projectile.transform.localScale.x + (AccretionSpeed * Time.deltaTime), MaxRadius);
-			keepPulling = true;
+			lastHeld = true;
 		}
 		else if (currState == ExtractState.FullHands)
 		{
-			projectile.Throw(inputVector);
+			projectile.Throw();
 			projectile = null;
-			currState = ExtractState.EmptyHanded;
+			extractBeam = null;
+			lastHeld = true;
+			showPull = false;
+			currState = ExtractState.JustThrew;
+		} else if(currState == ExtractState.JustThrew)
+		{
+			lastHeld = true;
 		}
 	}
 }
