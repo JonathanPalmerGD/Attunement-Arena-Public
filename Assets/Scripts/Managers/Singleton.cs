@@ -72,9 +72,11 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	/// So, this was made to be sure we're not creating that buggy ghost object.
 	/// </summary>
 	public void OnDestroy()
-	{
-		if(!safeCleanup)
-			applicationIsQuitting = true;
+    {
+        if (!safeCleanup)
+        {
+            applicationIsQuitting = true;
+        }
 	}
 
 	public void SafeCleanup()

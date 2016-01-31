@@ -117,7 +117,8 @@ public class Bolt : Ability
 
 					//Debug.Log(p.name + "\n");
 					p.AdjustHealth(-GeneralDamage);
-					p.controller.mRigidBody.velocity = Vector3.zero;
+
+					//p.controller.mRigidBody.velocity = Vector3.zero;
 				}
 			}
 
