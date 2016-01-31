@@ -46,6 +46,7 @@ public class Skate : Ability
 		//Debug.Log("Execute Skate!\n");
 
 		GameObject newPlatform = GameObject.Instantiate<GameObject>(icePrefab);
+		
 		float yDiff = inputVector.normalized.y;
 		newPlatform.transform.position = Owner.transform.position - (inputVector * .4f) - (Vector3.up * yDiff);
 
