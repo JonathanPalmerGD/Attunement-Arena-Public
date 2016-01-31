@@ -1635,6 +1635,8 @@ MonoBehaviour:
   FriendlyUnreadyButton: LMB
   DisableOnNext:
   - {fileID: 2088524814}
+  - {fileID: 1173781338}
+  - {fileID: 1977297521}
   EnableOnNext:
   - {fileID: 615247248}
   - {fileID: 351476321}
@@ -1709,6 +1711,8 @@ MonoBehaviour:
   FriendlyUnreadyButton: B
   DisableOnNext:
   - {fileID: 2088524814}
+  - {fileID: 1173781338}
+  - {fileID: 1977297521}
   EnableOnNext:
   - {fileID: 615247248}
   - {fileID: 351476321}
