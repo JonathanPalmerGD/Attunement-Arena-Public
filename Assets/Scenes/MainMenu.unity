@@ -10110,9 +10110,7 @@ MonoBehaviour:
     Out: <color=red>[B]</color> / <color=red>[Left Mouse Button]</color>
 
     <size=16>Press <color=blue>[2] [3]</color> or <color=blue>[4]</color> on keyboard
-    to choose number of players
-
-    Press <color=blue>[K]</color> to toggle use of Keyboard & Mouse</size>'
+    to choose number of players</size>'
 --- !u!222 &976853118
 CanvasRenderer:
   m_ObjectHideFlags: 0
