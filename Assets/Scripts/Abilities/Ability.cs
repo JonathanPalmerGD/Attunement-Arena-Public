@@ -79,8 +79,8 @@ public class Ability : ScriptableObject
 	}
 	public float Duration;
 
-	private float currentCooldown;
-	public float CurrentCooldown
+	protected float currentCooldown;
+	public virtual float CurrentCooldown
 	{
 		get
 		{

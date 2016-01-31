@@ -19,7 +19,7 @@ public class GameManager : Singleton<GameManager>
 
 	public List<PlayerSpawn> SpawnPoints;
 
-    void Awake()
+	void Awake()
 	{
 		LookupPrefabs();
 
@@ -27,7 +27,7 @@ public class GameManager : Singleton<GameManager>
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
 
-		int playerCount = 2;
+		int playerCount = 3;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
@@ -40,7 +40,7 @@ public class GameManager : Singleton<GameManager>
 			AddPlayer(i);
 		}
 
-        players = GameObject.FindObjectsOfType<Player>();
+		players = GameObject.FindObjectsOfType<Player>();
 
 		for (int i = 0; i < playerCount; i++)
 		{
@@ -53,11 +53,20 @@ public class GameManager : Singleton<GameManager>
 
 			players[i].transform.position = players[i].mySpawn.transform.position;
 			players[i].transform.rotation = players[i].mySpawn.transform.rotation;
-#if UNITY_EDITOR
-			if (players[i].playerID == playerCount - 1)
+			if (Input.GetJoystickNames().Length < NumPlayers)
 			{
-				players[i].ControlType = Player.PlayerControls.Mouse;
+				if (players[i].playerID == playerCount - 1)
+				{
+					//Debug.Log("Joy Count: " + Input.GetJoystickNames().Length + "\n");
+					players[i].ControlType = Player.PlayerControls.Mouse;
+				}
 			}
+
+#if UNITY_EDITOR
+			//if (players[i].playerID == playerCount - 1)
+			//{
+			//	players[i].ControlType = Player.PlayerControls.Mouse;
+			//}
 #endif
 		}
 
@@ -67,7 +76,7 @@ public class GameManager : Singleton<GameManager>
 		music.Play();
 
 		AudioManager.Instance.AddMusicTrack(music, true);
-    }
+	}
 
 	private void LookupPrefabs()
 	{
@@ -130,7 +139,7 @@ public class GameManager : Singleton<GameManager>
 			if (PlayerPrefs.HasKey(ritualKey))
 			{
 				long ritLong = long.Parse(PlayerPrefs.GetString(ritualKey));
-				
+
 				Ritual[] rituals = Ritual.GetRitualsForIDs((RitualID)ritLong);
 				var playerText = GameCanvas.Instance.LookupComponent<UnityEngine.UI.Text>("P" + players[i].playerID + " Name Text");
 				playerText.text = "";

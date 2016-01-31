@@ -69,6 +69,9 @@ public class Extract : Ability
 	public override void UpdateAbility(float deltaTime)
 	{
 		base.UpdateAbility(deltaTime);
+		CurrentCooldown = 0;
+		MaxCooldown = 1000;
+		
 		if (ExProj == null) ExProj = Resources.Load<GameObject>("ExProj");
 		if (currState == ExtractState.Pulling)
 		{
@@ -126,6 +129,8 @@ public class Extract : Ability
 
 	public override void ExecuteAbility(Vector3 inputVector = default(Vector3))
 	{
+		CurrentCooldown = 0;
+
 		if (currState == ExtractState.EmptyHanded)
 		{
 			var projType = ExtractProj.ProjType.Air;
