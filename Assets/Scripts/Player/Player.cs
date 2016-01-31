@@ -106,6 +106,16 @@ public class Player : MonoBehaviour
 		}
 		set
 		{
+			if (value >= MaxMana)
+			{
+				value = MaxMana;
+			}
+			if (value < 0)
+			{
+				value = 0;
+			}
+
+			mpBar.size = Mana / MaxMana;
 			mana = value;
 		}
 	}
@@ -133,6 +143,8 @@ public class Player : MonoBehaviour
 			maxMana = value;
 		}
 	}
+	public float ManaRegenRate = 100f;
+
 	#endregion
 	#endregion
 
@@ -308,10 +320,12 @@ public class Player : MonoBehaviour
 	}
 	void UpdateMana()
 	{
+		ManaToAdj += Time.deltaTime * ManaRegenRate;
+
 		//If our displayed Mana value isn't correct
 		if (ManaToAdj != 0)
 		{
-			float rate = Time.deltaTime * 30;
+			float rate = Time.deltaTime * 10;
 			float gainThisFrame = 0;
 			if (ManaToAdj < 0)
 			{
@@ -413,21 +427,27 @@ public class Player : MonoBehaviour
 		{
 			AdjustHealth(-15);
 		}
+		if (Input.GetKeyDown(KeyCode.Z))
+		{
+			AdjustHealth(100);
+			Mana += 100;
+		}
 
 		for (int i = 0; i < abilities.Count; i++)
 		{
+			//Debug.Log(abilities[i].GetType() + "   " + abilities[i].activationCond + "\n");
 			if (abilities[i].activationCond == Ability.KeyActivateCond.KeyDown)
 			{
-				Debug.Log(abilities[i].keyBinding + "\n");
-				if (Input.GetButtonDown(abilities[i].keyBinding))
+				//Debug.Log("["+ PlayerInput +"][" + abilities[i].keyBinding + "]\n");
+				if (Input.GetButtonDown(PlayerInput + abilities[i].keyBinding))
 				{
 					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
 				}
 			}
 			else if (abilities[i].activationCond == Ability.KeyActivateCond.KeyHold)
 			{
-				Debug.Log(abilities[i].keyBinding + "\n");
-				if (Input.GetButton(abilities[i].keyBinding))
+				//Debug.Log("Button Down ["+ PlayerInput +"][" + abilities[i].keyBinding + "]\n");
+				if (Input.GetButton(PlayerInput + abilities[i].keyBinding))
 				{
 					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
 				}

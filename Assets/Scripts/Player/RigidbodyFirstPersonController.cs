@@ -6,6 +6,7 @@ using UnityEngine;
 public class RigidbodyFirstPersonController : MonoBehaviour
 {
 	public Player Owner;
+	public float airDrag = 2;
 
 	[Serializable]
 	public class MovementSettings
@@ -218,10 +219,10 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		}
 		else
 		{
-			mRigidBody.drag = 1f;
+			mRigidBody.drag = airDrag;
 			if (mPreviouslyGrounded && !mJumping)
 			{
-				StickToGroundHelper();
+				//StickToGroundHelper();
 			}
 		}
 		mJump = false;

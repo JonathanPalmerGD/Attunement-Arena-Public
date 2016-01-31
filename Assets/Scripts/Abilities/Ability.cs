@@ -50,14 +50,14 @@ public class Ability : ScriptableObject
 	private float cost = 0;
 	public virtual float Cost
 	{
-		get { return 0; }
+		get { return cost; }
 		set
 		{
 			if (value <= 0)
 			{
 				value = 0;
 			}
-			if (value <= Owner.MaxMana)
+			if (value >= Owner.MaxMana)
 			{
 				value = Owner.MaxMana;
 			}
@@ -179,9 +179,10 @@ public class Ability : ScriptableObject
 
 		//Pay the cost
 		Owner.Mana -= Cost;
+		//Debug.Log(Owner.Mana + "  -" + Cost + "\n");
 
 		//Activate the Effect
-		ExecuteAbility(inputVector);
+		ExecuteAbility(inputVector.normalized);
 
 		return true;
 	}
