@@ -9,7 +9,7 @@ public class ExtractProj : MonoBehaviour
 	}
 	private ProjType projType;
 
-	private float Radius
+	public float Radius
 	{
 		get { return transform.localScale.x * 0.5f; }
 	}
@@ -82,16 +82,19 @@ public class ExtractProj : MonoBehaviour
 				break;
 		}
 		transform.SetParent(origin.Owner.transform.parent);
+		GetComponent<SphereCollider>().enabled = true;
 		Destroy(gameObject, 10f);
 	}
 
 	void OnCollisionEnter(Collision collision)
 	{
 		Vector3 where = collision.contacts[0].point;
+		float blastRadius = Radius * 3f * origin.ProjSpreadMult;
 
 		foreach(Player p in GameManager.Instance.players)
 		{
-			if ((p.transform.position - where).sqrMagnitude > Radius * 9f * origin.ProjSpreadMult) continue;
+			var tetherVector = where - p.transform.position;
+			if (tetherVector.sqrMagnitude > blastRadius*blastRadius) continue;
 
 			float effect = 1.0f;
 			if(p == origin.Owner)
@@ -99,7 +102,24 @@ public class ExtractProj : MonoBehaviour
 				effect = 0.5f;
 			}
 
-			
+			switch(projType)
+			{
+				case ProjType.Air:
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 30f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+                    break;
+				case ProjType.Lava:
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 2f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.AdjustHealth((effect * -25f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					break;
+				case ProjType.Water:
+					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 5f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					p.AdjustHealth((effect * -15f * Radius / Mathf.Max(1.0f, tetherVector.sqrMagnitude)));
+					break;
+				default:
+					break;
+			}
 		}
+
+		Destroy(gameObject);
 	}
 }

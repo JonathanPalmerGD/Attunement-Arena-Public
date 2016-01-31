@@ -58,7 +58,7 @@ public class Extract : Ability
 		base.UpdateAbility(deltaTime);
 		if (ExProj == null) ExProj = Resources.Load<GameObject>("ExProj");
 		if (currState == ExtractState.Pulling)
-			if (!lastHeld || projectile.transform.localScale.x >= MaxRadius)
+			if (!lastHeld || (projectile.Radius) >= MaxRadius)
 			{
 				showPull = false;
 				currState = ExtractState.FullHands;
@@ -80,7 +80,7 @@ public class Extract : Ability
 				lastHeld = false;
 			}
 		
-		if(showPull)
+		if(extractBeam && showPull)
 		{
 			extractBeam.SetPosition(1, projectile.transform.position);
 		}
@@ -127,7 +127,7 @@ public class Extract : Ability
 		}
 		else if (currState == ExtractState.Pulling)
 		{
-			projectile.transform.localScale = Vector3.one * Mathf.Min(projectile.transform.localScale.x + (AccretionSpeed * Time.deltaTime), MaxRadius);
+			projectile.transform.localScale = Vector3.one * Mathf.Min(projectile.transform.localScale.x + (AccretionSpeed * Time.deltaTime), MaxRadius * 2);
 			lastHeld = true;
 		}
 		else if (currState == ExtractState.FullHands)

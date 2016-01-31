@@ -107,6 +107,9 @@ public class GameManager : Singleton<GameManager>
 			newSkate.MaxCooldown = .05f;
 			newSkate.Duration = 5f;
 
+			Extract newExtract = (Extract)players[i].CreateAbility("Extract", players[i].PlayerInput + "Special", "Y");
+
+
 			Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "Right Bumper", "RT");
 			newBolt.MaxCooldown = .07f;
 			newBolt.Cost = 3;
