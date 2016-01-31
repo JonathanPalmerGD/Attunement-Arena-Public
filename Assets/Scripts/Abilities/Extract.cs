@@ -26,6 +26,7 @@ public class Extract : Ability
 		}
 	}
 
+	public bool Automated = true;
 	public float MaxRadius = 1.5f;
 	public float AccretionSpeed = 0.5f;
 	public float DamageMult = 1f;
@@ -49,7 +50,7 @@ public class Extract : Ability
 	{
 		get
 		{
-			return currState == ExtractState.FullHands ? KeyActivateCond.KeyDown : KeyActivateCond.KeyHold;
+			return (Automated || currState == ExtractState.FullHands) ? KeyActivateCond.KeyDown : KeyActivateCond.KeyHold;
 		}
 	}
 
@@ -58,16 +59,30 @@ public class Extract : Ability
 		base.UpdateAbility(deltaTime);
 		if (ExProj == null) ExProj = Resources.Load<GameObject>("ExProj");
 		if (currState == ExtractState.Pulling)
-			if (!lastHeld || (projectile.Radius) >= MaxRadius)
+		{
+			projectile.transform.localScale = Vector3.one * Mathf.Min(projectile.transform.localScale.x + (AccretionSpeed * Time.deltaTime), MaxRadius * 2);
+			if (Automated)
 			{
-				showPull = false;
-				currState = ExtractState.FullHands;
+				if ((projectile.Radius) >= MaxRadius)
+				{
+					showPull = false;
+					currState = ExtractState.FullHands;
+				}
 			}
 			else
 			{
-				showPull = true;
-				lastHeld = false;
+				if (!lastHeld || (projectile.Radius) >= MaxRadius)
+				{
+					showPull = false;
+					currState = ExtractState.FullHands;
+				}
+				else
+				{
+					showPull = true;
+					lastHeld = false;
+				}
 			}
+		}
 		else if (currState == ExtractState.FullHands)
 			projectile.transform.localEulerAngles = Owner.myCamera.transform.localEulerAngles;
 		else if (currState == ExtractState.JustThrew)
@@ -79,14 +94,14 @@ public class Extract : Ability
 			{
 				lastHeld = false;
 			}
-		
-		if(extractBeam && showPull)
+
+		if (extractBeam && showPull)
 		{
 			extractBeam.SetPosition(1, projectile.transform.position);
 		}
 		else
 		{
-			if(projectile && projectile.GetComponent<RenderBallisticPath>().enabled ^ currState == ExtractState.FullHands)
+			if (projectile && projectile.GetComponent<RenderBallisticPath>().enabled ^ currState == ExtractState.FullHands)
 				projectile.GetComponent<RenderBallisticPath>().enabled = currState == ExtractState.FullHands;
 		}
 	}
@@ -96,7 +111,7 @@ public class Extract : Ability
 		if (currState == ExtractState.EmptyHanded)
 		{
 			var projType = ExtractProj.ProjType.Air;
-            if (Owner.hitscanTarget && Owner.hitscanTarget.CompareTag("Stream"))
+			if (Owner.hitscanTarget && Owner.hitscanTarget.CompareTag("Stream"))
 			{
 				if (Owner.hitscanTarget.name.StartsWith("Lava"))
 				{
@@ -123,12 +138,24 @@ public class Extract : Ability
 			}
 
 			currState = ExtractState.Pulling;
-			lastHeld = true;
+			lastHeld = !Automated;
 		}
 		else if (currState == ExtractState.Pulling)
 		{
-			projectile.transform.localScale = Vector3.one * Mathf.Min(projectile.transform.localScale.x + (AccretionSpeed * Time.deltaTime), MaxRadius * 2);
-			lastHeld = true;
+			if (Automated)
+			{
+				projectile.transform.localEulerAngles = Owner.myCamera.transform.localEulerAngles;
+				projectile.Throw();
+				projectile = null;
+				extractBeam = null;
+				lastHeld = true;
+				showPull = false;
+				currState = ExtractState.JustThrew;
+			}
+			else
+			{
+				lastHeld = true;
+			}
 		}
 		else if (currState == ExtractState.FullHands)
 		{
@@ -138,7 +165,8 @@ public class Extract : Ability
 			lastHeld = true;
 			showPull = false;
 			currState = ExtractState.JustThrew;
-		} else if(currState == ExtractState.JustThrew)
+		}
+		else if (currState == ExtractState.JustThrew)
 		{
 			lastHeld = true;
 		}
