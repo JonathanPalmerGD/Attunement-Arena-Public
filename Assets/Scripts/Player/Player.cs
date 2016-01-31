@@ -8,8 +8,9 @@ public class Player : MonoBehaviour
 	public bool initialized;
 
 	public int playerID = 0;
-	public enum PlayerBuff { Burning, Shielded, None }
+	public enum PlayerBuff { Burning, Shielded, Chilled, None }
 	public PlayerBuff buffState = PlayerBuff.None;
+	public float remainingStatDur;
 
 	public enum PlayerControls { Mouse, GamePad}
 	public PlayerControls ControlType = PlayerControls.GamePad;
@@ -256,6 +257,24 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	public void UpdateBuffState()
+	{
+		if (buffState != PlayerBuff.None)
+		{
+			if (buffState == PlayerBuff.Chilled)
+			{
+				remainingStatDur -= Time.deltaTime;
+				AdjustHealth(-2 * Time.deltaTime);
+			}
+
+			if (remainingStatDur <= 0)
+			{
+				remainingStatDur = 0;
+				buffState = PlayerBuff.None;
+			}
+		}
+	}
+
 	/// <summary>
 	/// Affect the player's health
 	/// </summary>
@@ -316,7 +335,6 @@ public class Player : MonoBehaviour
 			}
 		}
 	}
-
 
 	void UpdateHealth()
 	{
@@ -393,6 +411,15 @@ public class Player : MonoBehaviour
 
 			//Add it to displayed Mana
 			Mana += gainThisFrame;
+		}
+	}
+
+	public void SetChilledState(float chillDur)
+	{
+		if(buffState == PlayerBuff.None || buffState == PlayerBuff.Chilled)
+		{
+			remainingStatDur = chillDur;
+			buffState = PlayerBuff.Chilled;
 		}
 	}
 

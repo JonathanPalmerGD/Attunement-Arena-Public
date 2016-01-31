@@ -46,7 +46,7 @@ class Bounds : MonoBehaviour
 	void OnDrawGizmos()
 	{
 		Gizmos.color = new Color(0f, 0f, 0f, 0.25f);
-		Gizmos.DrawSphere(transform.position, Radius);
+		//Gizmos.DrawSphere(transform.position, Radius);
 		Gizmos.color = Color.black;
 		Gizmos.DrawWireSphere(transform.position, Radius);
 		Gizmos.color = Color.white;

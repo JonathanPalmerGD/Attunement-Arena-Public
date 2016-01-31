@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
 		get { return players.Length; }
 	}
 	public Player[] players;
+	public GameObject chilledPrefab;
 
 	public List<PlayerSpawn> SpawnPoints;
 
@@ -168,6 +169,10 @@ public class GameManager : Singleton<GameManager>
 
 	public void OnDestroy()
 	{
+		if (PlayerPrefs.HasKey("PlayerCount"))
+		{
+			PlayerPrefs.DeleteKey("PlayerCount");
+		}
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			PlayerPrefs.DeleteKey("PlayerCount");
