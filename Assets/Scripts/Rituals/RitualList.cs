@@ -46,7 +46,16 @@ public class Cyclone : Ritual
 
 	public override void ApplyToPlayer(Player plyr)
 	{
-		throw new NotImplementedException();
+		for (int i = 0; i < plyr.abilities.Count; i++)
+		{
+			if (plyr.abilities[i].GetType() == typeof(Gust))
+			{
+				Gust gust = (Gust)plyr.abilities[i];
+				gust.MaxCharges += 2;
+				gust.MaxAngle += 15f;
+				gust.Range += 10f;
+			}
+		}
 	}
 }
 
