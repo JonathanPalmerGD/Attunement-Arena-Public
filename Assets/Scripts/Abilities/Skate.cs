@@ -38,9 +38,6 @@ public class Skate : Ability
 	}
 	public override void ExecuteAbility(Vector3 inputVector = default(Vector3))
 	{
-		//Make an icePrefab below the player.
-		//Debug.Log("Execute Skate!\n");
-
 		GameObject newPlatform = GameObject.Instantiate<GameObject>(icePrefab);
 		newPlatform.name = "[P" + Owner.playerID + "] Ice";
 		if (GeneralDamage > 0)

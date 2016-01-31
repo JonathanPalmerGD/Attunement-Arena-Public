@@ -262,7 +262,7 @@ public class Player : MonoBehaviour
 	/// <param name="amount">Positive for healing, negative for damage</param>
 	public void AdjustHealth(float amount)
 	{
-		if (amount < 0)
+		if (amount < 0 && buffState != PlayerBuff.Shielded)
 		{
 			if (!damaged)
 			{
@@ -282,7 +282,14 @@ public class Player : MonoBehaviour
 		{
 			if (amount < 0)
 			{
-				HealthToAdj += amount;
+				if (buffState == PlayerBuff.Shielded)
+				{
+					buffState = PlayerBuff.None;
+				}
+				else
+				{
+					HealthToAdj += amount;
+				}
 			}
 			else
 			{
@@ -290,6 +297,26 @@ public class Player : MonoBehaviour
 			}
 		}
 	}
+
+	public void AdjustMana(float amount)
+	{
+		if (Mana + amount >= MaxMana)
+		{
+			ManaToAdj += MaxMana - Mana;
+		}
+		else
+		{
+			if (amount < 0)
+			{
+				ManaToAdj += amount;
+			}
+			else
+			{
+				ManaToAdj += amount;
+			}
+		}
+	}
+
 
 	void UpdateHealth()
 	{

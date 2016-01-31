@@ -116,9 +116,35 @@ public class GameManager : Singleton<GameManager>
 			newBolt.GeneralDamage = 1.5f;
 			newBolt.Cost = 3;
 			newBolt.Duration = .35f;
+
+
+			WaterShield shield = (WaterShield)players[i].CreateAbility("WaterShield", players[i].PlayerInput + "Left Bumper", "LB");
+			shield.MaxCooldown = 8f;
+			shield.Cost = 15;
+			shield.Duration = 4f;
 		}
 
 
+	}
+
+	public void ApplyPlayerRituals()
+	{
+		for (int i = 0; i < NumPlayers; i++)
+		{
+			string ritualKey = "P" + players[i].playerID + "Rits";
+			if (PlayerPrefs.HasKey(ritualKey))
+			{
+				long ritLong = long.Parse(PlayerPrefs.GetString(ritualKey));
+				
+				Ritual[] rituals = Ritual.GetRitualsForIDs((RitualID)ritLong);
+
+				for (int k = 0; k < rituals.Length; k++)
+				{
+					Debug.Log("Applying ritual " + rituals[k].GetType() + " to player " + players[i].playerID + "\n");
+					rituals[k].ApplyToPlayer(players[i]);
+				}
+			}
+		}
 	}
 
 	void Update()

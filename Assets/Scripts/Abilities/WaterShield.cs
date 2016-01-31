@@ -3,7 +3,7 @@ using System.Collections;
 
 public class WaterShield : Ability
 {
-	public GameObject shieldPrefab;
+	public GameObject waterShieldPrefab;
 	public GameObject shieldParticle;
 
 	public override KeyActivateCond activationCond
@@ -18,48 +18,30 @@ public class WaterShield : Ability
 			return false;
 		}
 	}
-
 	public override int IconID
 	{
 		get { return 7; }
 	}
 
-	public override float GeneralDamage
-	{
-		get
-		{
-			return generalDamage;
-		}
-	}
-	private float maxAngle = 8;
-	public float MaxAngle
-	{
-		get
-		{
-			return maxAngle;
-		}
-		set
-		{
-			maxAngle = value;
-		}
-	}
-
-	public float Range
-	{
-		get
-		{
-			return 135f;
-		}
-	}
+	private float durCounter = 0;
 
 	public override void UpdateAbility(float deltaTime)
 	{
 		if (Owner.buffState == Player.PlayerBuff.Shielded)
 		{
-
+			//Debug.Log(durCounter + "\n");
+			durCounter -= deltaTime;
+			if(durCounter <= 0)
+			{
+				Owner.buffState = Player.PlayerBuff.None;
+			}
 		}
 		else
 		{
+			if (shieldParticle.activeSelf)
+			{
+				shieldParticle.SetActive(false);
+			}
 			//Debug.Log("Updating Gust - Grounded\n" + deltaTime);
 			base.UpdateAbility(deltaTime);
 		}
@@ -67,8 +49,8 @@ public class WaterShield : Ability
 
 	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{
-		shieldPrefab = Resources.Load<GameObject>("shieldPrefab");
-		shieldParticle = GameObject.Instantiate(shieldPrefab, newOwner.transform.position, newOwner.transform.rotation) as GameObject;
+		waterShieldPrefab = Resources.Load<GameObject>("waterShieldPrefab");
+		shieldParticle = GameObject.Instantiate(waterShieldPrefab, newOwner.transform.position, newOwner.transform.rotation) as GameObject;
 		shieldParticle.name = "Bolt Renderer [P" + newOwner.playerID + "]";
 		
 		shieldParticle.transform.SetParent(newOwner.transform);
@@ -79,10 +61,13 @@ public class WaterShield : Ability
 	{
 		var castDir = inputVector.normalized;
 
+		shieldParticle.SetActive(true);
+
 		//Debug.DrawLine(Owner.transform.position, Owner.transform.position + castDir * Range, Color.green, 5.0f);
 
 		if (Owner.buffState != Player.PlayerBuff.Shielded)
 		{
+			durCounter = Duration;
 			Owner.buffState = Player.PlayerBuff.Shielded;
 		}
 	}

@@ -88,9 +88,9 @@ public class Ability : ScriptableObject
 		}
 		set
 		{
-			abilDispUI.CooldownDisplay.fillAmount = currentCooldown / MaxCooldown;
-
 			currentCooldown = value;
+
+			abilDispUI.CooldownDisplay.fillAmount = currentCooldown / MaxCooldown;
 		}
 	}
 	public float MaxCooldown;
