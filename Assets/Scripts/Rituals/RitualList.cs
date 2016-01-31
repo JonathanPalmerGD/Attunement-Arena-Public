@@ -71,7 +71,15 @@ public class AspectBlizzard : Ritual
 
 	public override void ApplyToPlayer(Player plyr)
 	{
-		throw new NotImplementedException();
+		for (int i = 0; i < plyr.abilities.Count; i++)
+		{
+			if (plyr.abilities[i].GetType() == typeof(Skate))
+			{
+				Skate skate = (Skate)plyr.abilities[i];
+				skate.GeneralDamage += 2;
+			}
+		}
+		plyr.ManaRegenRate += 120;
 	}
 }
 
@@ -87,7 +95,16 @@ public class HarnessElements : Ritual
 
 	public override void ApplyToPlayer(Player plyr)
 	{
-		throw new NotImplementedException();
+		for (int i = 0; i < plyr.abilities.Count; i++)
+		{
+			if (plyr.abilities[i].GetType() == typeof(Extract))
+			{
+				Extract extr = (Extract)plyr.abilities[i];
+				extr.Automated = true;
+				extr.AccretionSpeed += .5f;
+			}
+		}
+		plyr.Health += 25;
 	}
 }
 
@@ -103,7 +120,15 @@ public class LightningHelix : Ritual
 
 	public override void ApplyToPlayer(Player plyr)
 	{
-		throw new NotImplementedException();
+		for (int i = 0; i < plyr.abilities.Count; i++)
+		{
+			if (plyr.abilities[i].GetType() == typeof(Bolt))
+			{
+				Bolt bolt = (Bolt)plyr.abilities[i];
+				bolt.GeneralDamage += .5f;
+			}
+		}
+		plyr.Health -= 35;
 	}
 }
 
@@ -119,6 +144,15 @@ public class TrickleCharge : Ritual
 
 	public override void ApplyToPlayer(Player plyr)
 	{
-		throw new NotImplementedException();
+		for (int i = 0; i < plyr.abilities.Count; i++)
+		{
+			if (plyr.abilities[i].GetType() == typeof(Bolt))
+			{
+				Bolt bolt = (Bolt)plyr.abilities[i];
+				bolt.GeneralDamage -= .5f;
+				bolt.MaxAngle += 2;
+			}
+		}
+		plyr.Mana += 50;
 	}
 }

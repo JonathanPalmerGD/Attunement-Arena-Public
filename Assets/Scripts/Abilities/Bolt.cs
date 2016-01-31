@@ -28,14 +28,19 @@ public class Bolt : Ability
 	{
 		get
 		{
-			return 1.5f;
+			return generalDamage;
 		}
 	}
+	private float maxAngle;
 	public float MaxAngle
 	{
 		get
 		{
-			return 8f;
+			return maxAngle;
+		}
+		set
+		{
+			MaxAngle = value;
 		}
 	}
 
