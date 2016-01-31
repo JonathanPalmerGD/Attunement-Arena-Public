@@ -21,7 +21,7 @@ public class Bolt : Ability
 
 	public override int IconID
 	{
-		get { return 1; }
+		get { return 3; }
 	}
 
 	public override float GeneralDamage

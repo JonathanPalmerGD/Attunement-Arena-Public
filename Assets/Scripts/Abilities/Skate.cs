@@ -18,7 +18,7 @@ public class Skate : Ability
 	}
 	public override int IconID
 	{
-		get { return 5; }
+		get { return 14; }
 	}
 	public override float GeneralDamage
 	{
