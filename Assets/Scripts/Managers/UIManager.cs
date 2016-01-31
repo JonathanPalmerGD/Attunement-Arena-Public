@@ -164,7 +164,24 @@ public class UIManager : Singleton<UIManager>
 				playerUIParents[id].anchorMax = anchMaxp1;
 			}
 		}
-
+		else if (GameManager.Instance.NumPlayers == 3)
+		{
+			if (player.playerID == 0)
+			{
+				playerUIParents[id].anchorMin = anchMinp04;
+				playerUIParents[id].anchorMax = anchMaxp04;
+			}
+			else if (player.playerID == 1)
+			{
+				playerUIParents[id].anchorMin = anchMinp14;
+				playerUIParents[id].anchorMax = anchMaxp14;
+			}
+			else if (player.playerID == 2)
+			{
+				playerUIParents[id].anchorMin = anchMinp24;
+				playerUIParents[id].anchorMax = anchMaxp24;
+			}
+		}
 		else if (GameManager.Instance.NumPlayers == 4)
 		{
 			if (player.playerID == 0)
@@ -172,17 +189,17 @@ public class UIManager : Singleton<UIManager>
 				playerUIParents[id].anchorMin = anchMinp04;
 				playerUIParents[id].anchorMax = anchMaxp04;
 			}
-			else if(player.playerID == 1)
+			else if (player.playerID == 1)
 			{
 				playerUIParents[id].anchorMin = anchMinp14;
 				playerUIParents[id].anchorMax = anchMaxp14;
 			}
-			else if(player.playerID == 2)
+			else if (player.playerID == 2)
 			{
 				playerUIParents[id].anchorMin = anchMinp24;
 				playerUIParents[id].anchorMax = anchMaxp24;
 			}
-			else if(player.playerID == 3)
+			else if (player.playerID == 3)
 			{
 				playerUIParents[id].anchorMin = anchMinp34;
 				playerUIParents[id].anchorMax = anchMaxp34;
@@ -252,7 +269,7 @@ public class UIManager : Singleton<UIManager>
 		HandleFade();
 
 		#region Escape Key
-		if (Input.GetKeyDown(KeyCode.Escape))
+		if (Input.GetButtonDown("Quit"))
 		{
 			Application.Quit();
 		}
