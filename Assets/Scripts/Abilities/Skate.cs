@@ -38,6 +38,10 @@ public class Skate : Ability
 	}
 	public override void ExecuteAbility(Vector3 inputVector = default(Vector3))
 	{
+		AudioSource source = AudioManager.Instance.MakeSource("Whoosh");
+		source.volume = .3f;
+		source.Play();
+
 		GameObject newPlatform = GameObject.Instantiate<GameObject>(icePrefab);
 		newPlatform.name = "[P" + Owner.playerID + "] Ice";
 		if (GeneralDamage > 0)

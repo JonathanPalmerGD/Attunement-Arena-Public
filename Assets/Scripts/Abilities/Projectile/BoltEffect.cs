@@ -12,6 +12,7 @@ public class BoltEffect : MonoBehaviour
 	public float timeOfZap = 0.15f;
 	public float zapTimer;
 	public bool trackTarget = false;
+	public AudioSource zap;
 
 	void Start()
 	{
@@ -21,14 +22,19 @@ public class BoltEffect : MonoBehaviour
 		}
 		zapTimer = 0;
 		lRend.SetVertexCount(1);
+
+		zap = AudioManager.Instance.MakeSource("Bolt Zap");
+
+		zap.volume = 0;
+		zap.loop = true;
+		zap.Play();
 	}
 
 	void Update()
 	{
-		
-
 		if (zapTimer > 0)
 		{
+			zap.volume = .3f;
 			if (trackTarget)
 			{
 				//Debug.LogError("Thing\n");
@@ -57,7 +63,8 @@ public class BoltEffect : MonoBehaviour
 			zapTimer = zapTimer - Time.deltaTime;
 		}
 		else
-		{	
+		{
+			zap.volume = 0f;
 			lRend.SetVertexCount(1);
 		}
 	}
