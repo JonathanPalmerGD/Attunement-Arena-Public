@@ -110,7 +110,7 @@ public class GameManager : Singleton<GameManager>
 
 			Extract newExtract = (Extract)players[i].CreateAbility("Extract", players[i].PlayerInput + "Special", "Y");
 
-			Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "Right Bumper", "RT");
+			Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "Right Bumper", "RB");
 			newBolt.MaxCooldown = .07f;
 			newBolt.Cost = 3;
 			newBolt.Duration = .35f;

@@ -219,7 +219,7 @@ ParticleSystem:
         rgba: 3204448146
       minMaxState: 0
     startSize:
-      scalar: .300000012
+      scalar: .800000012
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -274,7 +274,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
       minMaxState: 3
-    gravityModifier: 0
+    gravityModifier: .00999999978
     inheritVelocity: 0
     maxNumParticles: 1000
   ShapeModule:
@@ -327,15 +327,15 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
       minMaxState: 0
-    cnt0: 30
-    cnt1: 25
-    cnt2: 45
-    cnt3: 30
+    cnt0: 5
+    cnt1: 6
+    cnt2: 9
+    cnt3: 11
     time0: 0
     time1: .0500000007
-    time2: .600000024
-    time3: 0
-    m_BurstCount: 3
+    time2: .400000006
+    time3: .800000012
+    m_BurstCount: 4
   SizeModule:
     enabled: 1
     curve:

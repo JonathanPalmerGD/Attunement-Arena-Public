@@ -128,12 +128,25 @@ public class UIManager : Singleton<UIManager>
 	public Vector2 anchMinp1 = new Vector2(0, 0);
 	public Vector2 anchMaxp1 = new Vector2(1, .5f);
 
+
+
+	public Vector2 anchMinp04 = new Vector2(0, .5f);
+	public Vector2 anchMaxp04 = new Vector2(.5f, 1);
+
+	public Vector2 anchMinp14 = new Vector2(.5f, .5f);
+	public Vector2 anchMaxp14 = new Vector2(1, 1);
+
+	public Vector2 anchMinp24 = new Vector2(0, 0);
+	public Vector2 anchMaxp24 = new Vector2(.5f, .5f);
+
+	public Vector2 anchMinp34 = new Vector2(.5f, 0);
+	public Vector2 anchMaxp34 = new Vector2(1, .5f);
+
 	public void ConfigureUISize(Player player)
 	{
 		int id = player.playerID;
 
-		//Debug.Log(player.myCamera.rect + "\n" + id);
-
+		#region TWO PLAYERS
 		//P0
 		//Min	0		.5
 		//Max	1		1
@@ -141,6 +154,17 @@ public class UIManager : Singleton<UIManager>
 		//P1
 		//Min	0		0
 		//Max	1		.5
+		#endregion
+
+		#region FOUR PLAYERS
+		//P0					//P1
+		//Min	0		.5		//Min	.5		.5
+		//Max	.5		1		//Max	1		1	
+
+		//P2					//P3
+		//Min	0		0		//Min	.5		0
+		//Max	.5		.5		//Max	1		.5	
+		#endregion
 
 		if (GameManager.Instance.NumPlayers == 2)
 		{
@@ -153,6 +177,30 @@ public class UIManager : Singleton<UIManager>
 			{
 				playerUIParents[id].anchorMin = anchMinp1;
 				playerUIParents[id].anchorMax = anchMaxp1;
+			}
+		}
+
+		else if (GameManager.Instance.NumPlayers == 4)
+		{
+			if (player.playerID == 0)
+			{
+				playerUIParents[id].anchorMin = anchMinp04;
+				playerUIParents[id].anchorMax = anchMaxp04;
+			}
+			else if(player.playerID == 1)
+			{
+				playerUIParents[id].anchorMin = anchMinp14;
+				playerUIParents[id].anchorMax = anchMaxp14;
+			}
+			else if(player.playerID == 2)
+			{
+				playerUIParents[id].anchorMin = anchMinp24;
+				playerUIParents[id].anchorMax = anchMaxp24;
+			}
+			else if(player.playerID == 3)
+			{
+				playerUIParents[id].anchorMin = anchMinp34;
+				playerUIParents[id].anchorMax = anchMaxp34;
 			}
 		}
 

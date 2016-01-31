@@ -62,10 +62,10 @@ public class Gust : Ability
 			var tetherVector = p.transform.position - Owner.transform.position;
 
 			// If out of range, ignore
-			//if (tetherVector.sqrMagnitude > Range * Range) continue;
+			if (tetherVector.sqrMagnitude > Range * Range) continue;
 
 			// If the other player is not in the cone of influence, ignore
-			//if (Vector3.Angle(castDir, tetherVector) > MaxAngle) continue;
+			if (Vector3.Angle(castDir, tetherVector) > MaxAngle) continue;
 
 			//Debug.DrawRay(Owner.transform.position, p.transform.position - Owner.transform.position, Color.black, 5.0f);
 			RaycastHit hit;
