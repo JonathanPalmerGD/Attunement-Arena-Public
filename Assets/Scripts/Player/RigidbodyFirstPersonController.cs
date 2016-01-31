@@ -221,7 +221,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			mRigidBody.drag = 1f;
 			if (mPreviouslyGrounded && !mJumping)
 			{
-				StickToGroundHelper();
+				//StickToGroundHelper();
 			}
 		}
 		mJump = false;

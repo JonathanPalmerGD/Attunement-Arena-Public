@@ -322,8 +322,12 @@ MonoBehaviour:
   mySpawn: {fileID: 0}
   cameraController: {fileID: 11402282}
   myCamera: {fileID: 2060296}
+  hpBar: {fileID: 0}
+  mpBar: {fileID: 0}
   damaged: 0
+  ManaRegenRate: 3
   abilities: []
+  damageIndicator: {fileID: 0}
 --- !u!136 &13606810
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -460,6 +464,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: motionBob.HorizontalBobRange
       value: .0199999996
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ManaRegenRate
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

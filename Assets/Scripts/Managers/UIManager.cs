@@ -132,7 +132,7 @@ public class UIManager : Singleton<UIManager>
 	{
 		int id = player.playerID;
 
-		Debug.Log(player.myCamera.rect + "\n" + id);
+		//Debug.Log(player.myCamera.rect + "\n" + id);
 
 		//P0
 		//Min	0		.5
