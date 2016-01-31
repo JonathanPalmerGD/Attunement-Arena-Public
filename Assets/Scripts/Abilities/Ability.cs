@@ -78,8 +78,21 @@ public class Ability : ScriptableObject
 		get { return 0f; }
 	}
 	public float Duration;
-	
-	public float CurrentCooldown;
+
+	private float currentCooldown;
+	public float CurrentCooldown
+	{
+		get
+		{
+			return currentCooldown;
+		}
+		set
+		{
+			abilDispUI.CooldownDisplay.fillAmount = currentCooldown / MaxCooldown;
+
+			currentCooldown = value;
+		}
+	}
 	public float MaxCooldown;
 
 	public virtual void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
@@ -103,7 +116,7 @@ public class Ability : ScriptableObject
 
 	public virtual void UpdateAbility(float deltaTime)
 	{
-		if (CurrentCooldown >= 0)
+		if (CurrentCooldown > 0)
 		{
 			CurrentCooldown -= deltaTime;
 		}

@@ -18,7 +18,7 @@ public class Skate : Ability
 	}
 	public override int IconID
 	{
-		get { return 14; }
+		get { return 9; }
 	}
 	public float Force = 15;
 
