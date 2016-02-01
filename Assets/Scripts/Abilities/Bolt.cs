@@ -8,7 +8,17 @@ public class Bolt : Ability
 	private BoltEffect boltEff;
 	public override KeyActivateCond activationCond
 	{
-		get { return KeyActivateCond.KeyHold; }
+		get
+		{
+			if (Owner.ControlType == Player.PlayerControls.GamePad)
+			{
+				return KeyActivateCond.GetAxis;
+			}
+			else
+			{
+				return KeyActivateCond.KeyHold;
+			}
+		}
 	}
 
 	public override bool UseCharges

@@ -631,7 +631,12 @@ public class Player : MonoBehaviour
 			}
 			else if(abilities[i].activationCond == Ability.KeyActivateCond.GetAxis)
 			{
-
+				float axisValue = Input.GetAxis(abilities[i].keyBinding);
+				//Debug.Log("Hit\n" + axisValue);
+				if (axisValue > .2f)
+				{
+					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
+				}
 			}
 		}
 

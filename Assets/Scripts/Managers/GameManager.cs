@@ -111,7 +111,8 @@ public class GameManager : Singleton<GameManager>
 			Extract newExtract = (Extract)players[i].CreateAbility("Extract", players[i].PlayerInput + "Secondary", "X");
 
 			//Right Bumper
-			Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "Right Bumper", "RB");
+			//Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "Right Bumper", "RB");
+			Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "RTrigger", "RTrig");
 			newBolt.MaxCooldown = .07f;
 			newBolt.MaxAngle = 8;
 			newBolt.GeneralDamage = 1.5f;
@@ -119,7 +120,8 @@ public class GameManager : Singleton<GameManager>
 			newBolt.Duration = .35f;
 
 			//Left Bumper
-			Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Left Bumper", "LB");
+			//Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Left Bumper", "LB");
+			Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "LTrigger", "LTrig");
 			newSkate.Cost = 2f;
 			newSkate.Force = 32;
 			newSkate.MaxCooldown = .05f;
@@ -149,7 +151,7 @@ public class GameManager : Singleton<GameManager>
 
 				for (int k = 0; k < rituals.Length; k++)
 				{
-					Debug.Log("Applying ritual " + rituals[k].GetType() + " to player " + players[i].playerID + "\n");
+					//Debug.Log("Applying ritual " + rituals[k].GetType() + " to player " + players[i].playerID + "\n");
 					rituals[k].ApplyToPlayer(players[i]);
 					playerText.text += (string.IsNullOrEmpty(playerText.text) ? "" : "  ") + (rituals[k]).ToString();
 				}
