@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,13 +9,13 @@ public class Player : MonoBehaviour
 	public bool initialized;
 
 	public int playerID = 0;
-	public enum PlayerBuff { Burning, Shielded, Chilled, None }
-	public PlayerBuff buffState = PlayerBuff.None;
-	public float remainingStatDur;
+	public enum PlayerStatus { Burning, Shielded, Chilled, None }
+	public PlayerStatus curStatus = PlayerStatus.None;
+	public float curStatusDur;
 
 	public bool playerDead = false;
 
-	public enum PlayerControls { Mouse, GamePad}
+	public enum PlayerControls { Mouse, GamePad }
 	public PlayerControls ControlType = PlayerControls.GamePad;
 	public string PlayerInput
 	{
@@ -209,10 +210,10 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	public Ability CreateAbility(string abilityName, string keyBinding, string displayKeyBinding)
+	public T CreateAbility<T>(string keyBinding, string displayKeyBinding) where T : Ability
 	{
 		//Debug.Log("Creating " + abilityName + " " + keyBinding + "\n");
-		Ability newAbility = ScriptableObject.CreateInstance(abilityName) as Ability;
+		T newAbility = ScriptableObject.CreateInstance(typeof(T)) as T;
 
 		newAbility.Init(this, keyBinding, displayKeyBinding);
 
@@ -221,6 +222,22 @@ public class Player : MonoBehaviour
 
 		return newAbility;
 	}
+	public T GetAbility<T>(bool createIfNotFound = false) where T : Ability
+	{
+		//When a player sets an ability to a button bind PlayerInput+AbilityName
+
+		T abil = abilities.FirstOrDefault(a => a is T) as T;
+		//	?? CreateAbility<T>(PlayerInput + "Secondary", "X");
+
+		//The section after the ?? is the same as below:
+		if (abil == null && createIfNotFound)
+		{
+		//Create the ability
+			abil = CreateAbility<T>(PlayerInput + "Secondary", "X");
+		}
+
+		return abil;
+	}
 
 	public void AddAbilityBinding(Ability newAbil, string keyBinding)
 	{
@@ -228,14 +245,9 @@ public class Player : MonoBehaviour
 	}
 	#endregion
 
-	public void UseAbility()
-	{
-
-	}
-
 	void Update()
 	{
-		UpdateBuffState();
+		UpdateStatus();
 
 		UpdateHealth();
 		UpdateMana();
@@ -263,38 +275,56 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	public void UpdateBuffState()
+	public void UpdateStatus()
 	{
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.L))
 		{
-			SetChilledState(5);
+			SetPlayerStatus(PlayerStatus.Chilled, 5, true);
 		}
-		#endif
-
-		if (buffState == PlayerBuff.Chilled)
+		if (Input.GetKeyDown(KeyCode.O))
 		{
-			remainingStatDur -= Time.deltaTime;
-			AdjustHealth(-2 * Time.deltaTime, false);
-			if (remainingStatDur <= 0)
-			{
-				remainingStatDur = 0;
-				buffState = PlayerBuff.None;
-			}
+			SetPlayerStatus(PlayerStatus.Shielded, 5, true);
 		}
-		
-		if (buffState != PlayerBuff.Chilled)
+#endif
+
+		#region Chilled
+		if (curStatus == PlayerStatus.Chilled)
+		{
+			curStatusDur -= Time.deltaTime;
+			AdjustHealth(-1 * Time.deltaTime, false);
+
+			if (curStatusDur <= 0)
+			{
+				curStatusDur = 0;
+				curStatus = PlayerStatus.None;
+			}
+
+			chilledParticles.enableEmission = true;
+		}
+		if (curStatus != PlayerStatus.Chilled)
 		{
 			chilledParticles.enableEmission = false;
 		}
-		if (buffState == PlayerBuff.Shielded)
+		#endregion
+		#region Shielded
+		if (curStatus == PlayerStatus.Shielded)
 		{
+			curStatusDur -= Time.deltaTime;
+
+			if (curStatusDur <= 0)
+			{
+				curStatusDur = 0;
+				curStatus = PlayerStatus.None;
+			}
+
 			shieldParticles.enableEmission = true;
 		}
 		else
 		{
 			shieldParticles.enableEmission = false;
 		}
+		#endregion
 	}
 
 	/// <summary>
@@ -305,7 +335,17 @@ public class Player : MonoBehaviour
 	{
 		if (playerDead) { return; }
 
-		if (amount < 0 && buffState != PlayerBuff.Shielded)
+		if (curStatus == PlayerStatus.Shielded)
+		{
+			WaterShield shield = GetAbility<WaterShield>();
+
+			if (shield)
+			{
+				amount = amount * shield.damageReduction;
+			}
+		}
+
+		if (amount < 0)
 		{
 			if (causeFlicker)
 			{
@@ -328,53 +368,13 @@ public class Player : MonoBehaviour
 		{
 			if (amount < 0)
 			{
-				if (buffState == PlayerBuff.Shielded)
+				HealthToAdj += amount;
+
+				if (Health + amount <= 0)
 				{
-					buffState = PlayerBuff.None;
+					KillPlayer();
 				}
-				else
-				{
-					HealthToAdj += amount;
 
-					if(Health + amount <= 0)
-					{
-						playerDead = true;
-
-						// Stop the damage flashing
-						damaged = false;
-						damageFlashTimer = 0f;
-						StopAllCoroutines();
-
-						// Give the player a darkened "you're dead" screen
-						damageIndicator.gameObject.SetActive(true);
-						damageIndicator.color = new Color(0.5f, 0f, 0f, 0.3f);
-						StartCoroutine(DeadTextFadein(GameCanvas.Instance.LookupComponent<Text>("P" + playerID + " DeadText")));
-
-						// Test live player count
-						byte livePlayers = 0;
-						foreach(Player p in GameManager.Instance.players)
-						{
-							if (!p.playerDead) livePlayers++;
-						}
-
-						// We have winrar!
-						if(livePlayers < 2)
-						{
-							foreach (Player p in GameManager.Instance.players)
-							{
-								if (p.playerDead) continue;
-
-								Text winText = GameCanvas.Instance.LookupComponent<Text>("P" + p.playerID + " DeadText");
-								winText.text = "You are an Attunement Master!";
-								p.StartCoroutine(p.DeadTextFadein(winText));
-								p.damageIndicator.gameObject.SetActive(true);
-								p.damageIndicator.color = new Color(1.0f, 0.75f, 0f, 0.3f);
-								break;
-                            }
-							StartCoroutine(WaitThenChangeScene());  // Change back to main menu upon finish
-						}
-					}
-				}
 			}
 			else
 			{
@@ -399,6 +399,45 @@ public class Player : MonoBehaviour
 			{
 				ManaToAdj += amount;
 			}
+		}
+	}
+
+	void KillPlayer()
+	{
+		playerDead = true;
+
+		// Stop the damage flashing
+		damaged = false;
+		damageFlashTimer = 0f;
+		StopAllCoroutines();
+
+		// Give the player a darkened "you're dead" screen
+		damageIndicator.gameObject.SetActive(true);
+		damageIndicator.color = new Color(0.5f, 0f, 0f, 0.3f);
+		StartCoroutine(DeadTextFadein(GameCanvas.Instance.LookupComponent<Text>("P" + playerID + " DeadText")));
+
+		// Test live player count
+		byte livePlayers = 0;
+		foreach (Player p in GameManager.Instance.players)
+		{
+			if (!p.playerDead) livePlayers++;
+		}
+
+		// We have winrar!
+		if (livePlayers < 2)
+		{
+			foreach (Player p in GameManager.Instance.players)
+			{
+				if (p.playerDead) continue;
+
+				Text winText = GameCanvas.Instance.LookupComponent<Text>("P" + p.playerID + " DeadText");
+				winText.text = "You are an Attunement Master!";
+				p.StartCoroutine(p.DeadTextFadein(winText));
+				p.damageIndicator.gameObject.SetActive(true);
+				p.damageIndicator.color = new Color(1.0f, 0.75f, 0f, 0.3f);
+				break;
+			}
+			StartCoroutine(WaitThenChangeScene());  // Change back to main menu upon finish
 		}
 	}
 
@@ -455,7 +494,7 @@ public class Player : MonoBehaviour
 		{
 			ManaToAdj += Time.deltaTime * ManaRegenRate * 0.4f;
 		}
-		
+
 
 		//If our displayed Mana value isn't correct
 		if (ManaToAdj != 0)
@@ -491,20 +530,42 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	public void SetShieldedState(float chillDur)
+	public void SetPlayerStatus(PlayerStatus targetStatus, float statusDur = 0, bool maxDuration = false)
 	{
-		shieldParticles.enableEmission = true;
-		buffState = PlayerBuff.Shielded;
-	}
-
-	public void SetChilledState(float chillDur)
-	{
-		if(buffState == PlayerBuff.None || buffState == PlayerBuff.Chilled)
+		//If we're in the current status. Increase the duration
+		if (curStatus == targetStatus)
 		{
-			Debug.Log("hit\n");
-			remainingStatDur = chillDur;
-			chilledParticles.enableEmission = true;
-			buffState = PlayerBuff.Chilled;
+			//Override the remaining duration if we can't overflow
+			if (maxDuration)
+			{
+				curStatusDur = statusDur;
+			}
+			else
+			{
+				//Otherwise straight add it
+				curStatusDur += statusDur;
+			}
+		}
+		//If we aren't the right status, decrease the duration
+		else if (curStatus != targetStatus)
+		{
+			//Decrease the old status duration
+			if (curStatusDur >= statusDur)
+			{
+				curStatusDur -= statusDur;
+			}
+			else
+			{
+				//If the new status lasts longer, reduce the new status's duration and switch the status
+				curStatusDur = statusDur - curStatusDur;
+				curStatus = targetStatus;
+			}
+		}
+
+		if (curStatusDur <= 0 || targetStatus == PlayerStatus.None)
+		{
+			curStatusDur = 0;
+			curStatus = PlayerStatus.None;
 		}
 	}
 
@@ -523,7 +584,7 @@ public class Player : MonoBehaviour
 				{
 					abilities[i].Charges = newChargeCount;
 				}
-				else if(newChargeCount > abilities[i].Charges)
+				else if (newChargeCount > abilities[i].Charges)
 				{
 					abilities[i].Charges = newChargeCount;
 				}
@@ -629,7 +690,7 @@ public class Player : MonoBehaviour
 					abilityBindings[abilities[i].keyBinding].ActivateAbilityOverhead(targetScanDir);
 				}
 			}
-			else if(abilities[i].activationCond == Ability.KeyActivateCond.GetAxis)
+			else if (abilities[i].activationCond == Ability.KeyActivateCond.GetAxis)
 			{
 				float axisValue = Input.GetAxis(abilities[i].keyBinding);
 				//Debug.Log("Hit\n" + axisValue);
@@ -709,7 +770,7 @@ public class Player : MonoBehaviour
 		deadText.gameObject.SetActive(true);
 		deadText.color = new Color(1f, 0f, 0f, 0f);
 
-		for(float alpha = 0f; alpha < 1f; alpha += Time.deltaTime * 0.25f)
+		for (float alpha = 0f; alpha < 1f; alpha += Time.deltaTime * 0.25f)
 		{
 			deadText.color = new Color(1f, 0f, 0f, alpha);
 			yield return null;
@@ -722,7 +783,7 @@ public class Player : MonoBehaviour
 		UIManager.Instance.SafeCleanup();
 		GameManager.Instance.SafeCleanup();
 		AudioManager.Instance.SafeCleanup();
-		
+
 		Application.LoadLevel(Application.loadedLevel - 1);
 	}
 }

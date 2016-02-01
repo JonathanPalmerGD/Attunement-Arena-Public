@@ -8,7 +8,8 @@ public enum RitualID
 	AspectBlizzard = 2,
 	HarnessElements = 4,
 	LightningHelix = 8,
-	TrickleCharge = 16
+	TrickleCharge = 16,
+	HydroBurst = 32
 }
 
 public abstract class Ritual
@@ -128,7 +129,7 @@ public class LightningHelix : Ritual
 				bolt.GeneralDamage += .5f;
 			}
 		}
-		plyr.Health -= 35;
+		plyr.Health -= 20;
 	}
 }
 
@@ -149,8 +150,33 @@ public class TrickleCharge : Ritual
 			if (plyr.abilities[i].GetType() == typeof(Bolt))
 			{
 				Bolt bolt = (Bolt)plyr.abilities[i];
-				bolt.GeneralDamage -= .5f;
-				bolt.MaxAngle += 2;
+				bolt.GeneralDamage -= .75f;
+				bolt.MaxAngle += 6;
+			}
+		}
+		plyr.Mana += 50;
+	}
+}
+
+public class HydroBurst : Ritual
+{
+	public override RitualID rID
+	{
+		get
+		{
+			return RitualID.TrickleCharge;
+		}
+	}
+
+	public override void ApplyToPlayer(Player plyr)
+	{
+		for (int i = 0; i < plyr.abilities.Count; i++)
+		{
+			if (plyr.abilities[i].GetType() == typeof(Bolt))
+			{
+				WaterShield shield = (WaterShield)plyr.abilities[i];
+				shield.Duration += 4;
+				//shield.MaxAngle += 6;
 			}
 		}
 		plyr.Mana += 50;

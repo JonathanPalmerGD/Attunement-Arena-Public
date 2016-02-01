@@ -101,27 +101,25 @@ public class GameManager : Singleton<GameManager>
 			players[i].Init();
 
 			//A/B
-			Gust newGust = (Gust)players[i].CreateAbility("Gust", players[i].PlayerInput + "Primary", "A B");
+			Gust newGust = players[i].CreateAbility<Gust>(players[i].PlayerInput + "Primary", "A B");
 			newGust.MaxCooldown = .5f;
 			players[i].AddAbilityBinding(newGust, players[i].PlayerInput + "Jump");
 			newGust.MaxCharges = 5;
 			newGust.Charges = 5;
 			
 			//X Button
-			Extract newExtract = (Extract)players[i].CreateAbility("Extract", players[i].PlayerInput + "Secondary", "X");
+			Extract newExtract = players[i].CreateAbility<Extract>(players[i].PlayerInput + "Secondary", "X");
 
-			//Right Bumper
-			//Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "Right Bumper", "RB");
-			Bolt newBolt = (Bolt)players[i].CreateAbility("Bolt", players[i].PlayerInput + "RTrigger", "RTrig");
+			//Right Trigger
+			Bolt newBolt = players[i].CreateAbility<Bolt>(players[i].PlayerInput + "RTrigger", "RTrig");
 			newBolt.MaxCooldown = .07f;
 			newBolt.MaxAngle = 8;
 			newBolt.GeneralDamage = 1.5f;
 			newBolt.Cost = 3;
 			newBolt.Duration = .35f;
 
-			//Left Bumper
-			//Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "Left Bumper", "LB");
-			Skate newSkate = (Skate)players[i].CreateAbility("Skate", players[i].PlayerInput + "LTrigger", "LTrig");
+			//Left Trigger
+			Skate newSkate = players[i].CreateAbility<Skate>(players[i].PlayerInput + "LTrigger", "LTrig");
 			newSkate.Cost = 2f;
 			newSkate.Force = 32;
 			newSkate.MaxCooldown = .05f;
@@ -129,7 +127,7 @@ public class GameManager : Singleton<GameManager>
 			newSkate.GeneralDamage = 0f;
 
 			//Y
-			WaterShield shield = (WaterShield)players[i].CreateAbility("WaterShield", players[i].PlayerInput + "Special", "Y");
+			WaterShield shield = players[i].CreateAbility<WaterShield>(players[i].PlayerInput + "Special", "Y");
 			shield.MaxCooldown = 8f;
 			shield.Cost = 15;
 			shield.Duration = 4f;

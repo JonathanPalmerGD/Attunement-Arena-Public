@@ -135,7 +135,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 	public void ApplyExternalForce(Vector3 force, bool friendly = false)
 	{
 		//Debug.Log("Hit\n" + Owner.name + "\t" + force);
-		if (!friendly && Owner.buffState == Player.PlayerBuff.Shielded)
+		if (!friendly && Owner.curStatus == Player.PlayerStatus.Shielded)
 		{
 			//Debug.Log("Hit\n" + Owner.name + "\t" + force);
 
@@ -149,7 +149,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 	public void AddExternalForce(Vector3 force, ForceMode fMode = ForceMode.Force, bool friendly = false)
 	{
-		if (!friendly && Owner.buffState == Player.PlayerBuff.Shielded)
+		if (!friendly && Owner.curStatus == Player.PlayerStatus.Shielded)
 		{
 			//Negate the player's shielded state?
 			return;
@@ -173,7 +173,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 			//mRigidBody.drag = 50f;
 
-			float speedMult = Owner.buffState == Player.PlayerBuff.Chilled ? .5f : 1;
+			float speedMult = Owner.curStatus == Player.PlayerStatus.Chilled ? .5f : 1;
 
 			desiredMove.x = desiredMove.x * movementSettings.CurrentTargetSpeed * speedMult;
 			desiredMove.z = desiredMove.z * movementSettings.CurrentTargetSpeed * speedMult;

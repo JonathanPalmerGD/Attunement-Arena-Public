@@ -2602,7 +2602,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+33% Bolt Damage</color>
 
-    <color=red>-35 Maximum Health</color>'
+    <color=red>-20 Maximum Health</color>'
 --- !u!222 &278595332
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3016,7 +3016,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+33% Bolt Damage</color>
 
-    <color=red>-35 Maximum Health</color>'
+    <color=red>-20 Maximum Health</color>'
 --- !u!222 &337013848
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4416,7 +4416,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+33% Bolt Damage</color>
 
-    <color=red>-35 Maximum Health</color>'
+    <color=red>-20 Maximum Health</color>'
 --- !u!222 &487717207
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5090,7 +5090,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ready: 0
   pNum: 1
-  ctrlType: 1
+  ctrlType: 0
   ReadyButton: Jump
   UnreadyButton: Primary
   DisableOnNext:
@@ -6466,9 +6466,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+50 Max Mana
 
-    +20% Wider Bolt</color>
+    +75% Wider Bolt</color>
 
-    <color=red>-33% Bolt Damage</color>'
+    <color=red>-50% Bolt Damage</color>'
 --- !u!222 &629770682
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7624,7 +7624,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+33% Bolt Damage</color>
 
-    <color=red>-35 Maximum Health</color>'
+    <color=red>-20 Maximum Health</color>'
 --- !u!222 &754259451
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8212,9 +8212,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+50 Max Mana
 
-    +20% Wider Bolt</color>
+    +75% Wider Bolt</color>
 
-    <color=red>-33% Bolt Damage</color>'
+    <color=red>-50% Bolt Damage</color>'
 --- !u!222 &787620009
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8819,9 +8819,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+50 Max Mana
 
-    +20% Wider Bolt</color>
+    +75% Wider Bolt</color>
 
-    <color=red>-33% Bolt Damage</color>'
+    <color=red>-50% Bolt Damage</color>'
 --- !u!222 &864499909
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9036,7 +9036,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+33% Bolt Damage</color>
 
-    <color=red>-35 Maximum Health</color>'
+    <color=red>-20 Maximum Health</color>'
 --- !u!222 &932508743
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10766,9 +10766,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+50 Max Mana
 
-    +20% Wider Bolt</color>
+    +75% Wider Bolt</color>
 
-    <color=red>-33% Bolt Damage</color>'
+    <color=red>-50% Bolt Damage</color>'
 --- !u!222 &1124941957
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11165,7 +11165,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+33% Bolt Damage</color>
 
-    <color=red>-35 Maximum Health</color>'
+    <color=red>-20 Maximum Health</color>'
 --- !u!222 &1159697551
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11493,7 +11493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pNum: 1
-  ctrlType: 1
+  ctrlType: 0
   SelectedRitualCount: 0
   SelectedRituals: 0
   HorizAxis: Horizontal
@@ -12301,9 +12301,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+50 Max Mana
 
-    +20% Wider Bolt</color>
+    +75% Wider Bolt</color>
 
-    <color=red>-33% Bolt Damage</color>'
+    <color=red>-50% Bolt Damage</color>'
 --- !u!222 &1296659937
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13405,7 +13405,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+33% Bolt Damage</color>
 
-    <color=red>-35 Maximum Health</color>'
+    <color=red>-20 Maximum Health</color>'
 --- !u!222 &1387851113
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -16033,7 +16033,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+33% Bolt Damage</color>
 
-    <color=red>-35 Maximum Health</color>'
+    <color=red>-20 Maximum Health</color>'
 --- !u!222 &1703478127
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17252,9 +17252,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+50 Max Mana
 
-    +20% Wider Bolt</color>
+    +75% Wider Bolt</color>
 
-    <color=red>-33% Bolt Damage</color>'
+    <color=red>-50% Bolt Damage</color>'
 --- !u!222 &1825833283
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18471,9 +18471,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+50 Max Mana
 
-    +20% Wider Bolt</color>
+    +75% Wider Bolt</color>
 
-    <color=red>-33% Bolt Damage</color>'
+    <color=red>-50% Bolt Damage</color>'
 --- !u!222 &1939589078
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18767,9 +18767,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+50 Max Mana
 
-    +20% Wider Bolt</color>
+    +75% Wider Bolt</color>
 
-    <color=red>-33% Bolt Damage</color>'
+    <color=red>-50% Bolt Damage</color>'
 --- !u!222 &1952897088
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20283,9 +20283,9 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+50 Max Mana
 
-    +20% Wider Bolt</color>
+    +75% Wider Bolt</color>
 
-    <color=red>-33% Bolt Damage</color>'
+    <color=red>-50% Bolt Damage</color>'
 --- !u!222 &2042844287
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20651,7 +20651,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '<color=green>+33% Bolt Damage</color>
 
-    <color=red>-35 Maximum Health</color>'
+    <color=red>-20 Maximum Health</color>'
 --- !u!222 &2074046354
 CanvasRenderer:
   m_ObjectHideFlags: 0
