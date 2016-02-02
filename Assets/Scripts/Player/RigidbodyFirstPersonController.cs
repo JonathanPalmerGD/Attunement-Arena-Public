@@ -132,7 +132,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		accRBForces += force;
 	}
 
-	public void ApplyExternalForce(Vector3 force, bool friendly = false)
+	public void ApplyExternalForce(Vector3 force, bool removeGrounded = true, bool friendly = false)
 	{
 		//Debug.Log("Hit\n" + Owner.name + "\t" + force);
 		if (!friendly && Owner.curStatus == Player.PlayerStatus.Shielded)
@@ -141,6 +141,11 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 			//Negate the player's shielded state?
 			return;
+		}
+
+		if (removeGrounded)
+		{
+			Jumping = true;
 		}
 
 		//Debug.Log("Hit\n" + Owner.name + "\n" + accRBForces + " " + force);
@@ -192,6 +197,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 			if (mJump)
 			{
+				Debug.Log("hit\n");
 				mRigidBody.drag = 0f;
 				mRigidBody.velocity = new Vector3(mRigidBody.velocity.x, 0f, mRigidBody.velocity.z);
 				mRigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);

@@ -17,7 +17,10 @@ public class Gust : Ability
 	{
 		get { return 4; }
 	}
-
+	public override int AlternateIconID
+	{
+		get { return 14; }
+	}
 	public override float GeneralDamage
 	{
 		get
@@ -27,7 +30,7 @@ public class Gust : Ability
 	}
 	public float RecoilForce = 140;
 	public float JumpForce = 140;
-	public float Force = 50;
+	public float Force = 175;
 	public float Range = 10;
 	public float MaxAngle = 15;
 	public bool wasGrounded = false;
@@ -104,7 +107,8 @@ public class Gust : Ability
 				{
 					if (p.Grounded)
 					{
-						p.controller.ApplyExternalForce((new Vector3(castDir.x, 0, castDir.z) + Vector3.up * 3) * Force);
+						Vector3 knockbackVector = new Vector3(castDir.x, 0, castDir.z) + Vector3.up;
+						p.controller.ApplyExternalForce(knockbackVector.normalized * Force);
 					}
 					else
 					{
@@ -124,7 +128,7 @@ public class Gust : Ability
 		if (Vector3.Angle(castDir, Vector3.down) < 15)
 		{
 			Owner.controller.mRigidBody.velocity = new Vector3(oldVel.x, 0, oldVel.z);
-			Owner.controller.ApplyExternalForce(castDir * JumpForce * -1, true);
+			Owner.controller.ApplyExternalForce(castDir * JumpForce * -1, true, true);
 			if (Owner.Grounded)
 			{
 				wasGrounded = false;
@@ -136,7 +140,7 @@ public class Gust : Ability
 			if (!Owner.Grounded)
 			{
 				Owner.controller.mRigidBody.velocity = new Vector3(0, 0, 0);
-				Owner.controller.ApplyExternalForce(castDir * RecoilForce * -1);
+				Owner.controller.ApplyExternalForce(castDir * RecoilForce * -1, false, true);
 			}
 		}
 		

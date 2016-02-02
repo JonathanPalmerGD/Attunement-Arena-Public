@@ -130,6 +130,7 @@ public class GameManager : Singleton<GameManager>
 			WaterShield shield = players[i].CreateAbility<WaterShield>(players[i].PlayerInput + "Special", "Y");
 			shield.MaxCooldown = 8f;
 			shield.Cost = 15;
+			newSkate.GeneralDamage = 10f;
 			shield.Duration = 4f;
 		}
 	}

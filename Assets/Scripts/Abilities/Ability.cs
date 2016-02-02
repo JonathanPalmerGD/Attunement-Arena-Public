@@ -20,6 +20,17 @@ public class Ability : ScriptableObject
 	{
 		get { return 0; }
 	}
+	public virtual int AlternateIconID
+	{
+		get { return 0; }
+	}
+	public int SetDisplayIcon
+	{
+		set
+		{
+			abilDispUI.Icon.sprite = UIManager.Icons[value];
+		}
+	}
 
 	public virtual bool UseCharges
 	{
