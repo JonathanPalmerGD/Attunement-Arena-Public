@@ -341,7 +341,15 @@ public class Player : MonoBehaviour
 
 			if (shield)
 			{
-				amount = amount * shield.damageReduction;
+				//How much damage was prevented
+				float damagePrevented = amount * shield.damageReduction;
+
+				//How much gets through
+				amount = amount * (1-shield.damageReduction);
+
+				//Reduce shield duration.
+				// The percentage lost is the amount of base duration lost.
+				curStatusDur -= (damagePrevented / MaxHealth) * shield.Duration;
 			}
 		}
 

@@ -93,7 +93,8 @@ public class Skate : Ability
 			//Owner.SendMessage("ApplyExternalForce", inputVector * Force);
 		}
 
-		Owner.controller.AddExternalForce(forwardForce * Force, ForceMode.Impulse, true);
+		Owner.controller.ApplyExternalForce(forwardForce * Force, true, true);
+		//Owner.controller.AddExternalForce(forwardForce * Force, ForceMode.Impulse, true);
 		//Owner.SendMessage("ApplyExternalForce", Vector3.up * Force);
 		
 		GameObject.Destroy(newPlatform, Duration);

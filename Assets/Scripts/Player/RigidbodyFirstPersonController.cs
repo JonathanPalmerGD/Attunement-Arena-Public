@@ -123,7 +123,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 	private void Update()
 	{
-		if(!Owner.playerDead)
+		if (!Owner.playerDead)
 			RotateView();
 	}
 
@@ -137,10 +137,26 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		//Debug.Log("Hit\n" + Owner.name + "\t" + force);
 		if (!friendly && Owner.curStatus == Player.PlayerStatus.Shielded)
 		{
-			//Debug.Log("Hit\n" + Owner.name + "\t" + force);
+			float magnitude = force.magnitude;
+			WaterShield shield = Owner.GetAbility<WaterShield>();
 
-			//Negate the player's shielded state?
-			return;
+			if (shield)
+			{
+				//How much damage was prevented
+				float knockbackPrevented = magnitude * shield.KnockbackReduction;
+
+				//How much gets through
+				force = force.normalized * magnitude * (1 - shield.KnockbackReduction);
+
+				//Debug.Log("Applying reduced external force."
+				//+ "\nBase Mag: " + magnitude
+				//+ "\tKnock prevented: " + (magnitude * shield.KnockbackReduction)
+				//+ "\nShield Dur Red: " + (knockbackPrevented / 750) * shield.Duration
+				//+ "\tNew Knockback force: " + force.magnitude);
+
+				//Reduce shield duration.
+				Owner.curStatusDur -= (knockbackPrevented / 750) * shield.Duration;
+			}
 		}
 
 		if (removeGrounded)
@@ -150,17 +166,6 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 		//Debug.Log("Hit\n" + Owner.name + "\n" + accRBForces + " " + force);
 		accRBForces += force;
-	}
-
-	public void AddExternalForce(Vector3 force, ForceMode fMode = ForceMode.Force, bool friendly = false)
-	{
-		if (!friendly && Owner.curStatus == Player.PlayerStatus.Shielded)
-		{
-			//Negate the player's shielded state?
-			return;
-		}
-
-		mRigidBody.AddForce(force, fMode);
 	}
 
 	private void FixedUpdate()
@@ -173,7 +178,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		{
 			//Debug.Log("Moving\n");
 			// always move along the camera forward as it is the direction that it being aimed at
-			Vector3 desiredMove =	cam.transform.forward * input.y + cam.transform.right * input.x;
+			Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
 			desiredMove = Vector3.ProjectOnPlane(desiredMove, mGroundContactNormal).normalized;
 
 			//mRigidBody.drag = 50f;
@@ -197,7 +202,6 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 			if (mJump)
 			{
-				Debug.Log("hit\n");
 				mRigidBody.drag = 0f;
 				mRigidBody.velocity = new Vector3(mRigidBody.velocity.x, 0f, mRigidBody.velocity.z);
 				mRigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
@@ -226,13 +230,11 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		}
 	}
 
-
 	private float SlopeMultiplier()
 	{
 		float angle = Vector3.Angle(mGroundContactNormal, Vector3.up);
 		return movementSettings.SlopeCurveModifier.Evaluate(angle);
 	}
-
 
 	private void StickToGroundHelper()
 	{
