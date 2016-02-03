@@ -12,19 +12,14 @@ public class AirCurrent : MonoBehaviour
 	public float maxDist = 5;
 	public float pushSpeed = 25;
 
-	void Start()
+	void Update()
 	{
 		A = transform.position;
+		
 		if (targetPos != null)
 		{
 			B = targetPos.transform.position;
-		}
-	}
-
-	void Update()
-	{
-		if (targetPos != null)
-		{
+		
 			D = Vector3.zero;
 			foreach (Player player in GameManager.Instance.players)
 			{
@@ -112,11 +107,8 @@ public class AirCurrent : MonoBehaviour
 				//Debug.DrawLine(B, D, Color.green);
 				//Debug.DrawLine(C, D, Color.yellow);
 
-
-
 			}
 		}
-
 
 		//If a player is within me
 		//Push them towards the target
@@ -126,7 +118,11 @@ public class AirCurrent : MonoBehaviour
 	{
 		Gizmos.color = Color.green;
 		Gizmos.DrawSphere(transform.position, maxDist / 2);
-		Gizmos.color = Color.yellow;
-		Gizmos.DrawLine(A, B);
+
+			if (targetPos != null) 
+		{
+			Gizmos.color = Color.yellow;
+			Gizmos.DrawLine(A, B);
+		}
 	}
 }

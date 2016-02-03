@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
 	public bool initialized;
 
 	public int playerID = 0;
+	//TODO: Turn this into flags - some way to make it work in inspector
+	//Look at EnumFlagsAttributeDrawer.cs in Editor
+	//[System.Flags]
 	public enum PlayerStatus { Burning, Shielded, Chilled, None }
 	public PlayerStatus curStatus = PlayerStatus.None;
 	public float curStatusDur;

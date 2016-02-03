@@ -19,6 +19,17 @@ public abstract class Ritual
 		get;
 	}
 
+	//This will be the description (with color tags) for the main menu
+	//public abstract string Description
+	//{
+	//	get;
+	//}
+
+	//public abstract int DisplayIconID
+	//{
+	//	get;
+	//}
+
 	public abstract void ApplyToPlayer(Player plyr);
 
 	public static Ritual[] GetRitualsForIDs(RitualID rID)

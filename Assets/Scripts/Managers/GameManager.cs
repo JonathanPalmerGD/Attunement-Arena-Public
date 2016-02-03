@@ -27,7 +27,7 @@ public class GameManager : Singleton<GameManager>
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
 
-		int playerCount = 1;
+		int playerCount = 2;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
