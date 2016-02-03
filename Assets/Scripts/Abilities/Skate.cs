@@ -65,7 +65,6 @@ public class Skate : Ability
 		float yDiff = inputVector.normalized.y;
 		newPlatform.transform.position = Owner.transform.position - (inputVector * .4f) - (Vector3.up * yDiff);
 
-
 		Vector3 lookAtPos = new Vector3((Owner.transform.position + inputVector).x, newPlatform.transform.position.y, (Owner.transform.position + inputVector).z);
 		newPlatform.transform.LookAt(lookAtPos);
 

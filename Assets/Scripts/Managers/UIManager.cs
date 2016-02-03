@@ -77,8 +77,8 @@ public class UIManager : Singleton<UIManager>
 
 	private void LookupPrefabs()
 	{
-		gameUIPrefab = Resources.Load<GameObject>("In-Game UI - Canvas");
-		playerUIPrefab = Resources.Load<GameObject>("Player UI");
+		gameUIPrefab = Resources.Load<GameObject>("UI/In-Game UI - Canvas");
+		playerUIPrefab = Resources.Load<GameObject>("UI/Player UI");
 
 		Icons = Resources.LoadAll<Sprite>("Icons");
 	}

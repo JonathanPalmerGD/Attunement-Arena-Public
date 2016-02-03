@@ -27,7 +27,7 @@ public class GameManager : Singleton<GameManager>
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
 
-		int playerCount = 2;
+		int playerCount = 1;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
@@ -130,7 +130,7 @@ public class GameManager : Singleton<GameManager>
 			WaterShield shield = players[i].CreateAbility<WaterShield>(players[i].PlayerInput + "Special", "Y");
 			shield.MaxCooldown = 8f;
 			shield.Cost = 15;
-			newSkate.GeneralDamage = 10f;
+			shield.GeneralDamage = 15f;
 			shield.Duration = 4f;
 		}
 	}

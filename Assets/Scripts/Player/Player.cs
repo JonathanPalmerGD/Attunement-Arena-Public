@@ -333,6 +333,7 @@ public class Player : MonoBehaviour
 	/// <param name="amount">Positive for healing, negative for damage</param>
 	public void AdjustHealth(float amount, bool causeFlicker = true)
 	{
+		//Debug.Log(amount + "\n");
 		if (playerDead) { return; }
 
 		if (curStatus == PlayerStatus.Shielded)

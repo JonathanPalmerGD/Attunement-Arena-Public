@@ -7,6 +7,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 {
 	public Player Owner;
 	public float airDrag = 2;
+	public float inputAmt = 0;
 
 	[Serializable]
 	public class MovementSettings
@@ -250,7 +251,6 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		}
 	}
 
-
 	private Vector2 GetInput()
 	{
 		Vector2 input = new Vector2
@@ -259,9 +259,10 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 				y = Input.GetAxis(Owner.PlayerInput + "Vertical")
 			};
 		movementSettings.UpdateDesiredTargetSpeed(input);
+
+		inputAmt = input.magnitude;
 		return input;
 	}
-
 
 	private void RotateView()
 	{
@@ -280,7 +281,6 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			mRigidBody.velocity = velRotation * mRigidBody.velocity;
 		}
 	}
-
 
 	/// sphere cast down just beyond the bottom of the capsule to see if the capsule is colliding round the bottom
 	private void GroundCheck()
