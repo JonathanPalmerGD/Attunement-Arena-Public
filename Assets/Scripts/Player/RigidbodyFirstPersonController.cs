@@ -82,14 +82,12 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 	public MouseLook mouseLook = new MouseLook();
 	public AdvancedSettings advancedSettings = new AdvancedSettings();
 
-
 	public Rigidbody mRigidBody;
 	private Vector3 accRBForces;
 	private CapsuleCollider mCapsule;
 	private float mYRotation;
 	private Vector3 mGroundContactNormal;
 	private bool mJump, mPreviouslyGrounded, mJumping, mIsGrounded;
-
 
 	public Vector3 Velocity
 	{

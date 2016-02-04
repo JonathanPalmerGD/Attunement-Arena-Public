@@ -17,37 +17,75 @@ public class AirCurrent : MonoBehaviour
 	Vector3 AB;
 	#endregion
 
-	public ParticleSystem startPos, endPos;
-	void Update()
+	public ParticleSystem startZone, endZone;
+
+	void Start()
 	{
+		airCurrentComponents = new List<ParticleSystem>();
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			airCurrentComponents.Add(transform.GetChild(i).GetComponent<ParticleSystem>());
+		}
+		
 		for (int i = 0; i < airCurrentComponents.Count; i++)
 		{
-			startPos = airCurrentComponents[i];
+			startZone = airCurrentComponents[i];
 			if (i == 0)
 			{
-				endPos = airCurrentComponents[airCurrentComponents.Count - 1];
+				endZone = airCurrentComponents[airCurrentComponents.Count - 1];
 			}
 			else
 			{
-				endPos = airCurrentComponents[i - 1];
+				endZone = airCurrentComponents[i - 1];
 			}
 
-			if (startPos && endPos)
+			if (startZone && endZone)
 			{
-				CheckCurrentSegment(startPos, endPos);
+				ConfigureVisualEffect(startZone, endZone);
 			}
 		}
 	}
 
-	public void ConfigureVisualEffect(ParticleSystem startPos, ParticleSystem endPos)
+	void Update()
 	{
-		//if(startPos
+		for (int i = 0; i < airCurrentComponents.Count; i++)
+		{
+			startZone = airCurrentComponents[i];
+			if (i == 0)
+			{
+				endZone = airCurrentComponents[airCurrentComponents.Count - 1];
+			}
+			else
+			{
+				endZone = airCurrentComponents[i - 1];
+			}
+
+			if (startZone && endZone)
+			{
+				CheckCurrentSegment(startZone, endZone);
+			}
+		}
 	}
 
-	public void CheckCurrentSegment(ParticleSystem startPos, ParticleSystem endPos)
+	public void ConfigureVisualEffect(ParticleSystem startZone, ParticleSystem endZone)
 	{
-		A = startPos.transform.position;
-		B = endPos.transform.position;
+		Vector3 startPos = startZone.transform.position;
+		Vector3 endPos = endZone.transform.position;
+
+		float particleVel = pushSpeed / 3;
+		float dist = Vector3.Distance(startPos, endPos);
+		float lifeTime = dist / particleVel;
+
+		startZone.startLifetime = lifeTime * 1.05f;
+		startZone.startSpeed = particleVel;
+		startZone.emissionRate = 100/ lifeTime;
+		startZone.transform.LookAt(endPos);
+	}
+
+	public void CheckCurrentSegment(ParticleSystem startZone, ParticleSystem endZone)
+	{
+		A = startZone.transform.position;
+		B = endZone.transform.position;
 
 		D = Vector3.zero;
 		foreach (Player player in GameManager.Instance.players)
