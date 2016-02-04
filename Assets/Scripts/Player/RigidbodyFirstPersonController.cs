@@ -8,7 +8,13 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 	public Player Owner;
 	public float airDrag = 2;
 	public float inputAmt = 0;
+	public float forceAmt = 0;
+	//The decay time for sleeping constant forces (like air currents)
+	private float sleepCounterStart = .2f;
+	private float sleepCounter = 0;
+	private bool SleepConstantForce = false;
 
+	#region Movement & Advanced Settings
 	[Serializable]
 	public class MovementSettings
 	{
@@ -61,7 +67,6 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 #endif
 	}
 
-
 	[Serializable]
 	public class AdvancedSettings
 	{
@@ -70,7 +75,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		public float slowDownRate = 20f; // rate at which the controller comes to a stop when there is no input
 		public bool airControl; // can the user control the direction that is being moved in the air
 	}
-
+	#endregion
 
 	public Camera cam;
 	public MovementSettings movementSettings = new MovementSettings();
@@ -133,7 +138,22 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		accRBForces += force;
 	}
 
-	public void ApplyExternalForce(Vector3 force, bool removeGrounded = true, bool friendly = false)
+	/// <summary>
+	/// This function cares if the controller is currently sleeping external forces.
+	/// Basically if the player is in a air current but gets hit with an explosive force, we can sleep the application of that effect.
+	/// </summary>
+	/// <param name="force"></param>
+	/// <param name="removeGrounded"></param>
+	/// <param name="friendly"></param>
+	public void ApplyConstantForce(Vector3 force, bool removeGrounded = true, bool friendly = false)
+	{
+		if (!SleepConstantForce)
+		{
+			ApplyExternalForce(force, removeGrounded, friendly, false);
+		}
+	}
+
+	public void ApplyExternalForce(Vector3 force, bool removeGrounded = true, bool friendly = false, bool tracked = true)
 	{
 		//Debug.Log("Hit\n" + Owner.name + "\t" + force);
 		if (!friendly && Owner.curStatus == Player.PlayerStatus.Shielded)
@@ -165,8 +185,48 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			Jumping = true;
 		}
 
+		if (tracked)
+		{
+			//Debug.Log("Adding new tracked force: " + force.magnitude +"\n");
+			forceAmt += force.magnitude;
+		}
+
 		//Debug.Log("Hit\n" + Owner.name + "\n" + accRBForces + " " + force);
 		accRBForces += force;
+	}
+
+	private void DecayExternalForceTracking()
+	{
+		if (SleepConstantForce)
+		{
+			//Debug.Log("Decay:" + SleepConstantForce + "\nForce Amount: " + forceAmt + "\nTimer: " + sleepCounter);
+			sleepCounter -= Time.deltaTime;
+			if (sleepCounter < 0)
+			{
+				sleepCounter = 0;
+				SleepConstantForce = false;
+
+				forceAmt = 0;
+				//Debug.Log("Sleep Reset: " + forceAmt + "\n");
+			}
+		}
+
+		if (forceAmt > 50)
+		{
+			//Debug.Log("Sleep Start: " + forceAmt + "\n");
+			SleepConstantForce = true;
+			sleepCounter = sleepCounterStart;
+		}
+
+		if (forceAmt > 1)
+		{
+			//Debug.Log("Decaying: " + forceAmt + "\n");
+			forceAmt *= .8f;
+		}
+		else
+		{
+			forceAmt = 0;
+		}
 	}
 
 	private void FixedUpdate()
@@ -229,6 +289,8 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			mRigidBody.AddForce(accRBForces, ForceMode.Impulse);
 			accRBForces = Vector3.zero;
 		}
+
+		DecayExternalForceTracking();
 	}
 
 	private float SlopeMultiplier()
