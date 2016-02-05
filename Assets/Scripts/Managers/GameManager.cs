@@ -210,8 +210,8 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
-	public void DoNothing()
+	public void SetRandomArena(bool randArena = true)
 	{
-
+		spawnRandomArena = randArena;
 	}
 }

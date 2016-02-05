@@ -3,12 +3,13 @@ using System.Collections;
 
 public class SetupSingletons : MonoBehaviour
 {
+	public bool randomArena = false;
 	void Awake ()
 	{
 		GameCanvas.Instance.DoNothing();
 		AudioManager.Instance.DoNothing();
 		UIManager.Instance.DoNothing();
-		GameManager.Instance.DoNothing();
+		GameManager.Instance.SetRandomArena(randomArena);
 		
 	}
 

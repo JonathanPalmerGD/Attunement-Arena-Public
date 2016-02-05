@@ -66,11 +66,13 @@ public class AirCurrent : MonoBehaviour
 		}
 	}
 
-	public void ReverseAirCurrent()
+	public void ReverseAirCurrent(bool resetParticles = false)
 	{
 		airCurrentComponents.Reverse();
-
-		SetParticleEffect();
+		if (resetParticles)
+		{
+			SetParticleEffect();
+		}
 	}
 
 	public void SetParticleEffect()
@@ -78,6 +80,8 @@ public class AirCurrent : MonoBehaviour
 		for (int i = 0; i < airCurrentComponents.Count; i++)
 		{
 			startZone = airCurrentComponents[i];
+
+			startZone.enableEmission = true;
 
 			if (i == airCurrentComponents.Count - 1)
 			{
@@ -87,12 +91,16 @@ public class AirCurrent : MonoBehaviour
 				}
 				else
 				{
-					endZone.enableEmission = false;
+					startZone.enableEmission = false;
 				}
 			}
 			else
 			{
 				endZone = airCurrentComponents[i + 1];
+			}
+
+			if (startZone && endZone)
+			{
 				SetIndividualVisualEffect(startZone, endZone);
 			}
 		}
