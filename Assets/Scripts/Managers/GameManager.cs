@@ -17,11 +17,15 @@ public class GameManager : Singleton<GameManager>
 	public Player[] players;
 	public AudioSource music;
 
+	public GameObject[] ArenaPrefabs;
+	public GameObject arena;
+
 	public List<PlayerSpawn> SpawnPoints;
 
 	void Awake()
 	{
 		LookupPrefabs();
+		SpawnRandomArena();
 
 		SpawnPoints = new List<PlayerSpawn>();
 
@@ -81,6 +85,16 @@ public class GameManager : Singleton<GameManager>
 	private void LookupPrefabs()
 	{
 		playerPrefab = Resources.Load<GameObject>("Player Prefab");
+
+		ArenaPrefabs = Resources.LoadAll<GameObject>("Arenas");
+	}
+	private void SpawnRandomArena()
+	{
+		int arenaNum = Random.Range(0, ArenaPrefabs.Length);
+		arena = GameObject.Instantiate<GameObject>(ArenaPrefabs[arenaNum]);
+
+		arena.name = "Arena [" + arenaNum + "]";
+		arena.transform.position = Vector3.zero;
 	}
 
 	public void AddPlayer(int newID)
