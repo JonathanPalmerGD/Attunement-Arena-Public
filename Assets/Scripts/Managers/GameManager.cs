@@ -19,13 +19,17 @@ public class GameManager : Singleton<GameManager>
 
 	public GameObject[] ArenaPrefabs;
 	public GameObject arena;
+	private bool spawnRandomArena = false;
 
 	public List<PlayerSpawn> SpawnPoints;
 
 	void Awake()
 	{
 		LookupPrefabs();
-		SpawnRandomArena();
+		if (spawnRandomArena)
+		{
+			SpawnRandomArena();
+		}
 
 		SpawnPoints = new List<PlayerSpawn>();
 

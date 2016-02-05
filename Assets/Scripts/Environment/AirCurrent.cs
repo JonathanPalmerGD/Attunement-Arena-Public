@@ -8,6 +8,8 @@ public class AirCurrent : MonoBehaviour
 	public List<ParticleSystem> airCurrentComponents;
 	public float maxDist = 5;
 	public float pushSpeed = 150;
+	public bool loopCurrent = true;
+	public bool reverseDirection = false;
 
 	#region Vector Math Values
 	Vector3 A;
@@ -26,24 +28,13 @@ public class AirCurrent : MonoBehaviour
 		{
 			airCurrentComponents.Add(transform.GetChild(i).GetComponent<ParticleSystem>());
 		}
-		
-		for (int i = 0; i < airCurrentComponents.Count; i++)
-		{
-			startZone = airCurrentComponents[i];
-			if (i == 0)
-			{
-				endZone = airCurrentComponents[airCurrentComponents.Count - 1];
-			}
-			else
-			{
-				endZone = airCurrentComponents[i - 1];
-			}
 
-			if (startZone && endZone)
-			{
-				ConfigureVisualEffect(startZone, endZone);
-			}
+		if (reverseDirection)
+		{
+			ReverseAirCurrent();
 		}
+
+		SetParticleEffect();
 	}
 
 	void Update()
@@ -51,13 +42,16 @@ public class AirCurrent : MonoBehaviour
 		for (int i = 0; i < airCurrentComponents.Count; i++)
 		{
 			startZone = airCurrentComponents[i];
-			if (i == 0)
+			if (i == airCurrentComponents.Count - 1)
 			{
-				endZone = airCurrentComponents[airCurrentComponents.Count - 1];
+				if (loopCurrent)
+				{
+					endZone = airCurrentComponents[0];
+				}
 			}
 			else
 			{
-				endZone = airCurrentComponents[i - 1];
+				endZone = airCurrentComponents[i + 1];
 			}
 
 			if (startZone && endZone)
@@ -65,12 +59,52 @@ public class AirCurrent : MonoBehaviour
 				CheckCurrentSegment(startZone, endZone);
 			}
 		}
+
+		if (Input.GetKeyDown(KeyCode.G))
+		{
+			ReverseAirCurrent();
+		}
 	}
 
-	public void ConfigureVisualEffect(ParticleSystem startZone, ParticleSystem endZone)
+	public void ReverseAirCurrent()
+	{
+		airCurrentComponents.Reverse();
+
+		SetParticleEffect();
+	}
+
+	public void SetParticleEffect()
+	{
+		for (int i = 0; i < airCurrentComponents.Count; i++)
+		{
+			startZone = airCurrentComponents[i];
+
+			if (i == airCurrentComponents.Count - 1)
+			{
+				if (loopCurrent)
+				{
+					endZone = airCurrentComponents[0];
+				}
+				else
+				{
+					endZone.enableEmission = false;
+				}
+			}
+			else
+			{
+				endZone = airCurrentComponents[i + 1];
+				SetIndividualVisualEffect(startZone, endZone);
+			}
+		}
+	}
+
+	public void SetIndividualVisualEffect(ParticleSystem startZone, ParticleSystem endZone)
 	{
 		Vector3 startPos = startZone.transform.position;
 		Vector3 endPos = endZone.transform.position;
+
+		startZone.enableEmission = true;
+		endZone.enableEmission = true;
 
 		float particleVel = pushSpeed / 3;
 		float dist = Vector3.Distance(startPos, endPos);
@@ -78,7 +112,7 @@ public class AirCurrent : MonoBehaviour
 
 		startZone.startLifetime = lifeTime * 1.05f;
 		startZone.startSpeed = particleVel;
-		startZone.emissionRate = 100/ lifeTime;
+		startZone.emissionRate = 100 / lifeTime;
 		startZone.transform.LookAt(endPos);
 	}
 
@@ -177,25 +211,32 @@ public class AirCurrent : MonoBehaviour
 		{
 			for (int i = 0; i < airCurrentComponents.Count; i++)
 			{
-				if (i == 0)
+				bool justGizmo = false;
+				if (i == airCurrentComponents.Count - 1)
 				{
-					DrawGizmoCurrent(airCurrentComponents[i].gameObject, airCurrentComponents[airCurrentComponents.Count - 1].gameObject);
+					DrawGizmoCurrent(airCurrentComponents[i].gameObject, airCurrentComponents[0].gameObject, justGizmo);
 				}
 				else
 				{
-					DrawGizmoCurrent(airCurrentComponents[i].gameObject, airCurrentComponents[i - 1].gameObject);
+					if (!loopCurrent)
+					{
+						justGizmo = true;
+					}
+					DrawGizmoCurrent(airCurrentComponents[i].gameObject, airCurrentComponents[i + 1].gameObject, justGizmo);
 				}
 
 			}
 		}
 	}
 
-	void DrawGizmoCurrent(GameObject startPos, GameObject endPos)
+	void DrawGizmoCurrent(GameObject startPos, GameObject endPos, bool justGizmo = false)
 	{
 		Gizmos.color = Color.green;
 		Gizmos.DrawSphere(startPos.transform.transform.position, maxDist / 2);
-
-		Gizmos.color = Color.yellow;
-		Gizmos.DrawLine(startPos.transform.position, endPos.transform.position);
+		if (justGizmo)
+		{
+			Gizmos.color = Color.yellow;
+			Gizmos.DrawLine(startPos.transform.position, endPos.transform.position);
+		}
 	}
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 class Bounds : MonoBehaviour
 {
 	public float Radius = 150f;
+	public float BoundFloor = -25;
+	public bool ConsiderFloor = true;
 
 	void Start()
 	{
@@ -17,16 +19,20 @@ class Bounds : MonoBehaviour
 		{
 			Player player = GameManager.Instance.players[i];
 			float dist = Vector3.Distance(player.transform.position, transform.position);
-			
-			if(player.transform.position.y < transform.position.y - 25)
-			{
-				Vector3 oldVel = player.controller.mRigidBody.velocity;
-				//Debug.Log(oldVel.y + "\n");
-				player.controller.mRigidBody.velocity = new Vector3(oldVel.x, 80, oldVel.z);
-				//Debug.Log(-2.25f * oldVel.y + "\n");
 
-				player.AdjustHealth(-15);
-				player.SetGustCharges(2);
+			if (ConsiderFloor)
+			{
+				if (player.transform.position.y < transform.position.y + BoundFloor)
+				{
+					Vector3 oldVel = player.controller.mRigidBody.velocity;
+					//Debug.Log(oldVel.y + "\n");
+					player.controller.mRigidBody.velocity = new Vector3(oldVel.x, 80, oldVel.z);
+					//Debug.Log(-2.25f * oldVel.y + "\n");
+
+					Debug.Log("Hit bounds\n" + player.transform.position + "\n" + (transform.position.y - BoundFloor));
+					player.AdjustHealth(-15);
+					player.SetGustCharges(2);
+				}
 			}
 
 			if (dist > Radius)
@@ -45,10 +51,12 @@ class Bounds : MonoBehaviour
 
 	void OnDrawGizmos()
 	{
-		Gizmos.color = new Color(0f, 0f, 0f, 0.25f);
 		//Gizmos.DrawSphere(transform.position, Radius);
 		Gizmos.color = Color.black;
 		Gizmos.DrawWireSphere(transform.position, Radius);
+		Gizmos.color = new Color(0f, 0f, 0f, 0.50f);
+		if (ConsiderFloor)
+			Gizmos.DrawCube(transform.position - Vector3.down * BoundFloor, new Vector3(Radius * 1.5f, 1, Radius * 1.5f));
 		Gizmos.color = Color.white;
 	}
 }
