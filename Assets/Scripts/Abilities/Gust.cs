@@ -262,7 +262,7 @@ public class Gust : Ability
 					player.controller.ApplyExternalForce((knockbackDir.normalized + Vector3.up) * Force * blastIntensityBasedOnDist);
 
 					//Adjust their health based on the blasts damage and how much of the blast.
-					player.AdjustHealth(-1 * blastIntensityBasedOnDist * GeneralDamage);
+					player.AdjustHealth(-1 * blastIntensityBasedOnDist * SpecialDamage);
 				}
 			}
 		}

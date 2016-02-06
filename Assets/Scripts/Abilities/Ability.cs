@@ -84,9 +84,11 @@ public class Ability : ScriptableObject
 		get { return generalDamage; }
 		set { generalDamage = value; }
 	}
+	protected float specialDamage = 0;
 	public virtual float SpecialDamage
 	{
-		get { return 0f; }
+		get { return generalDamage; }
+		set { generalDamage = value; }
 	}
 	public float Duration;
 

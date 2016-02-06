@@ -29,7 +29,7 @@ class Bounds : MonoBehaviour
 					player.controller.mRigidBody.velocity = new Vector3(oldVel.x, 80, oldVel.z);
 					//Debug.Log(-2.25f * oldVel.y + "\n");
 
-					Debug.Log("Hit bounds\n" + player.transform.position + "\n" + (transform.position.y - BoundFloor));
+					//Debug.Log("Hit bounds\n" + player.transform.position + "\n" + (transform.position.y - BoundFloor));
 					player.AdjustHealth(-15);
 					player.SetGustCharges(2);
 				}
