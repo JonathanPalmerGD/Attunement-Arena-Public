@@ -8,8 +8,9 @@ public class SetupSingletons : MonoBehaviour
 	{
 		GameCanvas.Instance.DoNothing();
 		AudioManager.Instance.DoNothing();
+		GameManager.spawnRandomArena = randomArena;
 		UIManager.Instance.DoNothing();
-		GameManager.Instance.SetRandomArena(randomArena);
+		GameManager.Instance.DoNothing();
 		
 	}
 

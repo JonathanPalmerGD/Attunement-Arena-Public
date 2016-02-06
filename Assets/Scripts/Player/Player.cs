@@ -154,6 +154,23 @@ public class Player : MonoBehaviour
 	public float ManaRegenRate = 100f;
 
 	#endregion
+
+	private float knockbackMultiplier;
+	public float KnockbackMultiplier
+	{
+		get { return knockbackMultiplier; }
+		set
+		{
+			if (value >= 0 && value <= 5)
+			{
+				knockbackMultiplier = value;
+			}
+			if (value < 0)
+			{
+				knockbackMultiplier = 0;
+			}
+		}
+	}
 	#endregion
 
 	#region Ability List and Dict

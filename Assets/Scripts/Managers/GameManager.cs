@@ -19,7 +19,7 @@ public class GameManager : Singleton<GameManager>
 
 	public GameObject[] ArenaPrefabs;
 	public GameObject arena;
-	private bool spawnRandomArena = false;
+	public static bool spawnRandomArena = false;
 
 	public List<PlayerSpawn> SpawnPoints;
 
@@ -123,7 +123,7 @@ public class GameManager : Singleton<GameManager>
 			newGust.MaxCooldown = .5f;
 			players[i].AddAbilityBinding(newGust, players[i].PlayerInput + "Jump");
 			newGust.MaxCharges = 5;
-			newGust.Charges = 5;
+			newGust.Charges = newGust.MaxCharges;
 			
 			//X Button
 			Extract newExtract = players[i].CreateAbility<Extract>(players[i].PlayerInput + "Secondary", "X");
@@ -170,7 +170,7 @@ public class GameManager : Singleton<GameManager>
 				{
 					//Debug.Log("Applying ritual " + rituals[k].GetType() + " to player " + players[i].playerID + "\n");
 					rituals[k].ApplyToPlayer(players[i]);
-					playerText.text += (string.IsNullOrEmpty(playerText.text) ? "" : "  ") + (rituals[k]).ToString();
+					playerText.text += (string.IsNullOrEmpty(playerText.text) ? "" : "  ") + (rituals[k].DisplayName);
 				}
 			}
 		}
@@ -208,10 +208,5 @@ public class GameManager : Singleton<GameManager>
 		{
 			PlayerPrefs.DeleteKey("PlayerCount");
 		}
-	}
-
-	public void SetRandomArena(bool randArena = true)
-	{
-		spawnRandomArena = randArena;
 	}
 }

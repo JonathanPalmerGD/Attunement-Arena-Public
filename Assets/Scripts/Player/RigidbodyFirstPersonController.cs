@@ -159,6 +159,8 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			float magnitude = force.magnitude;
 			WaterShield shield = Owner.GetAbility<WaterShield>();
 
+			Debug.Log("Base force: " + magnitude + "\nWith Multiplier: " + force.normalized * Owner.KnockbackMultiplier);
+
 			if (shield)
 			{
 				//How much damage was prevented
@@ -348,7 +350,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 		mPreviouslyGrounded = mIsGrounded;
 		RaycastHit hitInfo;
 		if (Physics.SphereCast(transform.position, mCapsule.radius, Vector3.down, out hitInfo,
-							   ((mCapsule.height / 2f) - mCapsule.radius) + advancedSettings.groundCheckDistance))
+							   (transform.localScale.y * (mCapsule.height / 2f) - mCapsule.radius) + advancedSettings.groundCheckDistance))
 		{
 			mIsGrounded = true;
 			mGroundContactNormal = hitInfo.normal;
