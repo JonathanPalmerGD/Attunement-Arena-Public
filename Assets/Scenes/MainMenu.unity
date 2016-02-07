@@ -2129,9 +2129,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '<color=green>Improved Elemental Extraction
+  m_Text: '<color=green>Airborne gusts dive downward
 
-    +25 Health</color>'
+    Reduced knockback
+
+    +20 Health</color>'
 --- !u!222 &204115214
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5090,7 +5092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ready: 0
   pNum: 1
-  ctrlType: 0
+  ctrlType: 1
   ReadyButton: Jump
   UnreadyButton: Primary
   DisableOnNext:
@@ -11493,7 +11495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pNum: 1
-  ctrlType: 0
+  ctrlType: 1
   SelectedRitualCount: 0
   SelectedRituals: 0
   HorizAxis: Horizontal
@@ -18619,9 +18621,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '<color=green>Improved Elemental Extraction
+  m_Text: '<color=green>Airborne gusts dive downward
 
-    +25 Health</color>'
+    Reduced knockback
+
+    +20 Health</color>'
 --- !u!222 &1946488184
 CanvasRenderer:
   m_ObjectHideFlags: 0

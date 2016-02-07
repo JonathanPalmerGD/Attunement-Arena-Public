@@ -168,19 +168,16 @@ public class HarnessElements : Ritual
 		plyr.transform.localScale = new UnityEngine.Vector3(plyr.transform.localScale.x + 1.2f, plyr.transform.localScale.y + 1.0f, plyr.transform.localScale.z + 1.2f);
 		plyr.Health += 20;
 		plyr.KnockbackMultiplier -= .2f;
-		
-		
-		
-		
-		
-		Extract extr = plyr.GetAbility<Extract>(false);
-		if (extr)
-		{
-			extr.Automated = true;
-			extr.AccretionSpeed += .5f;
-		}
 
-		plyr.Health += 25;
+
+		//Extract extr = plyr.GetAbility<Extract>(false);
+		//if (extr)
+		//{
+		//	extr.Automated = true;
+		//	extr.AccretionSpeed += .5f;
+		//}
+
+		//plyr.Health += 25;
 	}
 }
 
@@ -336,6 +333,7 @@ public class RiteOfQuartz : Ritual
 			gust.earthAligned = true;
 			gust.MaxCharges -= 2;
 			gust.JumpForce += 150;
+			gust.SpecialDamage += 10;
 		}
 
 		plyr.transform.localScale = new UnityEngine.Vector3(plyr.transform.localScale.x + 1.2f, plyr.transform.localScale.y + 1.0f, plyr.transform.localScale.z + 1.2f);

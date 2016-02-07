@@ -221,7 +221,6 @@ public class Gust : Ability
 		Owner.controller.ApplyExternalForce(castDir * GroundPoundForce, true, true);
 	}
 
-
 	public void OnGroundImpact()
 	{
 		groundPoundReady = false;

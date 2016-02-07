@@ -12,7 +12,8 @@ public class Bolt : Ability
 		{
 			if (Owner.ControlType == Player.PlayerControls.GamePad)
 			{
-				return KeyActivateCond.GetAxis;
+				return KeyActivateCond.KeyHold;
+				//return KeyActivateCond.GetAxis;
 			}
 			else
 			{

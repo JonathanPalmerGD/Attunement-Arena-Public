@@ -129,15 +129,16 @@ public class GameManager : Singleton<GameManager>
 			Extract newExtract = players[i].CreateAbility<Extract>(players[i].PlayerInput + "Secondary", "X");
 
 			//Right Trigger
-			Bolt newBolt = players[i].CreateAbility<Bolt>(players[i].PlayerInput + "RTrigger", "RTrig");
+			Bolt newBolt = players[i].CreateAbility<Bolt>(players[i].PlayerInput + "RBump", "RB");
 			newBolt.MaxCooldown = .07f;
 			newBolt.MaxAngle = 8;
 			newBolt.GeneralDamage = 1.5f;
 			newBolt.Cost = 3;
 			newBolt.Duration = .35f;
 
+
 			//Left Trigger
-			Skate newSkate = players[i].CreateAbility<Skate>(players[i].PlayerInput + "LTrigger", "LTrig");
+			Skate newSkate = players[i].CreateAbility<Skate>(players[i].PlayerInput + "LBump", "LB");
 			newSkate.Cost = 2f;
 			newSkate.Force = 32;
 			newSkate.MaxCooldown = .05f;
