@@ -35,7 +35,7 @@ public class GameManager : Singleton<GameManager>
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
 
-		int playerCount = 1;
+		int playerCount = 2;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
@@ -126,7 +126,9 @@ public class GameManager : Singleton<GameManager>
 			newGust.Charges = newGust.MaxCharges;
 			
 			//X Button
-			Extract newExtract = players[i].CreateAbility<Extract>(players[i].PlayerInput + "Secondary", "X");
+			//Extract newExtract = players[i].CreateAbility<Extract>(players[i].PlayerInput + "Secondary", "X");
+			Smash newSmash = players[i].CreateAbility<Smash>(players[i].PlayerInput + "Secondary", "X");
+			newSmash.Charges = newSmash.MaxCharges;
 
 			//Right Trigger
 			Bolt newBolt = players[i].CreateAbility<Bolt>(players[i].PlayerInput + "RBump", "RB");

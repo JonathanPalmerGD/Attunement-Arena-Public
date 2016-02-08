@@ -34,6 +34,7 @@ public class Gust : Ability
 	public float GroundPoundForce = 280;
 	public float Force = 175;
 	public float Range = 10;
+	public float PoundRange = 15;
 	public float MaxAngle = 15;
 	public bool wasGrounded = false;
 	public bool earthAligned = false;
@@ -41,8 +42,8 @@ public class Gust : Ability
 
 	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{
-		gustPrefab = Resources.Load<GameObject>("gustPrefab");
-		groundPoundPrefab = Resources.Load<GameObject>("groundPoundPrefab");
+		gustPrefab = Resources.Load<GameObject>("Effects/gustPrefab");
+		groundPoundPrefab = Resources.Load<GameObject>("Effects/groundPoundPrefab");
 
 		base.Init(newOwner, newKeyBinding, displayKeyBinding);
 	}
@@ -96,48 +97,31 @@ public class Gust : Ability
 
 		foreach (Player p in GameManager.Instance.players)
 		{
-			if (p == Owner) continue; // Don't influence self just yet
+			bool coneHit = CheckConeEffect(Owner.transform.position, castDir, p, Range, MaxAngle, false, true);
 
-			// Get vector from owner to other player
-			var tetherVector = p.transform.position - Owner.transform.position;
-
-			// If out of range, ignore
-			if (tetherVector.sqrMagnitude > Range * Range) continue;
-
-			// If the other player is not in the cone of influence, ignore
-			if (Vector3.Angle(castDir, tetherVector) > MaxAngle) continue;
-
-			//Debug.DrawRay(Owner.transform.position, p.transform.position - Owner.transform.position, Color.black, 5.0f);
-			RaycastHit hit;
-			if (Physics.Raycast(Owner.transform.position, p.transform.position - Owner.transform.position, out hit, Range))
+			if (coneHit)
 			{
-				//Debug.DrawRay(Owner.transform.position, p.transform.position - Owner.transform.position, Color.black, 5.0f);
-				//Debug.Log(hit.collider.gameObject.name + "\n" + Owner.name + "   " + hit.collider.gameObject.tag);
-				if (hit.collider.gameObject.tag == "Player" && hit.collider.name != Owner.name)
+				if (p.Grounded)
 				{
-					if (p.Grounded)
+					Vector3 knockbackVector = new Vector3(castDir.x, 0, castDir.z) + Vector3.up;
+					p.controller.ApplyExternalForce(knockbackVector.normalized * Force);
+				}
+				else
+				{
+					if (earthAligned)
 					{
-						Vector3 knockbackVector = new Vector3(castDir.x, 0, castDir.z) + Vector3.up;
-						p.controller.ApplyExternalForce(knockbackVector.normalized * Force);
+						GroundPound();
 					}
 					else
 					{
-						if (earthAligned)
-						{
-							GroundPound();
-						}
-						else
-						{
-							p.controller.ApplyExternalForce(castDir * Force);
-						}
+						p.controller.ApplyExternalForce(castDir * Force);
 					}
-
-					p.AdjustHealth(-GeneralDamage);
 				}
-			}
-			//Debug.DrawLine(Owner.transform.position, Owner.transform.position + tetherVector, Color.red, 5.0f);
-		}
 
+				p.AdjustHealth(-GeneralDamage);
+			}
+		}
+		
 		GustSelfResult(inputVector);
 	}
 
@@ -238,31 +222,17 @@ public class Gust : Ability
 			}
 			else
 			{
-				float dist = Vector3.Distance(Owner.transform.position, player.transform.position);
+				float blastIntensity = CheckBlastIntensity(Owner.transform.position, player, PoundRange, .5f, 1.0f, false, true);
 
-				//Debug.DrawRay(Owner.transform.position, p.transform.position - Owner.transform.position, Color.black, 5.0f);
-				RaycastHit hit;
-				if (Physics.Raycast(Owner.transform.position, player.transform.position - Owner.transform.position, out hit, Range))
-				{
-					//Find what percentage away the player is
-					float percentOfdist = (Range - dist) / Range;
+				//Find the direction they're knocked away
+				Vector3 knockbackDir = player.transform.position - Owner.transform.position;
 
-					//The players take a minimum of 25% effect from the blast.
-					float blastIntensityBasedOnDist = Mathf.Clamp(percentOfdist, .25f, 1);
+				//Knock them away based on the direction, force of the ability and how much of the blast they're affected by
+				player.controller.ApplyExternalForce((knockbackDir.normalized + Vector3.up) * Force * blastIntensity);
 
-					//Find the direction they're knocked away
-					Vector3 knockbackDir = player.transform.position - Owner.transform.position;
+				//Adjust their health based on the blasts damage and how much of the blast.
+				player.AdjustHealth(-1 * blastIntensity * SpecialDamage);
 
-					//Debug.Log(percentOfdist + "  " + blastIntensityBasedOnDist + " \n" + knockbackDir + "\n");
-
-					//Debug.DrawLine(Owner.transform.position, Owner.transform.position + Vector3.up * 100, Color.blue, 15f);
-
-					//Knock them away based on the direction, force of the ability and how much of the blast they're affected by
-					player.controller.ApplyExternalForce((knockbackDir.normalized + Vector3.up) * Force * blastIntensityBasedOnDist);
-
-					//Adjust their health based on the blasts damage and how much of the blast.
-					player.AdjustHealth(-1 * blastIntensityBasedOnDist * SpecialDamage);
-				}
 			}
 		}
 	}
