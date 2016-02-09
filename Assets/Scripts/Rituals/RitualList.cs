@@ -6,12 +6,13 @@ public enum RitualID
 {
 	Cyclone = 1,
 	AspectBlizzard = 2,
-	HarnessElements = 4,
+	EarthenHeart = 4,
+	//HarnessElements = 4,
 	LightningHelix = 8,
 	TrickleCharge = 16,
 	TideCeremony = 32,
 	RiteOfQuartz = 64,
-	EarthenHeart = 128
+	//EarthenHeart = 128
 }
 
 public abstract class Ritual
@@ -43,11 +44,12 @@ public abstract class Ritual
 
 		if ((rID & RitualID.Cyclone) > 0) rtn.Add(new Cyclone());
 		if ((rID & RitualID.AspectBlizzard) > 0) rtn.Add(new AspectBlizzard());
-		if ((rID & RitualID.HarnessElements) > 0) rtn.Add(new HarnessElements());
+		//if ((rID & RitualID.HarnessElements) > 0) rtn.Add(new HarnessElements());
 		if ((rID & RitualID.LightningHelix) > 0) rtn.Add(new LightningHelix());
 		if ((rID & RitualID.TrickleCharge) > 0) rtn.Add(new TrickleCharge());
 		if ((rID & RitualID.TideCeremony) > 0) rtn.Add(new TideCeremony());
 		if ((rID & RitualID.RiteOfQuartz) > 0) rtn.Add(new RiteOfQuartz());
+		if ((rID & RitualID.EarthenHeart) > 0) rtn.Add(new EarthenHeart());
 
 		return rtn.ToArray();
 	}
@@ -58,11 +60,12 @@ public abstract class Ritual
 
 		if ((rID & RitualID.Cyclone) > 0) rit = new Cyclone();
 		if ((rID & RitualID.AspectBlizzard) > 0) rit = new AspectBlizzard();
-		if ((rID & RitualID.HarnessElements) > 0) rit = new HarnessElements();
+		//if ((rID & RitualID.HarnessElements) > 0) rit = new HarnessElements();
 		if ((rID & RitualID.LightningHelix) > 0) rit = new LightningHelix();
 		if ((rID & RitualID.TrickleCharge) > 0) rit = new TrickleCharge();
 		if ((rID & RitualID.TideCeremony) > 0) rit = new TideCeremony();
 		if ((rID & RitualID.RiteOfQuartz) > 0) rit = new RiteOfQuartz();
+		if ((rID & RitualID.EarthenHeart) > 0) rit = new EarthenHeart();
 
 		return rit;
 	}
@@ -146,7 +149,7 @@ public class AspectBlizzard : Ritual
 		plyr.ManaRegenRate += 3*1.2f;
 	}
 }
-
+/*
 public class HarnessElements : Ritual
 {
 	public override string Description
@@ -184,7 +187,7 @@ public class HarnessElements : Ritual
 		plyr.Health += 25;
 	}
 }
-
+*/
 public class LightningHelix : Ritual
 {
 	public override string Description
@@ -354,12 +357,12 @@ public class EarthenHeart : Ritual
 {
 	public override string Description
 	{
-		get { return "<color=green>Faster but weaker Rock Smash\n+3 Rock Smash charges</color><color=red>40% More vulnerable to knockback</color>"; }
+		get { return "<color=green>Faster and <color=red>weaker</color> Rock Smash\n+3 Rock Smash charges</color>\n<color=red>-40% knockback resistance</color>"; }
 	}
 
 	public override int DisplayIconID
 	{
-		get { return 12; }
+		get { return 10; }
 	}
 
 	public override string DisplayName
@@ -371,7 +374,7 @@ public class EarthenHeart : Ritual
 	{
 		get
 		{
-			return RitualID.RiteOfQuartz;
+			return RitualID.EarthenHeart;
 		}
 	}
 
