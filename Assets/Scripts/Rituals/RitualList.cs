@@ -10,7 +10,8 @@ public enum RitualID
 	LightningHelix = 8,
 	TrickleCharge = 16,
 	TideCeremony = 32,
-	RiteOfQuartz = 64
+	RiteOfQuartz = 64,
+	EarthenHeart = 128
 }
 
 public abstract class Ritual
@@ -45,8 +46,25 @@ public abstract class Ritual
 		if ((rID & RitualID.HarnessElements) > 0) rtn.Add(new HarnessElements());
 		if ((rID & RitualID.LightningHelix) > 0) rtn.Add(new LightningHelix());
 		if ((rID & RitualID.TrickleCharge) > 0) rtn.Add(new TrickleCharge());
+		if ((rID & RitualID.TideCeremony) > 0) rtn.Add(new TideCeremony());
+		if ((rID & RitualID.RiteOfQuartz) > 0) rtn.Add(new RiteOfQuartz());
 
 		return rtn.ToArray();
+	}
+
+	public static Ritual GetRitualForID(RitualID rID)
+	{
+		Ritual rit = null;
+
+		if ((rID & RitualID.Cyclone) > 0) rit = new Cyclone();
+		if ((rID & RitualID.AspectBlizzard) > 0) rit = new AspectBlizzard();
+		if ((rID & RitualID.HarnessElements) > 0) rit = new HarnessElements();
+		if ((rID & RitualID.LightningHelix) > 0) rit = new LightningHelix();
+		if ((rID & RitualID.TrickleCharge) > 0) rit = new TrickleCharge();
+		if ((rID & RitualID.TideCeremony) > 0) rit = new TideCeremony();
+		if ((rID & RitualID.RiteOfQuartz) > 0) rit = new RiteOfQuartz();
+
+		return rit;
 	}
 }
 
@@ -156,28 +174,14 @@ public class HarnessElements : Ritual
 
 	public override void ApplyToPlayer(Player plyr)
 	{
-		Gust gust = plyr.GetAbility<Gust>(false);
-		if (gust)
+		Extract extr = plyr.GetAbility<Extract>(false);
+		if (extr)
 		{
-			gust.earthAligned = true;
-			gust.MaxCharges -= 2;
-			gust.JumpForce += 150;
-			gust.SpecialDamage += 10;
+			extr.Automated = true;
+			extr.AccretionSpeed += .5f;
 		}
 
-		plyr.transform.localScale = new UnityEngine.Vector3(plyr.transform.localScale.x + 1.2f, plyr.transform.localScale.y + 1.0f, plyr.transform.localScale.z + 1.2f);
-		plyr.Health += 20;
-		plyr.KnockbackMultiplier -= .2f;
-
-
-		//Extract extr = plyr.GetAbility<Extract>(false);
-		//if (extr)
-		//{
-		//	extr.Automated = true;
-		//	extr.AccretionSpeed += .5f;
-		//}
-
-		//plyr.Health += 25;
+		plyr.Health += 25;
 	}
 }
 
@@ -185,7 +189,7 @@ public class LightningHelix : Ritual
 {
 	public override string Description
 	{
-		get { return "<color=green>Larger Gusts\n+2 Gust Charges</color>"; }
+		get { return "<color=green><color=green>+33% Bolt Damage\n+33% faster move speed</color>\n<color=red>-20 Maximum Health</color></color>"; }
 	}
 
 	public override int DisplayIconID
@@ -208,14 +212,14 @@ public class LightningHelix : Ritual
 
 	public override void ApplyToPlayer(Player plyr)
 	{
-		for (int i = 0; i < plyr.abilities.Count; i++)
+		Bolt bolt = plyr.GetAbility<Bolt>(false);
+		if (bolt)
 		{
-			if (plyr.abilities[i].GetType() == typeof(Bolt))
-			{
-				Bolt bolt = (Bolt)plyr.abilities[i];
-				bolt.GeneralDamage += .5f;
-			}
+			bolt.GeneralDamage += .5f;
 		}
+		plyr.controller.movementSettings.ForwardSpeed += 4;
+		plyr.controller.movementSettings.BackwardSpeed += 4;
+		plyr.controller.movementSettings.StrafeSpeed += 4;
 		plyr.Health -= 20;
 	}
 }
@@ -224,7 +228,7 @@ public class TrickleCharge : Ritual
 {
 	public override string Description
 	{
-		get { return "<color=green>+50 Max Mana\n+75% Wider Bolt</color>\n<color=red>-50% Bolt Damage</color>"; }
+		get { return "<color=green>+30 Max Mana\n+75% Wider Bolt</color>\n<color=red>-50% Bolt Damage</color>"; }
 	}
 
 	public override int DisplayIconID
@@ -264,7 +268,7 @@ public class TideCeremony : Ritual
 {
 	public override string Description
 	{
-		get { return "<color=blue>Gust gives water shield\n</color>"; }
+		get { return "<color=blue>Stronger & longer water shield.\nGust reduces shield cooldown</color>"; }
 	}
 
 	public override int DisplayIconID
@@ -287,16 +291,21 @@ public class TideCeremony : Ritual
 
 	public override void ApplyToPlayer(Player plyr)
 	{
-		for (int i = 0; i < plyr.abilities.Count; i++)
+		Gust gust = plyr.GetAbility<Gust>(false);
+		if (gust)
 		{
-			if (plyr.abilities[i].GetType() == typeof(Bolt))
-			{
-				WaterShield shield = (WaterShield)plyr.abilities[i];
-				shield.Duration += 4;
-				//shield.MaxAngle += 6;
-			}
+			gust.JumpForce -= 20;
+			gust.CooldownReduction += .75f;
+			gust.waterAligned = true;
 		}
-		plyr.Mana += 50;
+		WaterShield shield = plyr.GetAbility<WaterShield>(false);
+		if (shield)
+		{
+			shield.Duration += 2;
+			shield.damageReduction += .25f;
+			shield.KnockbackReduction += .25f;
+		}
+
 	}
 }
 
@@ -304,7 +313,7 @@ public class RiteOfQuartz : Ritual
 {
 	public override string Description
 	{
-		get { return "<color=green>Airborne gusts dive downward\nReduced knockback\n+20 Health</color>"; }
+		get { return "<color=green>Airborne gusts dive downward\nStronger but fewer gusts\n+20% knockback resistance</color>"; }
 	}
 
 	public override int DisplayIconID
@@ -336,8 +345,50 @@ public class RiteOfQuartz : Ritual
 			gust.SpecialDamage += 10;
 		}
 
-		plyr.transform.localScale = new UnityEngine.Vector3(plyr.transform.localScale.x + 1.2f, plyr.transform.localScale.y + 1.0f, plyr.transform.localScale.z + 1.2f);
-		plyr.Health += 20;
+		plyr.transform.localScale = new UnityEngine.Vector3(plyr.transform.localScale.x + 0.75f, plyr.transform.localScale.y + 0.5f, plyr.transform.localScale.z + 0.75f);
 		plyr.KnockbackMultiplier -= .2f;
+	}
+}
+
+public class EarthenHeart : Ritual
+{
+	public override string Description
+	{
+		get { return "<color=green>Faster but weaker Rock Smash\n+3 Rock Smash charges</color><color=red>40% More vulnerable to knockback</color>"; }
+	}
+
+	public override int DisplayIconID
+	{
+		get { return 12; }
+	}
+
+	public override string DisplayName
+	{
+		get { return "Earthen Heart"; }
+	}
+
+	public override RitualID rID
+	{
+		get
+		{
+			return RitualID.RiteOfQuartz;
+		}
+	}
+
+	public override void ApplyToPlayer(Player plyr)
+	{
+		
+		Smash smash = plyr.GetAbility<Smash>(false);
+		if (smash)
+		{
+			smash.RecoilForce += 50;
+			smash.PoundRange += 3;
+			smash.MaxCharges += 3;
+			smash.SwingDuration -= 1f;
+			smash.MaxCooldown -= 3;
+			smash.GeneralDamage -= 8;
+		}
+
+		plyr.KnockbackMultiplier += .4f;
 	}
 }

@@ -24,7 +24,6 @@ public class BoltEffect : MonoBehaviour
 		lRend.SetVertexCount(1);
 
 		zap = AudioManager.Instance.MakeSource("Bolt Zap");
-
 		zap.volume = 0;
 		zap.loop = true;
 		zap.Play();

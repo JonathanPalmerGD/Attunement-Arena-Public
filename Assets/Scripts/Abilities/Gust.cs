@@ -35,9 +35,11 @@ public class Gust : Ability
 	public float Force = 175;
 	public float Range = 10;
 	public float PoundRange = 15;
-	public float MaxAngle = 15;
+	public float MaxAngle = 19;
+	public float CooldownReduction = 0;
 	public bool wasGrounded = false;
 	public bool earthAligned = false;
+	public bool waterAligned = false;
 	public bool groundPoundReady = false;
 
 	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
@@ -97,28 +99,37 @@ public class Gust : Ability
 
 		foreach (Player p in GameManager.Instance.players)
 		{
-			bool coneHit = CheckConeEffect(Owner.transform.position, castDir, p, Range, MaxAngle, false, true);
-
-			if (coneHit)
+			if (Owner != p)
 			{
-				if (p.Grounded)
+				bool coneHit = CheckConeEffect(Owner.transform.position, castDir, p, Range, MaxAngle, false, true);
+				//bool sphereCast = Physics.SphereCast(new Ray(Owner.transform.position, castDir), 3f, 3);
+				//Debug.DrawLine(Owner.transform.position, Owner.transform.position + castDir.normalized * 3, Color.green, 15.0f);
+				//if (sphereCast)
+				//{
+				//	Debug.Log("Spherecast Hit\n");
+				//}
+
+				if (coneHit)// || sphereCast)
 				{
-					Vector3 knockbackVector = new Vector3(castDir.x, 0, castDir.z) + Vector3.up;
-					p.controller.ApplyExternalForce(knockbackVector.normalized * Force);
-				}
-				else
-				{
-					if (earthAligned)
+					if (p.Grounded)
 					{
-						GroundPound();
+						Vector3 knockbackVector = new Vector3(castDir.x, 0, castDir.z) + Vector3.up;
+						p.controller.ApplyExternalForce(knockbackVector.normalized * Force);
 					}
 					else
 					{
-						p.controller.ApplyExternalForce(castDir * Force);
+						if (earthAligned)
+						{
+							GroundPound();
+						}
+						else
+						{
+							p.controller.ApplyExternalForce(castDir * Force);
+						}
 					}
-				}
 
-				p.AdjustHealth(-GeneralDamage);
+					p.AdjustHealth(-GeneralDamage);
+				}
 			}
 		}
 		
@@ -127,6 +138,11 @@ public class Gust : Ability
 
 	public void GustSelfResult(Vector3 inputVector = default(Vector3))
 	{
+		if (waterAligned)
+		{
+			HandleWaterAligned();
+		}
+
 		var castDir = inputVector.normalized;
 
 		//If the ability is directed downward
@@ -188,6 +204,17 @@ public class Gust : Ability
 		}
 	}
 
+	public void HandleWaterAligned()
+	{
+		WaterShield waterShield = Owner.GetAbility<WaterShield>();
+		if(waterShield != null)
+		{
+			if (waterShield.CurrentCooldown > 0)
+			{
+				waterShield.CurrentCooldown -= CooldownReduction;
+			}
+		}
+	}
 	public void AdjustVelocity(bool amplifyVelocity = false)
 	{
 		Vector3 oldVel = Owner.controller.mRigidBody.velocity * (amplifyVelocity ? 2.5f : 1.0f);

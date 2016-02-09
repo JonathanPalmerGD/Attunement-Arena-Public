@@ -242,12 +242,12 @@ public class Ability : ScriptableObject
 			float dist = Vector3.Distance(Owner.transform.position, target.transform.position);
 			//Debug.Log("Checking blast intensity: " + Owner.name + "  " + affectOwner + "  " + target.name + "\nDist: " + dist);
 
-			Debug.DrawRay(Owner.transform.position, target.transform.position - Owner.transform.position, Color.black, 5.0f);
+			//Debug.DrawRay(Owner.transform.position, target.transform.position - Owner.transform.position, Color.black, 5.0f);
 			RaycastHit hit;
-			Debug.Log(Vector3.Distance(Owner.transform.position, target.transform.position) + "\n");
+			//Debug.Log(Vector3.Distance(Owner.transform.position, target.transform.position) + "\n");
 			if (Physics.Raycast(Owner.transform.position, target.transform.position - Owner.transform.position, out hit, explosiveRange))
 			{
-				Debug.Log("Hit\n" + hit.transform.name);
+				//Debug.Log("Hit\n" + hit.transform.name);
 				if (hit.collider.gameObject.tag == "Player" && hit.collider.gameObject == target.gameObject)
 				{
 					//Debug.Log(target.name + "\tExpDist :" + explosiveRange + " - " + dist + " " + explosiveRange + "\n");

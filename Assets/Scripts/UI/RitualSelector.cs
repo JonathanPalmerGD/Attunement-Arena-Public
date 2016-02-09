@@ -67,7 +67,7 @@ public class RitualSelector : MonoBehaviour
 			CurrRitual = Mathf.Min(TotalRitualCount - 1, CurrRitual + 1);
 		}
 
-		contentRect.offsetMin = new Vector2(Mathf.Lerp(contentRect.offsetMin.x, (-102f - (200f * CurrRitual)), Time.deltaTime * 10f), 0f);
+		contentRect.offsetMin = new Vector2(Mathf.Lerp(contentRect.offsetMin.x, (-127f - (250f * CurrRitual)), Time.deltaTime * 10f), 0f);
 
 		if (GetSelect())
 		{
