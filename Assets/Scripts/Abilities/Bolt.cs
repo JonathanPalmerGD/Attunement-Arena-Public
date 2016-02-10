@@ -65,7 +65,7 @@ public class Bolt : Ability
 
 	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{
-		boltPrefab = Resources.Load<GameObject>("boltPrefab");
+		boltPrefab = Resources.Load<GameObject>("Effects/boltPrefab");
 		bolt = GameObject.Instantiate(boltPrefab, newOwner.transform.position, newOwner.transform.rotation) as GameObject;
 		bolt.name = "Bolt Renderer [P" + newOwner.playerID + "]";
 		boltEff = bolt.GetComponent<BoltEffect>();

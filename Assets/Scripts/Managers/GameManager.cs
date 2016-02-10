@@ -19,6 +19,8 @@ public class GameManager : Singleton<GameManager>
 
 	public GameObject[] ArenaPrefabs;
 	public GameObject arena;
+
+	public List<Material> PlatformAppearance;
 	public static bool spawnRandomArena = false;
 
 	public List<PlayerSpawn> SpawnPoints;
@@ -91,6 +93,12 @@ public class GameManager : Singleton<GameManager>
 		playerPrefab = Resources.Load<GameObject>("Player Prefab");
 
 		ArenaPrefabs = Resources.LoadAll<GameObject>("Arenas");
+		PlatformAppearance = new List<Material>();
+		PlatformAppearance.Add(Resources.Load<Material>("Platform Appearances/Platform Falling"));
+		PlatformAppearance.Add(Resources.Load<Material>("Platform Appearances/Platform Heavy Damage"));
+		PlatformAppearance.Add(Resources.Load<Material>("Platform Appearances/Platform Damaged"));
+		PlatformAppearance.Add(Resources.Load<Material>("Platform Appearances/Platform Whole"));
+
 	}
 	private void SpawnRandomArena()
 	{

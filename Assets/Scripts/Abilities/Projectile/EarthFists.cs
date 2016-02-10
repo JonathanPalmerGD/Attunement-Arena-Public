@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EarthFists : MonoBehaviour 
+public class EarthFists : MonoBehaviour
 {
 	public Smash Creator;
 	public GameObject deathPrefab;
@@ -31,22 +31,25 @@ public class EarthFists : MonoBehaviour
 	{
 		if (other.gameObject != Creator.Owner.gameObject)
 		{
-			//Debug.Log(other.tag + "\n");
-			//if(other.gameObject.layer
-			//If it is a ground object
-			if (other.tag == "Ground")
+			if (!other.isTrigger)
 			{
-				//Ground Pound
-				Creator.OnGroundImpact();
-			}
-			else
-			{
-				//If we hit a player or object
-				Creator.Collide();
-			}
+				//Debug.Log(other.name + "\n");
+				//if(other.gameObject.layer
+				//If it is a ground object
+				if (other.tag == "Ground")
+				{
+					//Ground Pound
+					Creator.OnGroundImpact();
+				}
+				else
+				{
+					//If we hit a player or object
+					Creator.Collide();
+				}
 
-			PlayDeath();
-			Creator.SetFistActivity = false;
+				PlayDeath();
+				Creator.SetFistActivity = false;
+			}
 		}
 	}
 }

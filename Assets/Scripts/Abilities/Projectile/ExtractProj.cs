@@ -121,7 +121,7 @@ public class ExtractProj : MonoBehaviour
 			}
 		}
 
-		ParticleSystem particles = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>(projType.ToString() + "BallPff")).GetComponent<ParticleSystem>();
+		ParticleSystem particles = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Effects/"+projType.ToString() + "BallPff")).GetComponent<ParticleSystem>();
 		particles.transform.position = where;
 		particles.Emit(450);
 		Destroy(particles.gameObject, 5f);

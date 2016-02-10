@@ -49,6 +49,7 @@ MonoBehaviour:
   timeOfZap: .0500000007
   zapTimer: 0
   trackTarget: 0
+  zap: {fileID: 0}
 --- !u!120 &12075308
 LineRenderer:
   m_ObjectHideFlags: 1

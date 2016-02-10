@@ -35,7 +35,7 @@ public class Skate : Ability
 
 	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{
-		icePrefab = Resources.Load<GameObject>("icePrefab");
+		icePrefab = Resources.Load<GameObject>("Effects/icePrefab");
 		iceParent = new GameObject();
 		iceParent.name = "[P" + newOwner.playerID + "] Ice Parent";
 

@@ -34,7 +34,7 @@ public class WaterShield : Ability
 
 	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{
-		burstPrefab = Resources.Load<GameObject>("burstPrefab");
+		burstPrefab = Resources.Load<GameObject>("Effects/burstPrefab");
 
 		base.Init(newOwner, newKeyBinding, displayKeyBinding);
 	}

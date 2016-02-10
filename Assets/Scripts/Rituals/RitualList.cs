@@ -106,6 +106,7 @@ public class Cyclone : Ritual
 				gust.MaxCharges += 2;
 				gust.MaxAngle += 15f;
 				gust.Range += 10f;
+				gust.CooldownReduction -= .5f;
 			}
 		}
 	}
@@ -192,7 +193,7 @@ public class LightningHelix : Ritual
 {
 	public override string Description
 	{
-		get { return "<color=green><color=green>+33% Bolt Damage\n+33% faster move speed</color>\n<color=red>-20 Maximum Health</color></color>"; }
+		get { return "<color=green><color=green>+33% Bolt Damage\n+33% faster move speed</color>\n<color=red>-20 Max Health</color></color>"; }
 	}
 
 	public override int DisplayIconID
@@ -298,13 +299,13 @@ public class TideCeremony : Ritual
 		if (gust)
 		{
 			gust.JumpForce -= 20;
-			gust.CooldownReduction += .75f;
+			gust.CooldownReduction += 1.0f;
 			gust.waterAligned = true;
 		}
 		WaterShield shield = plyr.GetAbility<WaterShield>(false);
 		if (shield)
 		{
-			shield.Duration += 2;
+			shield.Duration += 4;
 			shield.damageReduction += .25f;
 			shield.KnockbackReduction += .25f;
 		}
@@ -387,9 +388,9 @@ public class EarthenHeart : Ritual
 			smash.RecoilForce += 50;
 			smash.PoundRange += 3;
 			smash.MaxCharges += 3;
-			smash.SwingDuration -= 1f;
+			smash.SwingDuration -= 1.25f;
 			smash.MaxCooldown -= 3;
-			smash.GeneralDamage -= 8;
+			smash.GeneralDamage -= 6;
 		}
 
 		plyr.KnockbackMultiplier += .4f;
