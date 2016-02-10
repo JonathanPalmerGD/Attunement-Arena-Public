@@ -36,7 +36,6 @@ public class Gust : Ability
 	public float Range = 10;
 	public float PoundRange = 15;
 	public float MaxAngle = 19;
-	public float CooldownReduction = 0;
 	public bool wasGrounded = false;
 	public bool earthAligned = false;
 	public bool waterAligned = false;

@@ -32,6 +32,9 @@ public class Skate : Ability
 		get { return 9; }
 	}
 	public float Force = 15;
+	public float AmplifiedForce = 15;
+
+	public bool waterAligned;
 
 	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{
@@ -53,21 +56,21 @@ public class Skate : Ability
 		source.volume = .3f;
 		source.Play();
 
-		GameObject newPlatform = GameObject.Instantiate<GameObject>(icePrefab);
-		newPlatform.name = "[P" + Owner.playerID + "] Ice";
+		GameObject iceCloud = GameObject.Instantiate<GameObject>(icePrefab);
+		iceCloud.name = "[P" + Owner.playerID + "] Ice Cloud";
 		if (GeneralDamage > 0)
 		{
-			IceAreaEffect iceEff = newPlatform.AddComponent<IceAreaEffect>();
+			IceAreaEffect iceEff = iceCloud.AddComponent<IceAreaEffect>();
 
 			iceEff.Owner = Owner;
 			iceEff.Creator = this;
 		}
-		newPlatform.transform.SetParent(iceParent.transform);
+		iceCloud.transform.SetParent(iceParent.transform);
 		float yDiff = inputVector.normalized.y;
-		newPlatform.transform.position = Owner.transform.position - (inputVector * .4f) - (Vector3.up * yDiff);
+		iceCloud.transform.position = Owner.transform.position - (inputVector * .4f) - (Vector3.up * yDiff);
 
-		Vector3 lookAtPos = new Vector3((Owner.transform.position + inputVector).x, newPlatform.transform.position.y, (Owner.transform.position + inputVector).z);
-		newPlatform.transform.LookAt(lookAtPos);
+		Vector3 lookAtPos = new Vector3((Owner.transform.position + inputVector).x, iceCloud.transform.position.y, (Owner.transform.position + inputVector).z);
+		iceCloud.transform.LookAt(lookAtPos);
 
 		Vector3 oldVel = Owner.controller.mRigidBody.velocity;
 		
@@ -93,11 +96,24 @@ public class Skate : Ability
 			//Owner.SendMessage("ApplyExternalForce", inputVector * Force);
 		}
 
+		float appliedForce = Force;
+
+		if (waterAligned)
+		{
+			if (Owner.curStatus == Player.PlayerStatus.Shielded)
+			{
+				appliedForce += AmplifiedForce;
+				Owner.curStatusDur += CooldownReduction;
+			}
+		}
+
 		Owner.controller.ApplyExternalForce(forwardForce * Force, true, true);
+
+
 		//Owner.controller.AddExternalForce(forwardForce * Force, ForceMode.Impulse, true);
 		//Owner.SendMessage("ApplyExternalForce", Vector3.up * Force);
 		
-		GameObject.Destroy(newPlatform, Duration);
+		GameObject.Destroy(iceCloud, Duration);
 
 	}
 }

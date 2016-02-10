@@ -107,6 +107,12 @@ public class Ability : ScriptableObject
 		}
 	}
 	public float MaxCooldown;
+	protected float cooldownReduction = 0;
+	public virtual float CooldownReduction
+	{
+		get { return cooldownReduction; }
+		set { cooldownReduction = value; }
+	}
 
 	public virtual void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{

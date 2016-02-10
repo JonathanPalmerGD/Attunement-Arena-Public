@@ -150,7 +150,7 @@ public class GameManager : Singleton<GameManager>
 			//Left Trigger
 			Skate newSkate = players[i].CreateAbility<Skate>(players[i].PlayerInput + "LBump", "LB");
 			newSkate.Cost = 2f;
-			newSkate.Force = 32;
+			newSkate.Force = 26;
 			newSkate.MaxCooldown = .05f;
 			newSkate.Duration = 5f;
 			newSkate.GeneralDamage = 0f;

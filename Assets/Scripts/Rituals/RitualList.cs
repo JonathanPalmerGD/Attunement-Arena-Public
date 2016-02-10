@@ -12,7 +12,7 @@ public enum RitualID
 	TrickleCharge = 16,
 	TideCeremony = 32,
 	RiteOfQuartz = 64,
-	//EarthenHeart = 128
+	//IceShelfMeditation = 128
 }
 
 public abstract class Ritual
@@ -381,7 +381,7 @@ public class EarthenHeart : Ritual
 
 	public override void ApplyToPlayer(Player plyr)
 	{
-		
+
 		Smash smash = plyr.GetAbility<Smash>(false);
 		if (smash)
 		{
@@ -394,5 +394,50 @@ public class EarthenHeart : Ritual
 		}
 
 		plyr.KnockbackMultiplier += .4f;
+	}
+}
+
+public class IceShelfMeditation : Ritual
+{
+	public override string Description
+	{
+		get { return "<color=green>Arctic Winds adds Water Shield duration\n</color>\n<color=blue>Water Shield costs 0 mana.</color>\n</color>\n<color=red>+6 seconds Water Shield Cooldown.</color>"; }
+	}
+
+	public override int DisplayIconID
+	{
+		get { return 0; }
+	}
+
+	public override string DisplayName
+	{
+		get { return "Ice Shelf Meditation"; }
+	}
+
+	public override RitualID rID
+	{
+		get
+		{
+			return RitualID.TideCeremony;
+		}
+	}
+
+	public override void ApplyToPlayer(Player plyr)
+	{
+		Skate skate = plyr.GetAbility<Skate>(false);
+		if (skate)
+		{
+			skate.waterAligned = true;
+			skate.CooldownReduction += skate.MaxCooldown * 2;
+			skate.AmplifiedForce += 8;
+		}
+
+		WaterShield shield = plyr.GetAbility<WaterShield>(false);
+		if (shield)
+		{
+			shield.MaxCooldown += 6;
+			shield.Cost = 0;
+		}
+
 	}
 }
