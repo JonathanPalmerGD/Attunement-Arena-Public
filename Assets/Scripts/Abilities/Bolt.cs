@@ -55,6 +55,8 @@ public class Bolt : Ability
 		}
 	}
 
+	public float VelocityDampenThreshold = 9;
+
 	public float Range
 	{
 		get
@@ -70,9 +72,16 @@ public class Bolt : Ability
 		bolt.name = "Bolt Renderer [P" + newOwner.playerID + "]";
 		boltEff = bolt.GetComponent<BoltEffect>();
 
+		base.Init(newOwner, newKeyBinding, displayKeyBinding);
+
+		MaxCooldown = .07f;
+		MaxAngle = 8;
+		GeneralDamage = 2.0f;
+		Cost = 3;
+		Duration = .35f;
+
 		bolt.transform.SetParent(newOwner.transform);
 
-		base.Init(newOwner, newKeyBinding, displayKeyBinding);
 	}
 
 	public override void ExecuteAbility(Vector3 inputVector = default(Vector3))
@@ -129,7 +138,10 @@ public class Bolt : Ability
 					//Debug.Log(p.name + "\n");
 					p.AdjustHealth(-GeneralDamage);
 
-					//p.controller.mRigidBody.velocity = Vector3.zero;
+					if (p.controller.mRigidBody.velocity.sqrMagnitude >= VelocityDampenThreshold * VelocityDampenThreshold)
+					{
+						p.controller.mRigidBody.velocity -= p.controller.mRigidBody.velocity.normalized * VelocityDampenThreshold;
+					}
 				}
 			}
 

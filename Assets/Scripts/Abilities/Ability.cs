@@ -329,6 +329,14 @@ public class Ability : ScriptableObject
 	}
 
 
+	public virtual void SetCharges()
+	{
+		if (UseCharges)
+		{
+			Charges = MaxCharges;
+		}
+	}
+
 	public virtual string OutputInfo()
 	{
 		string output = "[Ability]: " + this.GetType() + "\n";

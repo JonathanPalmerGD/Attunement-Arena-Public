@@ -35,8 +35,13 @@ public class WaterShield : Ability
 	public override void Init(Player newOwner, string newKeyBinding, string displayKeyBinding)
 	{
 		burstPrefab = Resources.Load<GameObject>("Effects/burstPrefab");
-
 		base.Init(newOwner, newKeyBinding, displayKeyBinding);
+
+		MaxCooldown = 8f;
+		Cost = 15;
+		GeneralDamage = 26f;
+		Duration = 4f;
+
 	}
 
 	public override bool CanUseAbility()

@@ -67,8 +67,10 @@ public class Smash : Ability
 	{
 		rockFistPrefab = Resources.Load<GameObject>("Projectiles/RockSmashPrefab");
 		groundPoundPrefab = Resources.Load<GameObject>("Effects/groundPoundPrefab");
-		GeneralDamage = 18;
-		SpecialDamage = 12;
+		base.Init(newOwner, newKeyBinding, displayKeyBinding);
+
+		GeneralDamage = 26;
+		SpecialDamage = 20;
 		MaxCooldown = 6;
 		MaxCharges = 3;
 
@@ -77,7 +79,6 @@ public class Smash : Ability
 		activeFists.Creator = this;
 
 
-		base.Init(newOwner, newKeyBinding, displayKeyBinding);
 
 		PlaceFists();
 		SetFistActivity = false;

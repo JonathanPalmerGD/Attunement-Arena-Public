@@ -26,7 +26,7 @@ public class Gust : Ability
 	{
 		get
 		{
-			return 5f;
+			return 8f;
 		}
 	}
 	public float RecoilForce = 140;
@@ -47,6 +47,10 @@ public class Gust : Ability
 		groundPoundPrefab = Resources.Load<GameObject>("Effects/groundPoundPrefab");
 
 		base.Init(newOwner, newKeyBinding, displayKeyBinding);
+
+		MaxCharges = 5;
+		MaxCooldown = .5f;
+
 	}
 
 	public override void UpdateAbility(float deltaTime)

@@ -37,7 +37,7 @@ public class GameManager : Singleton<GameManager>
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
 
-		int playerCount = 2;
+		int playerCount = 1;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
@@ -128,39 +128,19 @@ public class GameManager : Singleton<GameManager>
 
 			//A/B
 			Gust newGust = players[i].CreateAbility<Gust>(players[i].PlayerInput + "Primary", "A B");
-			newGust.MaxCooldown = .5f;
 			players[i].AddAbilityBinding(newGust, players[i].PlayerInput + "Jump");
-			newGust.MaxCharges = 5;
-			newGust.Charges = newGust.MaxCharges;
 			
 			//X Button
-			//Extract newExtract = players[i].CreateAbility<Extract>(players[i].PlayerInput + "Secondary", "X");
 			Smash newSmash = players[i].CreateAbility<Smash>(players[i].PlayerInput + "Secondary", "X");
-			newSmash.Charges = newSmash.MaxCharges;
 
 			//Right Trigger
 			Bolt newBolt = players[i].CreateAbility<Bolt>(players[i].PlayerInput + "RBump", "RB");
-			newBolt.MaxCooldown = .07f;
-			newBolt.MaxAngle = 8;
-			newBolt.GeneralDamage = 1.5f;
-			newBolt.Cost = 3;
-			newBolt.Duration = .35f;
-
 
 			//Left Trigger
 			Skate newSkate = players[i].CreateAbility<Skate>(players[i].PlayerInput + "LBump", "LB");
-			newSkate.Cost = 2f;
-			newSkate.Force = 26;
-			newSkate.MaxCooldown = .05f;
-			newSkate.Duration = 5f;
-			newSkate.GeneralDamage = 0f;
 
 			//Y
 			WaterShield shield = players[i].CreateAbility<WaterShield>(players[i].PlayerInput + "Special", "Y");
-			shield.MaxCooldown = 8f;
-			shield.Cost = 15;
-			shield.GeneralDamage = 15f;
-			shield.Duration = 4f;
 		}
 	}
 
@@ -183,6 +163,17 @@ public class GameManager : Singleton<GameManager>
 					rituals[k].ApplyToPlayer(players[i]);
 					playerText.text += (string.IsNullOrEmpty(playerText.text) ? "" : "  ") + (rituals[k].DisplayName);
 				}
+			}
+		}
+	}
+
+	public void SetAbilityCharges()
+	{
+		for (int i = 0; i < NumPlayers; i++)
+		{
+			for (int k = 0; k < players[i].abilities.Count; k++)
+			{
+				players[i].abilities[k].SetCharges();
 			}
 		}
 	}

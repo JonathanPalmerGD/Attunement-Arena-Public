@@ -41,8 +41,14 @@ public class Skate : Ability
 		icePrefab = Resources.Load<GameObject>("Effects/icePrefab");
 		iceParent = new GameObject();
 		iceParent.name = "[P" + newOwner.playerID + "] Ice Parent";
-
 		base.Init(newOwner, newKeyBinding, displayKeyBinding);
+
+		Cost = 2f;
+		Force = 26;
+		MaxCooldown = .05f;
+		Duration = 3.5f;
+		GeneralDamage = 0f;
+
 	}
 
 	public override void UpdateAbility(float deltaTime)

@@ -105,6 +105,7 @@ public class UIManager : Singleton<UIManager>
 
 			GameManager.Instance.AddPlayerAbilities();
 			GameManager.Instance.ApplyPlayerRituals();
+			GameManager.Instance.SetAbilityCharges();
 
 			initialized = true;
 		}

@@ -159,7 +159,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			float magnitude = force.magnitude;
 			WaterShield shield = Owner.GetAbility<WaterShield>();
 
-			Debug.Log("Base force: " + magnitude + "\nWith Multiplier: " + force.normalized * Owner.KnockbackMultiplier);
+			//Debug.Log("Base force: " + magnitude + "\nWith Multiplier: " + force.normalized * Owner.KnockbackMultiplier);
 
 			if (shield)
 			{
@@ -250,8 +250,9 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			desiredMove.z = desiredMove.z * movementSettings.CurrentTargetSpeed * speedMult;
 			desiredMove.y = desiredMove.y * movementSettings.CurrentTargetSpeed * speedMult;
 
+			//Debug.Log(speedMult + "\n" + desiredMove.magnitude);
 			if (mRigidBody.velocity.sqrMagnitude <
-				(movementSettings.CurrentTargetSpeed * movementSettings.CurrentTargetSpeed))
+				(movementSettings.CurrentTargetSpeed * movementSettings.CurrentTargetSpeed * speedMult))
 			{
 				mRigidBody.AddForce(desiredMove * SlopeMultiplier(), ForceMode.Impulse);
 			}

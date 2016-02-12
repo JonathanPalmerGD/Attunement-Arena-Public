@@ -234,6 +234,8 @@ public class Player : MonoBehaviour
 	{
 		//Debug.Log("Creating " + abilityName + " " + keyBinding + "\n");
 		T newAbility = ScriptableObject.CreateInstance(typeof(T)) as T;
+		
+		newAbility.Owner = this;
 
 		newAbility.Init(this, keyBinding, displayKeyBinding);
 
@@ -267,6 +269,8 @@ public class Player : MonoBehaviour
 
 	void Update()
 	{
+		Debug.Log("" + controller.mRigidBody.velocity.magnitude + "\n");
+
 		UpdateStatus();
 
 		UpdateHealth();
@@ -312,8 +316,8 @@ public class Player : MonoBehaviour
 		if (curStatus == PlayerStatus.Chilled)
 		{
 			curStatusDur -= Time.deltaTime;
-			AdjustHealth(-1 * Time.deltaTime, false);
-
+			AdjustHealth(-1.5f * Time.deltaTime, false);
+		
 			if (curStatusDur <= 0)
 			{
 				curStatusDur = 0;

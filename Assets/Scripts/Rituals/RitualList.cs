@@ -144,7 +144,7 @@ public class AspectBlizzard : Ritual
 			if (plyr.abilities[i].GetType() == typeof(Skate))
 			{
 				Skate skate = (Skate)plyr.abilities[i];
-				skate.GeneralDamage += 2;
+				skate.GeneralDamage += 4;
 			}
 		}
 		plyr.ManaRegenRate += 3*1.2f;
@@ -219,7 +219,7 @@ public class LightningHelix : Ritual
 		Bolt bolt = plyr.GetAbility<Bolt>(false);
 		if (bolt)
 		{
-			bolt.GeneralDamage += .5f;
+			bolt.GeneralDamage += 1f;
 		}
 		plyr.controller.movementSettings.ForwardSpeed += 4;
 		plyr.controller.movementSettings.BackwardSpeed += 4;
@@ -260,7 +260,7 @@ public class TrickleCharge : Ritual
 			if (plyr.abilities[i].GetType() == typeof(Bolt))
 			{
 				Bolt bolt = (Bolt)plyr.abilities[i];
-				bolt.GeneralDamage -= .75f;
+				bolt.GeneralDamage -= 1.5f;
 				bolt.MaxAngle += 6;
 			}
 		}
@@ -346,7 +346,7 @@ public class RiteOfQuartz : Ritual
 			gust.earthAligned = true;
 			gust.MaxCharges -= 2;
 			gust.JumpForce += 150;
-			gust.SpecialDamage += 10;
+			gust.SpecialDamage += 20;
 		}
 
 		plyr.transform.localScale = new UnityEngine.Vector3(plyr.transform.localScale.x + 0.75f, plyr.transform.localScale.y + 0.5f, plyr.transform.localScale.z + 0.75f);
