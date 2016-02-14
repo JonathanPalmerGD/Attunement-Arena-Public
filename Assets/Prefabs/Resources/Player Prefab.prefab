@@ -83,6 +83,7 @@ GameObject:
   - 81: {fileID: 8163560}
   - 114: {fileID: 11444262}
   - 114: {fileID: 11402282}
+  - 114: {fileID: 11451362}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -364,6 +365,44 @@ MonoBehaviour:
   rigidbodyFirstPersonController: {fileID: 11413502}
   StrideInterval: 4
   RunningStrideLengthen: .722000003
+--- !u!114 &11451362
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 192000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fceaeb339b971b429c4cc600acabd13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweakMode: 0
+  screenBlendMode: 1
+  hdr: 0
+  sepBlurSpread: 2.5
+  quality: 1
+  bloomIntensity: .600000024
+  bloomThreshold: .600000024
+  bloomThresholdColor: {r: 1, g: 1, b: 1, a: 1}
+  bloomBlurIterations: 2
+  hollywoodFlareBlurIterations: 2
+  flareRotation: 0
+  lensflareMode: 1
+  hollyStretchWidth: 2.5
+  lensflareIntensity: 0
+  lensflareThreshold: .300000012
+  lensFlareSaturation: .75
+  flareColorA: {r: .400000006, g: .400000006, b: .800000012, a: .75}
+  flareColorB: {r: .400000006, g: .800000012, b: .800000012, a: .75}
+  flareColorC: {r: .800000012, g: .400000006, b: .800000012, a: .75}
+  flareColorD: {r: .800000012, g: .400000006, b: 0, a: .75}
+  lensFlareVignetteMask: {fileID: 2800000, guid: 95ef4804fe0be4c999ddaa383536cde8,
+    type: 3}
+  lensFlareShader: {fileID: 4800000, guid: 459fe69d2f6d74ddb92f04dbf45a866b, type: 3}
+  screenBlendShader: {fileID: 4800000, guid: 7856cbff0a0ca45c787d5431eb805bb0, type: 3}
+  blurAndFlaresShader: {fileID: 4800000, guid: be6e39cf196f146d5be72fbefb18ed75, type: 3}
+  brightPassFilterShader: {fileID: 4800000, guid: 0aeaa4cb29f5d4e9c8455f04c8575c8c,
+    type: 3}
 --- !u!114 &11471986
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -392,10 +431,12 @@ MonoBehaviour:
   shieldParticles: {fileID: 19837336}
   damaged: 0
   ManaRegenRate: 3
-  damagePerSecond: 0
-  speedMultiplier: 1
-  damageTakenMultiplier: 1
-  damageDealtMultiplier: 1
+  _kckBackMult: 1
+  _dmgPerSec: 0
+  _speedMult: 1
+  _dmgTakenMult: 1
+  _dmgDealtMult: 1
+  _jumpMult: 1
   abilities: []
   statusEffects: []
   damageIndicator: {fileID: 0}
@@ -2761,6 +2802,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: damageDealtMultiplier
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: bloomThreshold
+      value: .600000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: bloomIntensity
+      value: .600000024
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
