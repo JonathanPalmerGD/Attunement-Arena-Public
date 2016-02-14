@@ -6,6 +6,8 @@ public class Bolt : Ability
 	public GameObject boltPrefab;
 	public GameObject bolt;
 	private BoltEffect boltEff;
+	public Status DamageAmp;
+
 	public override KeyActivateCond activationCond
 	{
 		get
@@ -56,6 +58,9 @@ public class Bolt : Ability
 	}
 
 	public float VelocityDampenThreshold = 9;
+	public float empowerMax = .25f;
+	public float empowerChargeTime = 2;
+	public bool lightningAligned = true;
 
 	public float Range
 	{
@@ -78,7 +83,7 @@ public class Bolt : Ability
 		MaxAngle = 8;
 		GeneralDamage = 2.0f;
 		Cost = 3;
-		Duration = .35f;
+		Duration = 4f;
 
 		bolt.transform.SetParent(newOwner.transform);
 
@@ -127,16 +132,39 @@ public class Bolt : Ability
 				}
 				else
 				{
+					#region Debug Lines for Lightning
 					//Debug.DrawLine(Owner.transform.position, Owner.transform.position + tetherVector, Color.red, 5.0f);
 					//Debug.Log(Vector3.Angle(castDir, tetherVector) + "\n\n\n");
 					//Debug.DrawLine(Owner.transform.position, Owner.transform.position + tetherVector, Color.white, 5.0f);
 
 					//Debug.DrawLine(Owner.transform.position, Owner.transform.position + tetherVector, Color.black, 25.0f);
+					#endregion
+
+					if (lightningAligned)
+					{
+						if (DamageAmp == null)
+						{
+							DamageAmp = Owner.AddStatus(this, Status.StatusTypes.Empowered, Duration, 0.0f, false);
+						}
+						else
+						{
+							//Reset the status duration if we deal any damage with lightning.
+							DamageAmp.DurationLeft = Duration;
+							
+							float ampGain = empowerMax * MaxCooldown / empowerChargeTime;
+
+							//If we are close to the threshold, only add the little bit we need left, else add whatever is to be gained.
+							ampGain = DamageAmp.EffectAmt + ampGain < empowerMax ? ampGain : empowerMax - DamageAmp.EffectAmt;
+
+							//Ramp up the damage amp.
+							DamageAmp.ModifyStatus(0, ampGain);
+						}
+					}
 
 					boltEff.ZapTarget(p.gameObject);
 
 					//Debug.Log(p.name + "\n");
-					p.AdjustHealth(-GeneralDamage);
+					p.AdjustHealth(-GeneralDamage * Owner._dmgDealtMult);
 
 					if (p.controller.mRigidBody.velocity.sqrMagnitude >= VelocityDampenThreshold * VelocityDampenThreshold)
 					{
@@ -144,16 +172,6 @@ public class Bolt : Ability
 					}
 				}
 			}
-
-
-			//Debug.DrawLine(Owner.transform.position, Owner.transform.position + tetherVector, Color.red, 5.0f);
-
-			// If the other player is not in the cone of influence, ignore
-			//if (Vector3.Angle(castDir, tetherVector) > MaxAngle) continue;
-
-			//Debug.DrawLine(Owner.transform.position, Owner.transform.position + tetherVector, Color.red, 5.0f);
-
-			//Owner.controller.ApplyExternalForce(castDir * Force, false);
 		}
 	}
 }

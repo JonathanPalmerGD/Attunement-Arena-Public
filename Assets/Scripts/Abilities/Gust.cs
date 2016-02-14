@@ -131,7 +131,7 @@ public class Gust : Ability
 						}
 					}
 
-					p.AdjustHealth(-GeneralDamage);
+					p.AdjustHealth(-GeneralDamage * Owner._dmgDealtMult);
 				}
 			}
 		}
@@ -166,7 +166,7 @@ public class Gust : Ability
 					AdjustVelocity();
 				}
 				//Jump
-				Owner.controller.ApplyExternalForce(castDir * JumpForce * -1, true, true);
+				Owner.controller.ApplyExternalForce(castDir * JumpForce * -1 * Owner._jumpMult, true, true);
 			}
 			else
 			{
@@ -186,7 +186,7 @@ public class Gust : Ability
 						AdjustVelocity();
 					}
 					//Jump
-					Owner.controller.ApplyExternalForce(castDir * JumpForce * -1, true, true);
+					Owner.controller.ApplyExternalForce(castDir * JumpForce * -1 * Owner._jumpMult, true, true);
 				}
 			}
 		}
@@ -261,7 +261,7 @@ public class Gust : Ability
 				player.controller.ApplyExternalForce((knockbackDir.normalized + Vector3.up) * Force * blastIntensity);
 
 				//Adjust their health based on the blasts damage and how much of the blast.
-				player.AdjustHealth(-1 * blastIntensity * SpecialDamage);
+				player.AdjustHealth(-1 * blastIntensity * SpecialDamage * Owner._dmgDealtMult);
 
 			}
 		}

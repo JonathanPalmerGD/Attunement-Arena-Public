@@ -110,11 +110,11 @@ public class ExtractProj : MonoBehaviour
                     break;
 				case ProjType.Lava:
 					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 20f * Radius ));
-					p.AdjustHealth((effect * -25f * Radius));
+					p.AdjustHealth(effect * -25f * Radius * origin.Owner._dmgDealtMult);
 					break;
 				case ProjType.Water:
 					p.controller.ApplyExternalForce(tetherVector.normalized * (effect * 50f * Radius));
-					p.AdjustHealth((effect * -15f * Radius));
+					p.AdjustHealth(effect * -15f * Radius * origin.Owner._dmgDealtMult);
 					break;
 				default:
 					break;

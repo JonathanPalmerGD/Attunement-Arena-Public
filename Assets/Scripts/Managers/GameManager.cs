@@ -10,6 +10,8 @@ public class GameManager : Singleton<GameManager>
 	#endregion
 	public float modifiedTimeScale = 1;
 
+	public const int NUM_PLAYERS = 2;
+
 	public int NumPlayers
 	{
 		get { return players.Length; }
@@ -37,7 +39,7 @@ public class GameManager : Singleton<GameManager>
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
 
-		int playerCount = 1;
+		int playerCount = NUM_PLAYERS;
 		if (PlayerPrefs.HasKey("PlayerCount"))
 		{
 			playerCount = PlayerPrefs.GetInt("PlayerCount");
@@ -157,12 +159,16 @@ public class GameManager : Singleton<GameManager>
 				var playerText = GameCanvas.Instance.LookupComponent<UnityEngine.UI.Text>("P" + players[i].playerID + " Name Text");
 				playerText.text = "";
 
+				string ritString = "Applying Rituals to " + players[i].name + "\n";
 				for (int k = 0; k < rituals.Length; k++)
 				{
 					//Debug.Log("Applying ritual " + rituals[k].GetType() + " to player " + players[i].playerID + "\n");
+					ritString += "  " + rituals[k].GetType().ToString();
 					rituals[k].ApplyToPlayer(players[i]);
 					playerText.text += (string.IsNullOrEmpty(playerText.text) ? "" : "  ") + (rituals[k].DisplayName);
 				}
+
+				Debug.Log(ritString + "\n");
 			}
 		}
 	}

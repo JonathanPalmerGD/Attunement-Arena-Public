@@ -15,8 +15,17 @@ public class IceAreaEffect : MonoBehaviour
 				Player other = c.GetComponent<Player>();
 				if (other != null)
 				{
-					other.SetPlayerStatus(Player.PlayerStatus.Chilled, Creator.Duration, true);
-					//other.AdjustHealth(-Creator.GeneralDamage * Time.deltaTime);
+					Status stat = null;
+					if (Creator.slowMultAdj != 0)
+					{
+						stat = other.AddStatus(Creator, Status.StatusTypes.Slowed, Creator.Duration, Creator.slowMultAdj, true, other.chilledParticles, true, false);
+					}
+
+					if (Creator.GeneralDamage != 0)
+					{
+						stat = other.AddStatus(Creator, Status.StatusTypes.Bleed, Creator.Duration, Creator.GeneralDamage, true, other.chilledParticles, true, false);
+					}
+
 				}
 			}
 		}

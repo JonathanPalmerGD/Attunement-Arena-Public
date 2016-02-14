@@ -12,9 +12,9 @@ public class Player : MonoBehaviour
 	//TODO: Turn this into flags - some way to make it work in inspector
 	//Look at EnumFlagsAttributeDrawer.cs in Editor
 	//[System.Flags]
-	public enum PlayerStatus { Burning, Shielded, Chilled, None }
-	public PlayerStatus curStatus = PlayerStatus.None;
-	public float curStatusDur;
+	//public enum PlayerStatus { Burning, Shielded, Chilled, None }
+	//public PlayerStatus curStatus = PlayerStatus.None;
+	//public float curStatusDur;
 
 	public bool playerDead = false;
 
@@ -155,27 +155,54 @@ public class Player : MonoBehaviour
 
 	#endregion
 
-	private float knockbackMultiplier;
+	public float _kckBackMult = 1;
 	public float KnockbackMultiplier
 	{
-		get { return knockbackMultiplier; }
-		set
-		{
-			if (value >= 0 && value <= 5)
-			{
-				knockbackMultiplier = value;
-			}
-			if (value < 0)
-			{
-				knockbackMultiplier = 0;
-			}
-		}
+		get { return Mathf.Clamp(_kckBackMult, 0, 10); }
+		set { _kckBackMult = value; }
+	}
+
+	public float _dmgPerSec = 0;
+	public float DamagePerSecond
+	{
+		get { return _dmgPerSec; }
+		set { _dmgPerSec = value; }
+	}
+
+	public float _speedMult = 1;
+	public float SpeedMultiplier
+	{
+		get { return Mathf.Clamp(_speedMult, 0.1f, 10); }
+		set { _speedMult = value; }
+	}
+
+	public float _dmgTakenMult = 1;
+	public float DamageTakenMultiplier
+	{
+		get { return Mathf.Clamp(_dmgTakenMult, 0, 10); }
+		set { _dmgTakenMult = value; }
+	}
+
+	public float _dmgDealtMult = 1;
+	public float DamageDealtMultiplier
+	{
+		get { return Mathf.Clamp(_dmgDealtMult, 0, 10); }
+		set { _dmgDealtMult = value; }
+	}
+
+	public float _jumpMult = 1;
+	public float JumpMultiplier
+	{
+		get { return Mathf.Clamp(_jumpMult, 0, 10); }
+		set { _jumpMult = value; }
 	}
 	#endregion
 
 	#region Ability List and Dict
 	public List<Ability> abilities;
 	public Dictionary<string, Ability> abilityBindings;
+
+	public List<Status> statusEffects;
 	#endregion
 
 	#region Start, Init and AddAbility
@@ -211,6 +238,7 @@ public class Player : MonoBehaviour
 			cameraController.PositionCamera((byte)playerID);
 
 			abilities = new List<Ability>();
+			statusEffects = new List<Status>();
 			abilityBindings = new Dictionary<string, Ability>();
 
 			controller = GetComponent<RigidbodyFirstPersonController>();
@@ -234,7 +262,7 @@ public class Player : MonoBehaviour
 	{
 		//Debug.Log("Creating " + abilityName + " " + keyBinding + "\n");
 		T newAbility = ScriptableObject.CreateInstance(typeof(T)) as T;
-		
+
 		newAbility.Owner = this;
 
 		newAbility.Init(this, keyBinding, displayKeyBinding);
@@ -254,7 +282,7 @@ public class Player : MonoBehaviour
 		//The section after the ?? is the same as below:
 		if (abil == null && createIfNotFound)
 		{
-		//Create the ability
+			//Create the ability
 			abil = CreateAbility<T>(PlayerInput + "Secondary", "X");
 		}
 
@@ -267,9 +295,10 @@ public class Player : MonoBehaviour
 	}
 	#endregion
 
+	#region Update Methods
 	void Update()
 	{
-		Debug.Log("" + controller.mRigidBody.velocity.magnitude + "\n");
+		//Debug.Log("" + controller.mRigidBody.velocity.magnitude + "\n");
 
 		UpdateStatus();
 
@@ -301,53 +330,70 @@ public class Player : MonoBehaviour
 
 	public void UpdateStatus()
 	{
+		for (int i = 0; i < statusEffects.Count; i++)
+		{
+			statusEffects[i].UpdateStatus(i, Time.deltaTime);
+
+			//If a status has no time left, remove it from the list.
+			if (statusEffects[i].CleanupStatus && statusEffects[i].DurationLeft <= 0)
+			{
+				statusEffects.RemoveAt(i);
+				i--;
+			}
+		}
+
+		if (_dmgPerSec != 0)
+		{
+			AdjustHealth(-_dmgPerSec * Time.deltaTime, false);
+		}
+
 #if UNITY_EDITOR
-		if (Input.GetKeyDown(KeyCode.L))
-		{
-			SetPlayerStatus(PlayerStatus.Chilled, 5, true);
-		}
-		if (Input.GetKeyDown(KeyCode.O))
-		{
-			SetPlayerStatus(PlayerStatus.Shielded, 5, true);
-		}
+		//if (Input.GetKeyDown(KeyCode.L))
+		//{
+		//	SetPlayerStatus(PlayerStatus.Chilled, 5, true);
+		//}
+		//if (Input.GetKeyDown(KeyCode.O))
+		//{
+		//	SetPlayerStatus(PlayerStatus.Shielded, 5, true);
+		//}
 #endif
 
 		#region Chilled
-		if (curStatus == PlayerStatus.Chilled)
-		{
-			curStatusDur -= Time.deltaTime;
-			AdjustHealth(-1.5f * Time.deltaTime, false);
-		
-			if (curStatusDur <= 0)
-			{
-				curStatusDur = 0;
-				curStatus = PlayerStatus.None;
-			}
+		//if (curStatus == PlayerStatus.Chilled)
+		//{
+		//	curStatusDur -= Time.deltaTime;
+		//	//AdjustHealth(0.0f * Time.deltaTime, false);
 
-			chilledParticles.enableEmission = true;
-		}
-		if (curStatus != PlayerStatus.Chilled)
-		{
-			chilledParticles.enableEmission = false;
-		}
+		//	if (curStatusDur <= 0)
+		//	{
+		//		curStatusDur = 0;
+		//		curStatus = PlayerStatus.None;
+		//	}
+
+		//	chilledParticles.enableEmission = true;
+		//}
+		//if (curStatus != PlayerStatus.Chilled)
+		//{
+		//	chilledParticles.enableEmission = false;
+		//}
 		#endregion
 		#region Shielded
-		if (curStatus == PlayerStatus.Shielded)
-		{
-			curStatusDur -= Time.deltaTime;
+		//if (curStatus == PlayerStatus.Shielded)
+		//{
+		//	curStatusDur -= Time.deltaTime;
 
-			if (curStatusDur <= 0)
-			{
-				curStatusDur = 0;
-				curStatus = PlayerStatus.None;
-			}
+		//	if (curStatusDur <= 0)
+		//	{
+		//		curStatusDur = 0;
+		//		curStatus = PlayerStatus.None;
+		//	}
 
-			shieldParticles.enableEmission = true;
-		}
-		else
-		{
-			shieldParticles.enableEmission = false;
-		}
+		//	shieldParticles.enableEmission = true;
+		//}
+		//else
+		//{
+		//	shieldParticles.enableEmission = false;
+		//}
 		#endregion
 	}
 
@@ -357,25 +403,22 @@ public class Player : MonoBehaviour
 	/// <param name="amount">Positive for healing, negative for damage</param>
 	public void AdjustHealth(float amount, bool causeFlicker = true)
 	{
-		//Debug.Log(amount + "\n");
+		//Debug.Log("Adjusting " + name + "'s Health: " + amount + "\n");
 		if (playerDead) { return; }
 
-		if (curStatus == PlayerStatus.Shielded)
+		if (_dmgTakenMult != 1)
 		{
+			//Check the reduction amounts.
+
 			WaterShield shield = GetAbility<WaterShield>();
 
-			if (shield)
+			if (shield && shield.ShieldActive)
 			{
-				//How much damage was prevented
-				float damagePrevented = amount * shield.damageReduction;
-
-				//How much gets through
-				amount = amount * (1-shield.damageReduction);
-
-				//Reduce shield duration.
-				// The percentage lost is the amount of base duration lost.
-				curStatusDur -= (damagePrevented / MaxHealth) * shield.Duration;
+				shield.ProcessDamageTaken(amount);
 			}
+
+			//How much gets through
+			amount = amount * _dmgTakenMult;
 		}
 
 		if (amount < 0)
@@ -432,45 +475,6 @@ public class Player : MonoBehaviour
 			{
 				ManaToAdj += amount;
 			}
-		}
-	}
-
-	void KillPlayer()
-	{
-		playerDead = true;
-
-		// Stop the damage flashing
-		damaged = false;
-		damageFlashTimer = 0f;
-		StopAllCoroutines();
-
-		// Give the player a darkened "you're dead" screen
-		damageIndicator.gameObject.SetActive(true);
-		damageIndicator.color = new Color(0.5f, 0f, 0f, 0.3f);
-		StartCoroutine(DeadTextFadein(GameCanvas.Instance.LookupComponent<Text>("P" + playerID + " DeadText")));
-
-		// Test live player count
-		byte livePlayers = 0;
-		foreach (Player p in GameManager.Instance.players)
-		{
-			if (!p.playerDead) livePlayers++;
-		}
-
-		// We have winrar!
-		if (livePlayers < 2)
-		{
-			foreach (Player p in GameManager.Instance.players)
-			{
-				if (p.playerDead) continue;
-
-				Text winText = GameCanvas.Instance.LookupComponent<Text>("P" + p.playerID + " DeadText");
-				winText.text = "You are an Attunement Master!";
-				p.StartCoroutine(p.DeadTextFadein(winText));
-				p.damageIndicator.gameObject.SetActive(true);
-				p.damageIndicator.color = new Color(1.0f, 0.75f, 0f, 0.3f);
-				break;
-			}
-			StartCoroutine(WaitThenChangeScene());  // Change back to main menu upon finish
 		}
 	}
 
@@ -563,44 +567,120 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	public void SetPlayerStatus(PlayerStatus targetStatus, float statusDur = 0, bool maxDuration = false)
+	void KillPlayer()
 	{
-		//If we're in the current status. Increase the duration
-		if (curStatus == targetStatus)
+		playerDead = true;
+
+		// Stop the damage flashing
+		damaged = false;
+		damageFlashTimer = 0f;
+		StopAllCoroutines();
+
+		// Give the player a darkened "you're dead" screen
+		damageIndicator.gameObject.SetActive(true);
+		damageIndicator.color = new Color(0.5f, 0f, 0f, 0.3f);
+		StartCoroutine(DeadTextFadein(GameCanvas.Instance.LookupComponent<Text>("P" + playerID + " DeadText")));
+
+		// Test live player count
+		byte livePlayers = 0;
+		foreach (Player p in GameManager.Instance.players)
 		{
-			//Override the remaining duration if we can't overflow
-			if (maxDuration)
-			{
-				curStatusDur = statusDur;
-			}
-			else
-			{
-				//Otherwise straight add it
-				curStatusDur += statusDur;
-			}
-		}
-		//If we aren't the right status, decrease the duration
-		else if (curStatus != targetStatus)
-		{
-			//Decrease the old status duration
-			if (curStatusDur >= statusDur)
-			{
-				curStatusDur -= statusDur;
-			}
-			else
-			{
-				//If the new status lasts longer, reduce the new status's duration and switch the status
-				curStatusDur = statusDur - curStatusDur;
-				curStatus = targetStatus;
-			}
+			if (!p.playerDead) livePlayers++;
 		}
 
-		if (curStatusDur <= 0 || targetStatus == PlayerStatus.None)
+		// We have winrar!
+		if (livePlayers < 2)
 		{
-			curStatusDur = 0;
-			curStatus = PlayerStatus.None;
+			foreach (Player p in GameManager.Instance.players)
+			{
+				if (p.playerDead) continue;
+
+				Text winText = GameCanvas.Instance.LookupComponent<Text>("P" + p.playerID + " DeadText");
+				winText.text = "You are an Attunement Master!";
+				p.StartCoroutine(p.DeadTextFadein(winText));
+				p.damageIndicator.gameObject.SetActive(true);
+				p.damageIndicator.color = new Color(1.0f, 0.75f, 0f, 0.3f);
+				break;
+			}
+			StartCoroutine(WaitThenChangeScene());  // Change back to main menu upon finish
 		}
 	}
+	#endregion
+
+	#region Status Control
+	public Status AddStatus(Ability abilitySource, Status.StatusTypes abilType, float duration, float effectAmount, bool cleanupStatus = true, ParticleSystem trackedVisual = null, bool checkExisting = false, bool overflowDuration = false)
+	{
+		Status stat = null;
+
+		if (checkExisting)
+		{
+			//Lookup a status effect with the correct owner AND status type.
+			stat = statusEffects.Find(x => x.Source == abilitySource && x.curStatus == abilType);
+
+			if (stat)
+			{
+				if (overflowDuration)
+				{
+					stat.RemainingDuration += duration;
+				}
+				else if (stat.RemainingDuration < duration)
+				{
+					stat.RemainingDuration = duration;
+				}
+				//Else, don't change it because we aren't increasing it.
+
+				//Finally, return the stat we found.
+				return stat;
+			}
+		}
+		//If we aren't checking for an existing one, or we failed to find it.
+
+		//Create a new one.
+
+		stat = ScriptableObject.CreateInstance<Status>();
+		stat.SetupStatus(this, abilitySource, abilType, duration, effectAmount, cleanupStatus);
+		stat.statusIndex = statusEffects.Count;
+
+		if (trackedVisual != null)
+		{
+			stat.VisualEffect = trackedVisual;
+		}
+
+		statusEffects.Add(stat);
+
+		stat.ApplyStatus();
+		stat.ControlVisual = true;
+
+		return stat;
+	}
+	#endregion
+
+	#region God Options
+	public void Bleed()
+	{
+		AdjustHealth(-10);
+		AddStatus(null, Status.StatusTypes.Bleed, 5, 5.0f);
+		AddStatus(null, Status.StatusTypes.Slowed, 5, 0.75f);
+		AddStatus(null, Status.StatusTypes.Bounding, 5, -0.35f);
+	}
+	public void SuperPower()
+	{
+		AddStatus(null, Status.StatusTypes.Empowered, 25, 1.0f);
+		AddStatus(null, Status.StatusTypes.Sturdy, 25, 0.9f);
+		AddStatus(null, Status.StatusTypes.Shielded, 25, 0.9f);
+		AddStatus(null, Status.StatusTypes.Bounding, 25, 1.0f);
+	}
+	public void RefreshAll()
+	{
+		Mana = MaxMana;
+		Health = MaxHealth;
+
+		for (int i = 0; i < abilities.Count; i++)
+		{
+			abilities[i].RefreshAbility();
+		}
+	}
+	#endregion
 
 	public void SetGustCharges(int newChargeCount, bool canReduceCharges = false)
 	{
@@ -695,12 +775,15 @@ public class Player : MonoBehaviour
 #if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.G))
 		{
-			AdjustHealth(-15);
+			Bleed();
 		}
 		if (Input.GetKeyDown(KeyCode.Z))
 		{
-			AdjustHealth(100);
-			Mana += 100;
+			RefreshAll();
+		}
+		if (Input.GetKeyDown(KeyCode.X))
+		{
+			SuperPower();
 		}
 #endif
 

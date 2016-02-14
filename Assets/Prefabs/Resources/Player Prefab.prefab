@@ -377,8 +377,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialized: 0
   playerID: 0
-  curStatus: 3
-  curStatusDur: 0
   playerDead: 0
   ControlType: 1
   controller: {fileID: 11413502}
@@ -394,7 +392,12 @@ MonoBehaviour:
   shieldParticles: {fileID: 19837336}
   damaged: 0
   ManaRegenRate: 3
+  damagePerSecond: 0
+  speedMultiplier: 1
+  damageTakenMultiplier: 1
+  damageDealtMultiplier: 1
   abilities: []
+  statusEffects: []
   damageIndicator: {fileID: 0}
 --- !u!136 &13606810
 CapsuleCollider:
@@ -652,7 +655,7 @@ ParticleSystem:
     m_Mesh: {fileID: 0}
     randomDirection: 0
   EmissionModule:
-    enabled: 1
+    enabled: 0
     m_Type: 0
     rate:
       scalar: 350
@@ -2745,6 +2748,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: speedMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: damageTakenMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: damageDealtMultiplier
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

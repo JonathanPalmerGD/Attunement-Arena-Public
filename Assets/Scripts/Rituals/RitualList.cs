@@ -306,8 +306,8 @@ public class TideCeremony : Ritual
 		if (shield)
 		{
 			shield.Duration += 4;
-			shield.damageReduction += .25f;
-			shield.KnockbackReduction += .25f;
+			shield.dmgMultAdj += .25f;
+			shield.kckBackMultAdj += .25f;
 		}
 
 	}

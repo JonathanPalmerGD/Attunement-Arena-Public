@@ -154,30 +154,18 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 	public void ApplyExternalForce(Vector3 force, bool removeGrounded = true, bool friendly = false, bool tracked = true)
 	{
 		//Debug.Log("Hit\n" + Owner.name + "\t" + force);
-		if (!friendly && Owner.curStatus == Player.PlayerStatus.Shielded)
+		if (!friendly && Owner.KnockbackMultiplier != 1)
 		{
 			float magnitude = force.magnitude;
 			WaterShield shield = Owner.GetAbility<WaterShield>();
 
-			//Debug.Log("Base force: " + magnitude + "\nWith Multiplier: " + force.normalized * Owner.KnockbackMultiplier);
-
-			if (shield)
+			if (shield && shield.ShieldActive)
 			{
-				//How much damage was prevented
-				float knockbackPrevented = magnitude * shield.KnockbackReduction;
-
-				//How much gets through
-				force = force.normalized * magnitude * (1 - shield.KnockbackReduction);
-
-				//Debug.Log("Applying reduced external force."
-				//+ "\nBase Mag: " + magnitude
-				//+ "\tKnock prevented: " + (magnitude * shield.KnockbackReduction)
-				//+ "\nShield Dur Red: " + (knockbackPrevented / 750) * shield.Duration
-				//+ "\tNew Knockback force: " + force.magnitude);
-
-				//Reduce shield duration.
-				Owner.curStatusDur -= (knockbackPrevented / 750) * shield.Duration;
+				shield.ProcessKnockback(magnitude);
 			}
+
+			//Debug.Log("Knockback Multiplier is adjusting\n" + (int)magnitude + "  to  " + (int)magnitude * Owner.KnockbackMultiplier);
+			force = force.normalized * magnitude * Owner.KnockbackMultiplier;
 		}
 
 		if (removeGrounded)
@@ -191,7 +179,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			forceAmt += force.magnitude;
 		}
 
-		//Debug.Log("Hit\n" + Owner.name + "\n" + accRBForces + " " + force);
+		//Debug.Log("" + Owner.name + "\nOld: " + accRBForces + "  New Force:" + force);
 		accRBForces += force;
 	}
 
@@ -242,9 +230,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 			Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
 			desiredMove = Vector3.ProjectOnPlane(desiredMove, mGroundContactNormal).normalized;
 
-			//mRigidBody.drag = 50f;
-
-			float speedMult = Owner.curStatus == Player.PlayerStatus.Chilled ? .5f : 1;
+			float speedMult = Owner._speedMult;
 
 			desiredMove.x = desiredMove.x * movementSettings.CurrentTargetSpeed * speedMult;
 			desiredMove.z = desiredMove.z * movementSettings.CurrentTargetSpeed * speedMult;

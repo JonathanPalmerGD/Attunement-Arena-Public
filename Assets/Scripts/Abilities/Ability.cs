@@ -327,7 +327,12 @@ public class Ability : ScriptableObject
 
 		return false;
 	}
-
+	
+	public virtual void RefreshAbility()
+	{
+		CurrentCooldown = 0;
+		Charges = MaxCharges;
+	}
 
 	public virtual void SetCharges()
 	{

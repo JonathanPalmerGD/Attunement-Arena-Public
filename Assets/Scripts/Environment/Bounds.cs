@@ -31,7 +31,7 @@ class Bounds : MonoBehaviour
 
 					//Debug.Log("Hit bounds\n" + player.transform.position + "\n" + (transform.position.y - BoundFloor));
 					player.AdjustHealth(-15);
-					player.SetGustCharges(2);
+					player.GetAbility<Gust>().Charges += 2;
 				}
 			}
 
