@@ -13,6 +13,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 	private float sleepCounterStart = .2f;
 	private float sleepCounter = 0;
 	private bool SleepConstantForce = false;
+	public bool InCurrent;
 
 	#region Movement & Advanced Settings
 	[Serializable]
@@ -219,6 +220,7 @@ public class RigidbodyFirstPersonController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		InCurrent = false;
 		//Debug.Log(mRigidBody.velocity + "\n" + mRigidBody.velocity.magnitude);
 		GroundCheck();
 		Vector2 input = Owner.playerDead ? Vector2.zero : GetInput();

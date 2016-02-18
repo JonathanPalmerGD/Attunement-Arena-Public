@@ -30,6 +30,8 @@ public class GameManager : Singleton<GameManager>
 	void Awake()
 	{
 		LookupPrefabs();
+
+		#region Spawn Players and Arena
 		if (spawnRandomArena)
 		{
 			SpawnRandomArena();
@@ -38,6 +40,7 @@ public class GameManager : Singleton<GameManager>
 		SpawnPoints = new List<PlayerSpawn>();
 
 		SpawnPoints = GameObject.FindObjectsOfType<PlayerSpawn>().ToList();
+		#endregion
 
 		int playerCount = NUM_PLAYERS;
 		if (PlayerPrefs.HasKey("PlayerCount"))
@@ -54,6 +57,7 @@ public class GameManager : Singleton<GameManager>
 
 		players = GameObject.FindObjectsOfType<Player>();
 
+		#region Set Player Positions
 		for (int i = 0; i < playerCount; i++)
 		{
 			if (SpawnPoints.Count > 0)
@@ -81,13 +85,16 @@ public class GameManager : Singleton<GameManager>
 			//}
 #endif
 		}
+		#endregion
 
+		#region Music
 		music = AudioManager.Instance.MakeSource("Meditate_Theme");
 		music.volume = .3f;
 		music.loop = true;
 		music.Play();
 
 		AudioManager.Instance.AddMusicTrack(music, true);
+		#endregion
 	}
 
 	private void LookupPrefabs()

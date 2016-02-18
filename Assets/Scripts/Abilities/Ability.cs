@@ -235,13 +235,13 @@ public class Ability : ScriptableObject
 	/// <param name="minPercentFalloff">The percentage of blast that should be affected on the complete edge.</param>
 	/// <param name="maxPercentFalloff">The highest scalable percentage in the inner area</param>
 	/// <param name="affectOwner">Should it affect the owner of the ability?</param>
-	/// <param name="needClearLoS">If it should raycast to make a clear line of sight.</param>
+	/// <param name="needClearLoS">If it should raycast to make a ClearColor line of sight.</param>
 	/// <returns>The percentage of blast intensity from the min to the max.</returns>
 	public virtual float CheckBlastIntensity(Vector3 sourcePoint, Player target,
 										float explosiveRange = 0, float minPercentFalloff = .25f, float maxPercentFalloff = 1, 
 										bool affectOwner = false, bool needClearLoS = true)
 	{
-		//TODO: Implement Need Clear LoS correctly.
+		//TODO: Implement Need ClearColor LoS correctly.
 
 		if (!affectOwner || target != Owner)
 		{

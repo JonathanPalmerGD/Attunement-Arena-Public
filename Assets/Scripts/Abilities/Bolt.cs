@@ -60,7 +60,7 @@ public class Bolt : Ability
 	public float VelocityDampenThreshold = 9;
 	public float empowerMax = .25f;
 	public float empowerChargeTime = 2;
-	public bool lightningAligned = true;
+	public bool lightningAligned = false;
 
 	public float Range
 	{

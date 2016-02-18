@@ -270,6 +270,14 @@ Prefab:
       propertyPath: m_LocalPosition.y
       value: -2.97000003
       objectReference: {fileID: 0}
+    - target: {fileID: 19977112, guid: 9663af23a5e786e4d91117dc43449b3a, type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 473d6d3ec0d161b4a85e466c8c6da3fb, type: 2}
+    - target: {fileID: 19802008, guid: 9663af23a5e786e4d91117dc43449b3a, type: 2}
+      propertyPath: InitialModule.startColor.maxColor.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9663af23a5e786e4d91117dc43449b3a, type: 2}
   m_IsPrefabParent: 0

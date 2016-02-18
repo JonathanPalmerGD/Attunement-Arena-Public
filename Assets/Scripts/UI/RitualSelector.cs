@@ -82,7 +82,7 @@ public class RitualSelector : MonoBehaviour
 				InputHints.text = Hint;
 
 				// User has not done a dumb and picked more than three Rituals
-				// Clear error away
+				// ClearColor error away
 				if (PnPCR != null) StopCoroutine(PnPCR);
 				Color c = TooManyText.color;
 				c.a = 0f;
