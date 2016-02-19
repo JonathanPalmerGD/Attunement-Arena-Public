@@ -182,18 +182,24 @@ public class AirCurrent : MonoBehaviour
 						player.controller.mRigidBody.velocity = Vector3.zero;
 						player.controller.mRigidBody.useGravity = false;
 						player.controller.ApplyConstantForce(reverseInputAmt * AB.normalized * pushSpeed + -playerToD * pushSpeed / 5, true, true);
+
+						player.controller.InCurrent = true;
 					}
 					else if (nearANode)
 					{
 						player.controller.mRigidBody.velocity = Vector3.zero;
 						player.controller.mRigidBody.useGravity = false;
 						player.controller.ApplyConstantForce(reverseInputAmt * AB.normalized * pushSpeed + -playerToD * pushSpeed / 5, true, true);
+
+						player.controller.InCurrent = true;
 					}
 					else if (nearBNode)
 					{
 						player.controller.mRigidBody.velocity = Vector3.zero;
 						player.controller.mRigidBody.useGravity = false;
 						player.controller.ApplyConstantForce(reverseInputAmt * AB.normalized * pushSpeed + -playerToD * pushSpeed / 5, true, true);
+
+						player.controller.InCurrent = true;
 					}
 				}
 			}

@@ -12,7 +12,8 @@ public enum RitualID
 	TrickleCharge = 16,
 	TideCeremony = 32,
 	RiteOfQuartz = 64,
-	//IceShelfMeditation = 128
+	IceShelfMeditation = 128,
+	DeepEarthTrance = 256
 }
 
 public abstract class Ritual
@@ -66,6 +67,7 @@ public abstract class Ritual
 		if ((rID & RitualID.TideCeremony) > 0) rit = new TideCeremony();
 		if ((rID & RitualID.RiteOfQuartz) > 0) rit = new RiteOfQuartz();
 		if ((rID & RitualID.EarthenHeart) > 0) rit = new EarthenHeart();
+		if ((rID & RitualID.IceShelfMeditation) > 0) rit = new IceShelfMeditation();
 
 		return rit;
 	}
@@ -193,7 +195,7 @@ public class LightningHelix : Ritual
 {
 	public override string Description
 	{
-		get { return "<color=green><color=green>+33% Bolt Damage\n+33% faster move speed</color>\n<color=red>-20 Max Health</color></color>"; }
+		get { return "<color=green><color=green>Bolt amplifies damage dealt after use.\n+33% faster move speed</color>\n<color=red>-20 Max Health</color></color>"; }
 	}
 
 	public override int DisplayIconID
@@ -219,7 +221,7 @@ public class LightningHelix : Ritual
 		Bolt bolt = plyr.GetAbility<Bolt>(false);
 		if (bolt)
 		{
-			bolt.GeneralDamage += 1f;
+			bolt.lightningAligned = true;
 		}
 		plyr.controller.movementSettings.ForwardSpeed += 4;
 		plyr.controller.movementSettings.BackwardSpeed += 4;
@@ -401,7 +403,7 @@ public class IceShelfMeditation : Ritual
 {
 	public override string Description
 	{
-		get { return "<color=green>Arctic Winds adds Water Shield duration\n</color>\n<color=blue>Water Shield costs 0 mana.</color>\n</color>\n<color=red>+6 seconds Water Shield Cooldown.</color>"; }
+		get { return "<color=green>Arctic Winds adds Water Shield duration\n</color>\n<color=blue>Water Shield costs 0 mana.</color>\n<color=red>+6 seconds Water Shield Cooldown.</color>"; }
 	}
 
 	public override int DisplayIconID
@@ -418,7 +420,7 @@ public class IceShelfMeditation : Ritual
 	{
 		get
 		{
-			return RitualID.TideCeremony;
+			return RitualID.IceShelfMeditation;
 		}
 	}
 
@@ -438,6 +440,44 @@ public class IceShelfMeditation : Ritual
 			shield.MaxCooldown += 6;
 			shield.Cost = 0;
 		}
+	}
+}
 
+public class EyeOfTheStorm : Ritual
+{
+	public override string Description
+	{
+		get { return "<color=green>Arctic Winds adds Water Shield duration\n</color>\n<color=blue>Water Shield costs 0 mana.</color>\n<color=red>+6 seconds Water Shield Cooldown.</color>"; }
+	}
+
+	public override int DisplayIconID
+	{
+		get { return 0; }
+	}
+
+	public override string DisplayName
+	{
+		get { return "Ice Shelf Meditation"; }
+	}
+
+	public override RitualID rID
+	{
+		get
+		{
+			return RitualID.IceShelfMeditation;
+		}
+	}
+
+	public override void ApplyToPlayer(Player plyr)
+	{
+		Gust gust = plyr.GetAbility<Gust>(false);
+		if (gust)
+		{
+			//skate.waterAligned = true;
+			//skate.CooldownReduction += skate.MaxCooldown * 2;
+			//skate.AmplifiedForce += 8;
+		}
+
+		
 	}
 }

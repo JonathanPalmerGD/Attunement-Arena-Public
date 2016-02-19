@@ -119,9 +119,12 @@ public class Skate : Ability
 				//Up the force
 				appliedForce += AmplifiedForce;
 
-				//Add duration
-				shield.dmgReductStatus.DurationLeft += CooldownReduction;
-				shield.knockbackReductStatus.DurationLeft += CooldownReduction;
+				//If the shield is active
+				if (shield.ShieldActive)
+				{
+					//Extend the duration
+					shield.AddWaterShield(CooldownReduction);
+				}
 			}
 		}
 

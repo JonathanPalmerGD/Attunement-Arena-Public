@@ -16,6 +16,7 @@ public class RitualElement : MonoBehaviour
 		Text effect = transform.FindChild("Effect").GetComponent<Text>();
 
 		Ritual myRit = Ritual.GetRitualForID(connectedRitual);
+		Debug.Log(connectedRitual.ToString());
 		label.text = myRit.DisplayName;
 		icon.sprite = IconLoader.Icons[myRit.DisplayIconID];
 		effect.text = myRit.Description;

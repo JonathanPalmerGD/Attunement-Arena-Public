@@ -14,6 +14,7 @@ public class UIManager : Singleton<UIManager>
 	#region Assets
 	#region Static Prefabs & Assets
 	public static GameObject gameUIPrefab;
+	public static GameObject indicatorPrefab;
 	public static GameObject playerUIPrefab;
 	public static Sprite[] Icons;
 	#endregion
@@ -26,7 +27,7 @@ public class UIManager : Singleton<UIManager>
 
 	public RectTransform[] playerUIParents;
 	public PopulateContainer[] PlayerAbilityDisplay;
-	
+
 	public Image transitionImage;
 
 	public CanvasGroup WinState;
@@ -38,8 +39,12 @@ public class UIManager : Singleton<UIManager>
 	//public MenuState journalState;
 	#endregion
 
+	#region Colors
+	Color ClearColor = new Color(0, 0, 0, 0);
+	#endregion
+
 	#region Fade Controls
-	public enum DisplayTransition { NormalDisplay, FadingOut, FadingIn, Darkened};
+	public enum DisplayTransition { NormalDisplay, FadingOut, FadingIn, Darkened };
 	public DisplayTransition fadingTrans = DisplayTransition.NormalDisplay;
 	public float fadeCounter = 0;
 	public float fadeOutDuration = .2f;
@@ -72,17 +77,17 @@ public class UIManager : Singleton<UIManager>
 		{
 			AddPlayerUI(GameManager.Instance.players[i]);
 		}
-		
+
 	}
 
 	private void LookupPrefabs()
 	{
 		gameUIPrefab = Resources.Load<GameObject>("UI/In-Game UI - Canvas");
 		playerUIPrefab = Resources.Load<GameObject>("UI/Player UI");
+		indicatorPrefab = Resources.Load<GameObject>("UI/Position Indicator");
 
 		Icons = Resources.LoadAll<Sprite>("Icons");
 	}
-
 
 	public void Init()
 	{
@@ -92,7 +97,7 @@ public class UIManager : Singleton<UIManager>
 
 			for (int i = 0; i < PlayerAbilityDisplay.Length; i++)
 			{
-				
+
 				PlayerAbilityDisplay[i] = GameCanvas.Instance.LookupComponent<PopulateContainer>("P" + i + " Ability Parent");
 			}
 
@@ -103,6 +108,8 @@ public class UIManager : Singleton<UIManager>
 				GameCanvas.Instance.LookupComponent<Text>("P" + GameManager.Instance.players[i].playerID + " DeadText").gameObject.SetActive(false);
 			}
 
+			SetupIndicators();
+
 			GameManager.Instance.AddPlayerAbilities();
 			GameManager.Instance.ApplyPlayerRituals();
 			GameManager.Instance.SetAbilityCharges();
@@ -111,6 +118,26 @@ public class UIManager : Singleton<UIManager>
 		}
 	}
 
+	public void SetupIndicators()
+	{
+		for (int i = 0; i < GameManager.Instance.NumPlayers; i++)
+		{
+			Transform indicatorParent = GameCanvas.Instance.LookupGameObject("P" + i + " Target Indicators").transform;
+			for (int k = 0; k < GameManager.Instance.NumPlayers; k++)
+			{
+				if (i != k)
+				{
+					Image img = GameObject.Instantiate<GameObject>(indicatorPrefab).GetComponent<Image>();
+					img.GetComponent<UIComponent>().Name = "P" + GameManager.Instance.players[i].playerID + " Indicator to [" + +GameManager.Instance.players[k].playerID + "]";
+
+					img.transform.SetParent(indicatorParent);
+					img.color = ClearColor;
+				}
+			}
+		}
+	}
+
+	#region UI Anchors (for 2/3/4 players)
 	public Vector2 anchMinp0 = new Vector2(0, .5f);
 	public Vector2 anchMaxp0 = new Vector2(1, 1);
 	public Vector2 anchMinp1 = new Vector2(0, 0);
@@ -127,6 +154,7 @@ public class UIManager : Singleton<UIManager>
 
 	public Vector2 anchMinp34 = new Vector2(.5f, 0);
 	public Vector2 anchMaxp34 = new Vector2(1, .5f);
+	#endregion
 
 	public void ConfigureUISize(Player player)
 	{
@@ -136,7 +164,7 @@ public class UIManager : Singleton<UIManager>
 		//P0
 		//Min	0		.5
 		//Max	1		1
-		
+
 		//P1
 		//Min	0		0
 		//Max	1		.5
@@ -229,7 +257,7 @@ public class UIManager : Singleton<UIManager>
 	private void RecursiveChildNaming(int id, Transform target)
 	{
 		//This entire method is messy. Be careful if you change.
-		
+
 		string oldName = target.name;
 		string newName = target.name.Replace("Player", "P" + id);
 
@@ -237,7 +265,7 @@ public class UIManager : Singleton<UIManager>
 		if (newName != oldName)
 		{
 			UIComponent comp = target.GetComponent<UIComponent>();
-			if(comp)
+			if (comp)
 			{
 				//EXTREMELY IMPORTANT: We use .Name, which is a special thing of UIComponents.
 				comp.Name = newName;
@@ -255,7 +283,7 @@ public class UIManager : Singleton<UIManager>
 		//Find the parent ID.
 		int id = ability.Owner.playerID;
 		AbilityDisplayUI aDisUI = null;
-		
+
 		GameObject go = PlayerAbilityDisplay[id].AddPrefabToContainerReturn();
 		aDisUI = go.GetComponent<AbilityDisplayUI>();
 
@@ -269,6 +297,8 @@ public class UIManager : Singleton<UIManager>
 	{
 		HandleFade();
 
+		//UpdateIndicators();
+
 		#region Escape Key
 		if (Input.GetButtonDown("Quit"))
 		{
@@ -277,13 +307,99 @@ public class UIManager : Singleton<UIManager>
 		#endregion
 
 		#region Editor Keys
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		//if (Input.GetKeyDown(KeyCode.H))
 		//{
 		//	BeginFade(.35f);
 		//}
-		#endif
+#endif
 		#endregion
+	}
+	#endregion
+
+	#region Player Indicator
+	public void UpdateIndicators()
+	{
+		for (int i = 0; i < GameManager.Instance.NumPlayers; i++)
+		{
+			for (int k = 0; k < GameManager.Instance.NumPlayers; k++)
+			{
+				if (i != k)
+				{
+					UpdateIndicator(GameManager.Instance.players[i], GameManager.Instance.players[k]);
+				}
+			}
+			//For each player
+			//Look for each other player.
+			//Have an indicator for that player.
+		}
+	}
+
+	public void UpdateIndicator(Player source, Player target)
+	{
+		Image indicator = GameCanvas.Instance.LookupComponent<Image>("P" + source.playerID + " Indicator to [" + target.playerID + "]");
+		if(source.playerDead || target.playerDead)
+		{
+			Debug.Log("player dead\n");
+			//If the target is dead, disable the indicator.
+			indicator.color = ClearColor;
+			return; 
+		}
+
+		//Look at the player forward.
+		Vector3 sourceToTarg = target.transform.position - source.transform.position;
+
+		// If target is not within the cone, ignore
+
+
+		indicator.color = Color.white;
+
+		Camera cam = source.myCamera;
+		Vector3 screenPos = source.myCamera.WorldToScreenPoint(target.transform.position);
+
+		if (Vector3.Angle(source.myCamera.transform.forward, sourceToTarg) > source.myCamera.fieldOfView)
+		{
+			//Debug.Log("In Sight\n");
+
+		}
+
+		if (source.playerID == 1)
+		{
+			//Debug.Log("Angle: " + Vector3.Angle(source.myCamera.transform.forward, sourceToTarg) + "\n");
+
+			indicator.transform.localPosition = screenPos;
+			//If the target is behind us
+			if (screenPos.z < 0)
+			{
+				if (screenPos.x > 0 && screenPos.x < cam.rect.width &&
+					screenPos.y > 0 && screenPos.y < cam.rect.height)
+				{
+					//Debug.Log("Back: " + screenPos + "\n");
+					indicator.color = Color.red;
+				}
+				else if ((screenPos.x < 0 || screenPos.x > cam.rect.width) &&
+						(screenPos.y < 0 || screenPos.y > cam.rect.height))
+				{
+					//Debug.Log("Side: " + screenPos + "\n");
+					
+					indicator.color = Color.cyan;
+
+				}
+			}
+			else
+			{
+				//Debug.Log("Front: " + screenPos + "\n");
+
+				if (screenPos.x > 0 && screenPos.x < cam.rect.width &&
+				screenPos.y > 0 && screenPos.y < cam.rect.height)
+				{
+					indicator.color = Color.yellow;
+				}
+			}
+		}
+
+		//Check the relation of the target.
+
 	}
 	#endregion
 
@@ -324,7 +440,7 @@ public class UIManager : Singleton<UIManager>
 
 				fadePercentage = 1;
 			}
-			
+
 			if (fadingTrans == DisplayTransition.FadingIn)
 			{
 				fadeCounter -= Time.deltaTime;

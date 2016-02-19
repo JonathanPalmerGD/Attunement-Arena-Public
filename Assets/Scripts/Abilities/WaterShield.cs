@@ -44,6 +44,9 @@ public class WaterShield : Ability
 
 		shieldVisual = newOwner.transform.FindChild("waterShield").GetComponent<ParticleSystem>();
 
+		dmgReductStatus = Owner.AddStatus(this, Status.StatusTypes.Shielded, 0, dmgMultAdj, false);
+		knockbackReductStatus = Owner.AddStatus(this, Status.StatusTypes.Sturdy, 0, kckBackMultAdj, false);
+
 		MaxCooldown = 8f;
 		Cost = 15;
 		GeneralDamage = 26f;
@@ -150,25 +153,12 @@ public class WaterShield : Ability
 
 	public void AddWaterShield(float specificDuration = 0)
 	{
-		if (dmgReductStatus == null)
-		{
-			dmgReductStatus = Owner.AddStatus(this, Status.StatusTypes.Shielded, specificDuration, dmgMultAdj, false);
-		}
-		else
-		{
-			dmgReductStatus.DurationLeft += specificDuration;
-			dmgReductStatus.EffectAmt = dmgMultAdj;
-		}
-		if (knockbackReductStatus == null)
-		{
-			knockbackReductStatus = Owner.AddStatus(this, Status.StatusTypes.Sturdy, specificDuration, kckBackMultAdj, false);
-		}
-		else
-		{
-			knockbackReductStatus.EffectAmt = kckBackMultAdj;
-			knockbackReductStatus.DurationLeft += specificDuration;
-		}
-
+		dmgReductStatus.DurationLeft += specificDuration;
+		dmgReductStatus.EffectAmt = dmgMultAdj;
+		
+		knockbackReductStatus.EffectAmt = kckBackMultAdj;
+		knockbackReductStatus.DurationLeft += specificDuration;
+		
 		shieldVisual.enableEmission = true;
 
 		ShieldActive = true;
